@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { randomBytes } from 'node:crypto';
+import { validateWith, contractFormSchema, ndaFormSchema } from '@/lib/validation/schemas';
 
 export type ContractType = 'fulltime' | 'parttime' | 'daily';
 export type WageType = 'hourly' | 'monthly' | 'daily';
@@ -48,18 +49,7 @@ export interface CreateContractResult {
 }
 
 function validate(input: ContractFormData): string | null {
-  if (!input.invite_name.trim()) return '직원 이름을 입력해주세요.';
-  if (!input.invite_phone.trim()) return '직원 휴대폰 번호를 입력해주세요.';
-  if (!/^[0-9-]+$/.test(input.invite_phone)) return '휴대폰 번호 형식이 올바르지 않습니다.';
-  if (!input.work_start_date) return '근로 시작일을 선택해주세요.';
-  if (!input.workplace_address.trim()) return '근무 장소를 입력해주세요.';
-  if (!input.job_description.trim()) return '담당 업무를 입력해주세요.';
-  if (input.work_days.length === 0) return '근무 요일을 1개 이상 선택해주세요.';
-  if (!input.work_start_time || !input.work_end_time) return '근무 시간을 입력해주세요.';
-  if (input.break_minutes < 0) return '휴게 시간이 올바르지 않습니다.';
-  if (input.wage_amount <= 0) return '임금 금액을 입력해주세요.';
-  if (input.pay_day < 1 || input.pay_day > 31) return '임금 지급일은 1~31일 사이여야 합니다.';
-  return null;
+  return validateWith(contractFormSchema, input);
 }
 
 function generateSignToken(): string {
@@ -287,14 +277,7 @@ export interface NDAFormData {
 }
 
 function validateNDA(input: NDAFormData): string | null {
-  if (!input.invite_name.trim()) return '직원 이름을 입력해주세요.';
-  if (!input.invite_phone.trim()) return '직원 휴대폰 번호를 입력해주세요.';
-  if (!/^[0-9-]+$/.test(input.invite_phone)) return '휴대폰 번호 형식이 올바르지 않습니다.';
-  if (!input.effective_date) return '시행일을 선택해주세요.';
-  if (input.retention_years < 1 || input.retention_years > 10) {
-    return '비밀유지 기간은 1~10년 사이여야 합니다.';
-  }
-  return null;
+  return validateWith(ndaFormSchema, input);
 }
 
 export async function createNDA(

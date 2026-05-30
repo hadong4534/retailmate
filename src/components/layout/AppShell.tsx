@@ -63,9 +63,7 @@ const NAV_GROUPS: NavGroup[] = [
   },
   {
     title: 'AI',
-    items: [
-      { href: '/ai', label: 'AI 도구', Icon: SparklesIcon },
-    ],
+    items: [{ href: '/ai', label: 'AI 도구', Icon: SparklesIcon }],
   },
   {
     title: '소식',
@@ -77,31 +75,23 @@ const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
-const BOTTOM_NAV: NavItem[] = [
-  { href: '/dashboard', label: '홈', Icon: HomeIcon },
-  { href: '/sales', label: '매출', Icon: SalesIcon },
-  { href: '/expenses', label: '비용', Icon: ExpensesIcon },
-  { href: '/employees', label: '직원', Icon: PeopleIcon },
-  { href: '/reports', label: '리포트', Icon: BarChartIcon },
-];
-
+// 모바일 하단 탭: 좌측 2 + 중앙 AI FAB + 우측 2(직원 / 더보기)
 const STAFF_TAB_PREFIXES = ['/employees', '/attendance', '/contracts'];
+
+/** 모바일 "더보기" 시트에 들어가는 보조 메뉴 — 하단탭에 없는 모든 기능을 여기서 접근. */
+const MORE_LINKS: NavItem[] = [
+  { href: '/expenses', label: '비용', Icon: ExpensesIcon },
+  { href: '/reports', label: '리포트', Icon: BarChartIcon },
+  { href: '/attendance', label: '근태', Icon: ClockAlarmIcon },
+  { href: '/contracts', label: '계약서', Icon: ClipboardIcon },
+  { href: '/notices', label: '공지', Icon: MegaphoneIcon },
+  { href: '/settings', label: '설정', Icon: GearIcon },
+];
 
 /** 모바일 하단 탭바를 숨길 경로 — 채팅 입력창과 탭바가 충돌하기 때문. */
 const HIDE_MOBILE_TABBAR_PREFIXES = ['/ai/chat'];
 
-/**
- * 사이드바/탭바 active 매칭.
- * - 정확 매칭은 항상 active.
- * - 일부 라우트는 "hub" 성격이라 자식 segment가 사이드바에 별개 메뉴로 존재.
- *   예: `/employees`와 `/employees/payroll`이 둘 다 있을 때
- *       `/employees/payroll` 진입 시 `/employees`는 active가 아니어야 한다.
- * - 그 외는 자식(예: `/sales/new`, `/contracts/new`)에서도 부모 메뉴 active 유지.
- */
-const EXACT_MATCH_ONLY = new Set([
-  '/dashboard',
-  '/employees', // /employees/payroll이 별개 사이드바 메뉴이므로
-]);
+const EXACT_MATCH_ONLY = new Set(['/dashboard', '/employees']);
 
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
@@ -115,6 +105,10 @@ function shouldHideMobileTabbar(pathname: string): boolean {
 
 function isStaffTabActive(pathname: string): boolean {
   return STAFF_TAB_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'));
+}
+
+function isAiActive(pathname: string): boolean {
+  return pathname === '/ai' || pathname.startsWith('/ai/');
 }
 
 export function AppShell({
@@ -139,6 +133,7 @@ export function AppShell({
   const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
   const [storePickerOpen, setStorePickerOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [storeSwitching, startStoreSwitch] = useTransition();
   const hasMultipleStores = (storeOptions?.length ?? 0) > 1;
   const hideMobileTabbar = shouldHideMobileTabbar(pathname);
@@ -155,8 +150,6 @@ export function AppShell({
         alert(result.error);
         return;
       }
-      // 사용자 요청: 매장 전환 시 어느 탭에 있었든 홈으로 이동 (PC StoreSwitcher와 동일 동작).
-      // replace로 뒤로가기 시 이전 매장 페이지로 돌아가지 않게 + refresh로 서버 컴포넌트 새 매장 컨텍스트로.
       router.replace('/dashboard');
       router.refresh();
     });
@@ -171,25 +164,26 @@ export function AppShell({
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 lg:flex-row">
+    <div className="flex min-h-screen flex-col lg:flex-row">
       <TopProgressBar />
-      {/* 사이드바 (PC) — 다크 네이비 */}
-      <aside className="hidden w-60 flex-col border-r border-slate-800 bg-slate-900 lg:flex">
-        <div className="flex h-16 items-center border-b border-slate-800 px-5">
+
+      {/* ───────── 사이드바 (PC) — Aurora 라이트 글래스 ───────── */}
+      <aside className="hidden w-60 flex-col border-r border-[#ECE9FB] bg-white/70 backdrop-blur-xl lg:flex">
+        <div className="flex h-16 items-center border-b border-[#ECE9FB] px-5">
           <Link href="/dashboard" aria-label="리테일메이트 홈">
-            <Logo size="md" onDark />
+            <Logo size="md" />
           </Link>
         </div>
         {currentStore && storeOptions && storeOptions.length > 0 && (
-          <div className="border-b border-slate-800 px-3 py-3">
-            <StoreSwitcher current={currentStore} options={storeOptions} onDark />
+          <div className="border-b border-[#ECE9FB] px-3 py-3">
+            <StoreSwitcher current={currentStore} options={storeOptions} />
           </div>
         )}
         <nav className="flex-1 space-y-5 overflow-y-auto p-3">
           {NAV_GROUPS.map((group, gIdx) => (
             <div key={gIdx}>
               {group.title && (
-                <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">
                   {group.title}
                 </p>
               )}
@@ -197,19 +191,22 @@ export function AppShell({
                 {group.items.map((item) => {
                   const active = isActive(pathname, item.href);
                   const Icon = item.Icon;
+                  const isAi = item.href === '/ai';
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
                       prefetch={active ? false : true}
                       className={cn(
-                        'flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-150 active:scale-[0.97]',
+                        'flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-150 active:scale-[0.97]',
                         active
-                          ? 'bg-blue-600 text-white shadow-sm'
-                          : 'text-slate-300 hover:bg-slate-800 hover:text-white active:bg-slate-700',
+                          ? 'bg-[#6C5CE7] text-white shadow-[0_6px_16px_-6px_rgba(108,92,231,0.6)]'
+                          : 'text-slate-600 hover:bg-[#F1EEFE] hover:text-[#5A47D6] active:bg-[#E9E4FD]',
                       )}
                     >
-                      <Icon className="h-5 w-5 shrink-0" />
+                      <span className={cn('relative flex h-5 w-5 shrink-0 items-center justify-center', isAi && !active && 'text-[#6C5CE7]')}>
+                        <Icon className="h-5 w-5" />
+                      </span>
                       {item.label}
                     </Link>
                   );
@@ -218,9 +215,9 @@ export function AppShell({
             </div>
           ))}
         </nav>
-        <div className="border-t border-slate-800 p-4 text-sm">
+        <div className="border-t border-[#ECE9FB] p-4 text-sm">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 text-xs font-bold text-white">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#8B7CF5] to-[#6C5CE7] text-xs font-bold text-white">
               {ownerAvatarUrl ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={ownerAvatarUrl} alt={ownerName} className="h-full w-full object-cover" />
@@ -229,27 +226,25 @@ export function AppShell({
               )}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-white">{ownerName}</p>
+              <p className="truncate text-sm font-semibold text-slate-900">{ownerName}</p>
               <span
                 className={
                   'inline-block rounded px-1.5 py-0.5 text-[10px] font-medium ' +
                   (role === 'owner'
-                    ? 'bg-blue-500/20 text-blue-300'
+                    ? 'bg-[#F1EEFE] text-[#5A47D6]'
                     : role === 'manager'
-                    ? 'bg-emerald-500/20 text-emerald-300'
-                    : 'bg-slate-500/30 text-slate-300')
+                    ? 'bg-emerald-50 text-emerald-600'
+                    : 'bg-slate-100 text-slate-500')
                 }
               >
                 {roleLabel}
               </span>
             </div>
           </div>
-          {!currentStore && (
-            <div className="mt-1 text-xs text-slate-500">{storeName}</div>
-          )}
+          {!currentStore && <div className="mt-1 text-xs text-slate-400">{storeName}</div>}
           <button
             onClick={handleLogout}
-            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-700"
+            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-[#ECE9FB] bg-white px-3 py-1.5 text-xs font-medium text-slate-500 hover:bg-[#F1EEFE] hover:text-[#5A47D6]"
           >
             <LogoutIcon className="h-3.5 w-3.5" />
             로그아웃
@@ -257,11 +252,9 @@ export function AppShell({
         </div>
       </aside>
 
-      {/* TopBar (모바일) — sticky로 스크롤 시 상단 고정 + 약한 backdrop blur
-          PWA 풀스크린(viewportFit: cover)에서 iOS 노치·다이내믹 아일랜드와 겹치지 않도록
-          padding-top에 safe-area-inset-top 추가. 일반 Safari에서는 0이라 영향 없음. */}
+      {/* ───────── TopBar (모바일) — 라이트 글래스 ───────── */}
       <header
-        className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur-md lg:hidden"
+        className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[#ECE9FB] bg-white/80 px-4 backdrop-blur-xl lg:hidden"
         style={{
           paddingTop: 'env(safe-area-inset-top)',
           height: 'calc(3.5rem + env(safe-area-inset-top))',
@@ -273,13 +266,12 @@ export function AppShell({
           </Link>
           {currentStore?.storeName && (
             <>
-              <span className="h-4 w-px shrink-0 bg-slate-300" aria-hidden />
-              {/* 매장 전환 버튼 — 멀티 매장이면 클릭 가능 */}
+              <span className="h-4 w-px shrink-0 bg-[#E3DEFA]" aria-hidden />
               {hasMultipleStores ? (
                 <button
                   type="button"
                   onClick={() => setStorePickerOpen((v) => !v)}
-                  className="inline-flex min-w-0 items-center gap-1 rounded-md px-1.5 py-1 text-left text-[13px] font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+                  className="inline-flex min-w-0 items-center gap-1 rounded-lg px-1.5 py-1 text-left text-[13px] font-semibold text-slate-700 hover:bg-[#F1EEFE] disabled:opacity-50"
                   aria-haspopup="menu"
                   aria-expanded={storePickerOpen}
                   disabled={storeSwitching}
@@ -297,16 +289,11 @@ export function AppShell({
                 </span>
               )}
 
-              {/* 매장 전환 드롭다운 */}
               {storePickerOpen && hasMultipleStores && storeOptions && (
                 <>
-                  <div
-                    className="fixed inset-0 z-30"
-                    onClick={() => setStorePickerOpen(false)}
-                    aria-hidden
-                  />
-                  <div className="absolute left-3 top-12 z-40 w-64 rounded-xl border border-slate-200 bg-white shadow-xl">
-                    <div className="border-b border-slate-100 px-3 py-2">
+                  <div className="fixed inset-0 z-30" onClick={() => setStorePickerOpen(false)} aria-hidden />
+                  <div className="absolute left-3 top-12 z-40 w-64 rounded-2xl border border-[#ECE9FB] bg-white shadow-xl">
+                    <div className="border-b border-[#F1EEFE] px-3 py-2">
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">매장 전환</p>
                     </div>
                     <ul className="max-h-72 overflow-y-auto py-1">
@@ -319,29 +306,29 @@ export function AppShell({
                               onClick={() => handleSwitchStore(o.storeId)}
                               disabled={storeSwitching}
                               className={
-                                'flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm transition active:bg-slate-50 ' +
-                                (active ? 'bg-blue-50' : 'hover:bg-slate-50')
+                                'flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm transition active:bg-[#F1EEFE] ' +
+                                (active ? 'bg-[#F1EEFE]' : 'hover:bg-slate-50')
                               }
                             >
                               <span className="min-w-0 flex-1">
-                                <span className={'block truncate ' + (active ? 'font-semibold text-blue-700' : 'text-slate-900')}>
+                                <span className={'block truncate ' + (active ? 'font-semibold text-[#5A47D6]' : 'text-slate-900')}>
                                   {o.storeName}
                                 </span>
                                 <span className="block text-[10px] text-slate-400">
                                   {o.role === 'owner' ? '최고관리자' : '매니저'}
                                 </span>
                               </span>
-                              {active && <span className="ml-2 text-xs text-blue-600">✓</span>}
+                              {active && <span className="ml-2 h-2 w-2 shrink-0 rounded-full bg-[#6C5CE7]" aria-hidden />}
                             </button>
                           </li>
                         );
                       })}
                     </ul>
-                    <div className="border-t border-slate-100 p-1">
+                    <div className="border-t border-[#F1EEFE] p-1">
                       <Link
                         href="/stores/new"
                         onClick={() => setStorePickerOpen(false)}
-                        className="block rounded-md px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50"
+                        className="block rounded-lg px-3 py-2 text-sm font-medium text-[#6C5CE7] hover:bg-[#F1EEFE]"
                       >
                         + 새 매장 추가
                       </Link>
@@ -355,10 +342,10 @@ export function AppShell({
         <button
           type="button"
           onClick={() => setProfileOpen((v) => !v)}
-          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm hover:bg-slate-100"
+          className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm hover:bg-[#F1EEFE]"
           aria-label="프로필 메뉴"
         >
-          <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-xs font-semibold text-slate-700">
+          <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#8B7CF5] to-[#6C5CE7] text-xs font-semibold text-white">
             {ownerAvatarUrl ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img src={ownerAvatarUrl} alt={ownerName} className="h-full w-full object-cover" />
@@ -366,19 +353,14 @@ export function AppShell({
               ownerName.charAt(0) || '?'
             )}
           </span>
-          <span className="hidden text-xs sm:inline">{ownerName}</span>
           <ChevronDownIcon className="h-3.5 w-3.5 text-slate-400" />
         </button>
 
         {profileOpen && (
           <>
-            <div
-              className="fixed inset-0 z-30"
-              onClick={() => setProfileOpen(false)}
-              aria-hidden
-            />
-            <div className="absolute right-3 top-12 z-40 w-56 rounded-md border border-slate-200 bg-white shadow-lg">
-              <div className="border-b border-slate-200 px-4 py-3">
+            <div className="fixed inset-0 z-30" onClick={() => setProfileOpen(false)} aria-hidden />
+            <div className="absolute right-3 top-12 z-40 w-56 rounded-2xl border border-[#ECE9FB] bg-white shadow-xl">
+              <div className="border-b border-[#F1EEFE] px-4 py-3">
                 <p className="text-sm font-semibold text-slate-900">{ownerName}</p>
                 <p className="mt-0.5 text-xs text-slate-500">
                   {roleLabel} · {currentStore?.storeName ?? storeName}
@@ -386,57 +368,26 @@ export function AppShell({
               </div>
               <ul className="py-1">
                 <li>
-                  <Link
-                    href="/ai"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                  >
-                    <SparklesIcon className="h-4 w-4 text-slate-500" />
-                    AI 도구
+                  <Link href="/settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-[#F1EEFE]">
+                    <GearIcon className="h-4 w-4 text-slate-400" />설정
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/notices"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                  >
-                    <MegaphoneIcon className="h-4 w-4 text-slate-500" />
-                    공지사항
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/settings"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                  >
-                    <GearIcon className="h-4 w-4 text-slate-500" />
-                    설정
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/stores/new"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                  >
-                    <PlusIcon className="h-4 w-4 text-slate-500" />
-                    매장 추가
+                  <Link href="/stores/new" onClick={() => setProfileOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-[#F1EEFE]">
+                    <PlusIcon className="h-4 w-4 text-slate-400" />매장 추가
                   </Link>
                 </li>
               </ul>
-              <div className="border-t border-slate-200 py-1">
+              <div className="border-t border-[#F1EEFE] py-1">
                 <button
                   type="button"
                   onClick={() => {
                     setProfileOpen(false);
                     handleLogout();
                   }}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-[#F1EEFE]"
                 >
-                  <LogoutIcon className="h-4 w-4 text-slate-500" />
-                  로그아웃
+                  <LogoutIcon className="h-4 w-4 text-slate-400" />로그아웃
                 </button>
               </div>
             </div>
@@ -444,51 +395,103 @@ export function AppShell({
         )}
       </header>
 
-      {/* 메인 컨텐츠 — 모바일 하단 탭바(68px) + safe-area 영역 만큼 padding. 탭바 숨김 페이지는 0. */}
+      {/* 메인 컨텐츠 */}
       <main
         className={cn(
           'flex-1 lg:pb-0',
-          hideMobileTabbar ? 'pb-0' : 'pb-[calc(68px+env(safe-area-inset-bottom))]',
+          hideMobileTabbar ? 'pb-0' : 'pb-[calc(76px+env(safe-area-inset-bottom))]',
         )}
       >
         {children}
       </main>
 
-      {/* BottomTab (모바일) — 높이 68px + safe-area. 활성색 파랑·라벨 강조로 도트 indicator 대체. */}
+      {/* ───────── 더보기 시트 (모바일) ───────── */}
+      {moreOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
+          <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={() => setMoreOpen(false)} aria-hidden />
+          <div
+            className="absolute bottom-0 left-0 right-0 rounded-t-3xl border-t border-[#ECE9FB] bg-white p-5 shadow-2xl"
+            style={{ paddingBottom: 'calc(20px + env(safe-area-inset-bottom))' }}
+          >
+            <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-slate-200" aria-hidden />
+            <p className="mb-3 text-sm font-bold text-slate-900">더보기</p>
+            <div className="grid grid-cols-3 gap-3">
+              {MORE_LINKS.map((item) => {
+                const Icon = item.Icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMoreOpen(false)}
+                    className="flex flex-col items-center gap-2 rounded-2xl border border-[#F1EEFE] bg-[#FBFAFF] px-2 py-4 text-xs font-medium text-slate-600 transition active:scale-95 active:bg-[#F1EEFE]"
+                  >
+                    <Icon className="h-6 w-6 text-[#6C5CE7]" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ───────── BottomTab (모바일) — 중앙 AI FAB ───────── */}
       <nav
         className={cn(
-          'fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur-md lg:hidden',
+          'fixed bottom-0 left-0 right-0 z-30 border-t border-[#ECE9FB] bg-white/90 backdrop-blur-xl lg:hidden',
           hideMobileTabbar && 'hidden',
         )}
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
-        <div className="flex h-[68px] items-center justify-around px-1">
-          {BOTTOM_NAV.map((item) => {
-            const active =
-              item.href === '/employees'
-                ? isStaffTabActive(pathname)
-                : isActive(pathname, item.href);
-            const Icon = item.Icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                // 비활성 탭은 강제 prefetch=true — 모바일에서 viewport 자동 prefetch가 누락되는 케이스
-                // (Save-Data, 느린 네트워크 감지 등)에서도 항상 RSC 페이로드를 미리 받아 탭 클릭 시 즉시 전환.
-                prefetch={active ? false : true}
-                className={cn(
-                  'relative flex h-full min-w-[44px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[11px] transition-all duration-150 active:scale-[0.94] active:bg-slate-100/60',
-                  active ? 'font-semibold text-blue-600' : 'font-medium text-slate-500',
-                )}
-                aria-current={active ? 'page' : undefined}
-              >
-                <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.2 : 1.8} />
-                <span className="leading-none">{item.label}</span>
-              </Link>
-            );
-          })}
+        <div className="relative flex h-[76px] items-stretch justify-around px-1">
+          {/* 좌측: 홈, 매출 */}
+          <BottomLink href="/dashboard" label="홈" Icon={HomeIcon} active={isActive(pathname, '/dashboard')} />
+          <BottomLink href="/sales" label="매출" Icon={SalesIcon} active={isActive(pathname, '/sales')} />
+
+          {/* 중앙 AI FAB */}
+          <div className="flex flex-1 items-start justify-center">
+            <Link
+              href="/ai"
+              aria-label="AI 도구"
+              className={cn(
+                'relative -top-4 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-6px_rgba(108,92,231,0.65)] transition active:scale-95',
+                'bg-gradient-to-br from-[#8B7CF5] via-[#6C5CE7] to-[#38BDF8]',
+                isAiActive(pathname) && 'ring-4 ring-[#6C5CE7]/25',
+              )}
+            >
+              <SparklesIcon className="h-7 w-7" />
+            </Link>
+          </div>
+
+          {/* 우측: 직원, 더보기 */}
+          <BottomLink href="/employees" label="직원" Icon={PeopleIcon} active={isStaffTabActive(pathname)} />
+          <button
+            type="button"
+            onClick={() => setMoreOpen(true)}
+            className="relative flex h-full min-w-[44px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[11px] font-medium text-slate-500 transition-all duration-150 active:scale-[0.94] active:bg-[#F1EEFE]/60"
+          >
+            <ChevronDownIcon className="h-[22px] w-[22px] rotate-180" strokeWidth={1.8} />
+            <span className="leading-none">더보기</span>
+          </button>
         </div>
       </nav>
     </div>
+  );
+}
+
+function BottomLink({ href, label, Icon, active }: { href: string; label: string; Icon: Icon; active: boolean }) {
+  return (
+    <Link
+      href={href}
+      prefetch={active ? false : true}
+      className={cn(
+        'relative flex h-full min-w-[44px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[11px] transition-all duration-150 active:scale-[0.94] active:bg-[#F1EEFE]/60',
+        active ? 'font-semibold text-[#6C5CE7]' : 'font-medium text-slate-500',
+      )}
+      aria-current={active ? 'page' : undefined}
+    >
+      <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.2 : 1.8} />
+      <span className="leading-none">{label}</span>
+    </Link>
   );
 }

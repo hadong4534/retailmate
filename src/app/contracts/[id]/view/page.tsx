@@ -75,6 +75,8 @@ export default async function ContractViewPage({
     phone: contract.invite_phone,
     role: 'employee',
     avatar_url: null,
+    avatar_path: null,
+    phone_verified: false,
     created_at: contract.created_at,
     updated_at: contract.created_at,
   };
@@ -86,6 +88,8 @@ export default async function ContractViewPage({
     phone: null,
     role: 'owner',
     avatar_url: null,
+    avatar_path: null,
+    phone_verified: false,
     created_at: contract.created_at,
     updated_at: contract.created_at,
   };

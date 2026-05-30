@@ -1,9 +1,21 @@
 // ────────────────────────────────────────────────────────────────────────────
-// Supabase 데이터베이스 타입 정의 (수동 작성 — 추후 supabase gen types로 자동화)
+// Supabase 데이터베이스 타입 (라이브 스키마 mdvywgzjxfxlrnjbqmbu 기준, 2026-05-31)
+// 마이그레이션 019(NDA)/020(cancelled) 적용 반영. 21개 테이블 중 코드에서
+// 사용하는 엔티티 + enum을 정확히 정의한다.
+// 전체 자동생성본이 필요하면: supabase gen types typescript --project-id <id>
 // ────────────────────────────────────────────────────────────────────────────
 
-export type UserRole = 'owner' | 'employee';
-export type SaleChannel = 'card' | 'cash' | 'cash_receipt' | 'transfer' | 'delivery' | 'other';
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+// ── Enums (DB enum과 1:1) ────────────────────────────────────────────────────
+export type UserRole = 'owner' | 'employee' | 'manager';
+export type SaleChannel = 'cash' | 'card' | 'delivery' | 'other' | 'cash_receipt' | 'transfer';
 export type ExpenseCategory =
   | 'material' | 'labor' | 'rent' | 'utility'
   | 'communication' | 'marketing' | 'tax' | 'etc';
@@ -11,7 +23,9 @@ export type ContractType = 'fulltime' | 'parttime' | 'daily' | 'nda';
 export type ContractStatus = 'draft' | 'sent' | 'signed' | 'terminated' | 'cancelled';
 export type WageType = 'hourly' | 'monthly' | 'daily';
 export type ConsentType = 'terms' | 'privacy' | 'gps_location' | 'marketing';
+export type NoticeTarget = 'all' | 'employees';
 
+// ── Row 인터페이스 ───────────────────────────────────────────────────────────
 export interface Profile {
   id: string;
   email: string;
@@ -19,6 +33,8 @@ export interface Profile {
   phone: string | null;
   role: UserRole;
   avatar_url: string | null;
+  avatar_path: string | null;
+  phone_verified: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -36,7 +52,17 @@ export interface Store {
   radius_m: number;
   open_time: string | null;
   close_time: string | null;
-  monthly_target: number;
+  monthly_target: number | null;
+  postcode: string | null;
+  wage_calc_mode: string | null;
+  weekly_holiday_default: boolean | null;
+  pay_day_default: number | null;
+  tax_filing_mode: string | null;
+  business_name: string | null;
+  logo_path: string | null;
+  brand_color: string | null;
+  brand_slogan: string | null;
+  brand_description: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -95,10 +121,49 @@ export interface Attendance {
   lat_out: number | null;
   lng_out: number | null;
   distance_out_m: number | null;
-  is_valid: boolean;
+  is_valid: boolean | null;
   work_minutes: number | null;
   memo: string | null;
   created_at: string;
+}
+
+export interface Payroll {
+  id: string;
+  store_id: string;
+  user_id: string;
+  year_month: string;
+  work_minutes: number;
+  base_pay: number;
+  weekly_bonus: number;
+  overtime_pay: number;
+  night_pay: number;
+  holiday_pay: number;
+  deduction: number;
+  total: number;
+  paid_at: string | null;
+  created_at: string;
+}
+
+export interface Notice {
+  id: string;
+  store_id: string;
+  author_id: string;
+  title: string;
+  body: string;
+  target: NoticeTarget;
+  is_pinned: boolean;
+  published_at: string;
+  expires_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** 근로계약서 사회보험 가입 항목 (labor_contracts.social_insurance jsonb) */
+export interface SocialInsurance {
+  national_pension: boolean;
+  health_insurance: boolean;
+  employment_insurance: boolean;
+  industrial_accident: boolean;
 }
 
 export interface LaborContract {
@@ -121,15 +186,9 @@ export interface LaborContract {
   weekly_holiday_allowance: boolean;
   pay_day: number;
   pay_method: string | null;
-  social_insurance: {
-    national_pension: boolean;
-    health_insurance: boolean;
-    employment_insurance: boolean;
-    industrial_accident: boolean;
-  };
+  social_insurance: SocialInsurance;
   annual_leave_policy: string | null;
   additional_terms: string | null;
-  // NDA 전용 (contract_type='nda'일 때만 유효)
   nda_retention_years: number | null;
   nda_info_scope: string | null;
   pdf_url: string | null;
@@ -148,11 +207,7 @@ export interface LaborContract {
   updated_at: string;
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// Supabase typed client용 Database 타입
-// supabase gen types로 자동 생성하기 전까지는 최소한의 타입 시그니처만 유지.
-// 쿼리 응답 narrowing은 호출부에서 명시적 타입 지정으로 처리한다.
-// ────────────────────────────────────────────────────────────────────────────
+// ── Supabase typed client용 Database (필요 테이블만; 점진 확장) ───────────────
 type Table<Row> = {
   Row: Row;
   Insert: Partial<Row> & Record<string, unknown>;
@@ -163,12 +218,14 @@ type Table<Row> = {
 export interface Database {
   public: {
     Tables: {
-      profiles:        Table<Profile>;
-      stores:          Table<Store>;
-      store_members:   Table<StoreMember>;
-      sales:           Table<Sale>;
-      expenses:        Table<Expense>;
-      attendances:     Table<Attendance>;
+      profiles: Table<Profile>;
+      stores: Table<Store>;
+      store_members: Table<StoreMember>;
+      sales: Table<Sale>;
+      expenses: Table<Expense>;
+      attendances: Table<Attendance>;
+      payrolls: Table<Payroll>;
+      notices: Table<Notice>;
       labor_contracts: Table<LaborContract>;
     };
     Views: { [key: string]: { Row: Record<string, unknown>; Relationships: [] } };
@@ -181,6 +238,7 @@ export interface Database {
       contract_status: ContractStatus;
       wage_type: WageType;
       consent_type: ConsentType;
+      notice_target: NoticeTarget;
     };
     CompositeTypes: { [key: string]: Record<string, unknown> };
   };
