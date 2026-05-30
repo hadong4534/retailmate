@@ -1,0 +1,50 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="50%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0F172A" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect x="64" y="64" width="896" height="896" rx="220" fill="url(#bg)"/>
+  <!-- Diagonal sheen -->
+  <rect x="64" y="64" width="896" height="896" rx="220" fill="url(#sheen)"/>
+
+  <!-- Bar chart (3 ascending bars) — white, rounded ends -->
+  <g filter="url(#softShadow)">
+    <rect x="252" y="600" width="120" height="200" rx="34" fill="white"/>
+    <rect x="452" y="496" width="120" height="304" rx="34" fill="white"/>
+    <rect x="652" y="392" width="120" height="408" rx="34" fill="white"/>
+  </g>
+
+  <!-- Upward arrow that crosses over the bars from lower-left to top-right -->
+  <g filter="url(#softShadow)">
+    <!-- Arrow line: zig-zag rising path approximated by polyline -->
+    <path
+      d="M 226 600 L 446 416 L 596 528 L 808 296"
+      fill="none"
+      stroke="white"
+      stroke-width="56"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <!-- Arrow head -->
+    <path
+      d="M 696 248 L 832 248 L 832 384"
+      fill="none"
+      stroke="white"
+      stroke-width="56"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

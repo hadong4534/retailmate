@@ -1,0 +1,76 @@
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function formatKRW(amount: number | null | undefined): string {
+  if (amount == null) return '₩0';
+  return `₩${amount.toLocaleString('ko-KR')}`;
+}
+
+/**
+ * 모바일 친화 금액 표기 — "원" 접미. 한국 사용자에게 자연스럽다.
+ * 예: 102,448,200원 / 0원
+ * ₩ 기호는 일부 폰트에서 가운데 가로선처럼 보이는 문제가 있어 모바일은 "원"이 안전.
+ */
+export function formatWon(amount: number | null | undefined): string {
+  if (amount == null) return '0원';
+  return `${amount.toLocaleString('ko-KR')}원`;
+}
+
+export function formatNumber(n: number | null | undefined): string {
+  if (n == null) return '0';
+  return n.toLocaleString('ko-KR');
+}
+
+export function parseMoney(input: string): number {
+  const digits = input.replace(/[^0-9]/g, '');
+  return digits === '' ? 0 : Number(digits);
+}
+
+export function formatMoneyInput(value: number | string): string {
+  const n = typeof value === 'string' ? parseMoney(value) : value;
+  if (!Number.isFinite(n) || n === 0) return '';
+  return n.toLocaleString('ko-KR');
+}
+
+export function todayInKST(): string {
+  const now = new Date();
+  const kst = new Date(now.getTime() + (now.getTimezoneOffset() + 9 * 60) * 60 * 1000);
+  return kst.toISOString().slice(0, 10);
+}
+
+export function formatKoDate(d: Date | string): string {
+  const date = typeof d === 'string' ? new Date(d + 'T00:00:00') : d;
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${date.getMonth() + 1}월 ${date.getDate()}일 (${days[date.getDay()]})`;
+}
+
+export function getMonthRange(yearMonth: string): { start: string; end: string } {
+  const [y, m] = yearMonth.split('-').map(Number);
+  const start = `${yearMonth}-01`;
+  const lastDay = new Date(y, m, 0).getDate();
+  const end = `${yearMonth}-${String(lastDay).padStart(2, '0')}`;
+  return { start, end };
+}
+
+export function currentYearMonth(): string {
+  return todayInKST().slice(0, 7);
+}
+
+export function distanceInMeters(
+  lat1: number, lng1: number,
+  lat2: number, lng2: number
+): number {
+  const R = 6371000;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c);
+}

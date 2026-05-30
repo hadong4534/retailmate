@@ -1,0 +1,443 @@
+@import "tailwindcss";
+
+/* ────────────────────────────────────────────────────────────────────────
+   리테일메이트 디자인 토큰
+   - PC와 모바일이 같은 값을 공유. 레이아웃만 분기.
+   - Tailwind 클래스로 직접 표현하기 어려운 경우 var(--rm-*) 로 사용.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+  /* ────────────────── 색상 ──────────────────
+     사용자 요청 토큰명과 별칭을 함께 둠.
+     별칭(--rm-primary 등)은 기존 코드 호환용, *-bare(--color-primary)는 새 코드용. */
+  --rm-primary: #2563EB;
+  --rm-primary-hover: #1D4ED8;
+  --rm-primary-soft: #EFF6FF;
+  --rm-primary-bright: #3B82F6;
+
+  --rm-navy: #0F172A;
+  --rm-navy-card: #111827;
+  --rm-navy-sidebar: #071326;
+
+  --rm-bg: #F6F8FB;
+  --rm-surface: #FFFFFF;
+  --rm-surface-soft: #F8FAFC;
+  --rm-card-bg: #FFFFFF; /* 별칭: surface */
+  --rm-card-subtle: #F1F5F9;
+  --rm-border: #E2E8F0;
+
+  --rm-text-primary: #0F172A;
+  --rm-text-secondary: #64748B;
+  --rm-text-muted: #94A3B8;
+  --rm-text-main: #0F172A; /* 별칭: text-primary */
+  --rm-text-sub: #64748B; /* 별칭: text-secondary */
+
+  --rm-success: #10B981;
+  --rm-warning: #F59E0B;
+  --rm-danger: #EF4444;
+  --rm-purple: #8B5CF6;
+  --rm-cyan: #38BDF8;
+  --rm-info: #0EA5E9;
+
+  /* ────────────────── 카드/라운드 ────────────────── */
+  --rm-radius-card: 20px;
+  --rm-radius-card-lg: 24px;
+  --rm-radius-button: 14px;
+  --rm-radius-input: 12px;
+  --rm-radius-pill: 9999px;
+
+  /* ────────────────── 섀도우 ────────────────── */
+  --rm-shadow-soft: 0 1px 2px 0 rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.05);
+  --rm-shadow-md: 0 4px 12px -4px rgba(15, 23, 42, 0.08);
+  --rm-shadow-card-elevated: 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+
+  /* ────────────────── 여백 ──────────────────
+     모바일 좌우 16px / PC 콘텐츠 max-width 기준. */
+  --rm-page-padding-x: 16px;
+  --rm-card-padding-mobile: 20px;
+  --rm-card-padding-pc: 24px;
+  --rm-content-max-w: 1280px;
+
+  /* ────────────────── 타이포 ──────────────────
+     모바일은 변수, PC는 미디어쿼리로 확장. */
+  --rm-fs-page-title: 26px;     /* 모바일 h1 */
+  --rm-fs-section-title: 19px;  /* 모바일 h2 */
+  --rm-fs-body: 14px;
+  --rm-fs-sub: 13px;
+  --rm-fs-caption: 12px;
+  --rm-fs-kpi: 20px;
+
+  /* ────────────────── z-index ────────────────── */
+  --rm-z-base: 0;
+  --rm-z-sticky-header: 30;
+  --rm-z-tabbar: 30;
+  --rm-z-dropdown: 40;
+  --rm-z-modal-backdrop: 50;
+  --rm-z-modal: 60;
+  --rm-z-toast: 70;
+
+  /* ────────────────── 모션 ────────────────── */
+  --rm-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --rm-duration-fast: 150ms;
+  --rm-duration-md: 220ms;
+  --rm-duration-slow: 360ms;
+
+  /* ────────────────── 기존 next-themes 호환 ────────────────── */
+  --background: var(--rm-bg);
+  --foreground: var(--rm-text-primary);
+}
+
+/* PC 전용 카드 radius 확장 */
+@media (min-width: 1024px) {
+  :root {
+    --rm-radius-card: 24px;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+
+  /* ────────────────────────────────────────────────────────────────────
+     비주얼 리디자인 — 본문 배경에 은은한 radial gradient.
+     - PC: 좌상단 blue / 우상단 cyan / 본문 거의 흰색에 가까운 cool slate
+     - 모바일: 톤을 낮춰 눈부심 줄임 (아래 미디어쿼리에서 약화)
+     ──────────────────────────────────────────────────────────────────── */
+  background-color: #F7FAFC;
+  background-image:
+    radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.10), transparent 28%),
+    radial-gradient(circle at 100% 6%, rgba(56, 189, 248, 0.10), transparent 26%),
+    radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.05), transparent 35%);
+  background-attachment: fixed;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.06), transparent 35%),
+      radial-gradient(circle at 0% 30%, rgba(56, 189, 248, 0.05), transparent 40%);
+  }
+}
+
+/* iOS 모바일 입력 zoom 방지 — 16px 이상 보장 */
+@media (max-width: 640px) {
+  input, textarea, select {
+    font-size: 16px;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   비주얼 리디자인 — 카드 3단계 시스템
+   - rm-card-hero: AI 인사이트·핵심 요약. dark navy gradient + 내부 glow + inset border
+   - rm-card-data: 숫자/데이터 카드. white surface + glass blur + soft shadow + top accent line
+   - rm-card-action: 액션/링크 카드. 호버 lift + active 압축, icon badge 강조
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* 기존 호환 — 단순 카드 (이 클래스를 쓰는 기존 코드 유지) */
+.rm-card {
+  background: var(--rm-card-bg);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-card);
+  box-shadow: var(--rm-shadow-soft);
+}
+
+.rm-card-elevated {
+  background: var(--rm-card-bg);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-card);
+  box-shadow: var(--rm-shadow-card-elevated);
+}
+
+/* Hero Card — AI Command Center 톤 */
+.rm-card-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--rm-radius-card);
+  background: linear-gradient(135deg, #0F172A 0%, #172554 50%, #0F172A 100%);
+  color: #fff;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 12px 32px -16px rgba(15, 23, 42, 0.45),
+    0 0 0 1px rgba(15, 23, 42, 0.05);
+}
+
+/* Data Card — 정보·숫자 표시 */
+.rm-card-data {
+  position: relative;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-card);
+  box-shadow:
+    0 1px 2px 0 rgba(15, 23, 42, 0.04),
+    0 4px 12px -6px rgba(15, 23, 42, 0.06);
+}
+
+/* Data Card top accent — 위쪽 1.5px 컬러 그라데이션 라인 (tone별 색은 인라인 style로) */
+.rm-card-data-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--accent, linear-gradient(90deg, #2563eb, #38bdf8));
+  opacity: 0.85;
+}
+
+/* Action Card — 호버 lift + active scale + 그룹 클릭 시 압축 */
+.rm-card-action {
+  position: relative;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-card);
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  transition:
+    transform 220ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)),
+    box-shadow 220ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)),
+    border-color 220ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1));
+}
+@media (hover: hover) and (pointer: fine) {
+  .rm-card-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -12px rgba(15, 23, 42, 0.18);
+    border-color: rgba(37, 99, 235, 0.25);
+  }
+}
+.rm-card-action:active {
+  transform: scale(0.98);
+}
+
+/* tabular-nums 강제 (금액 정렬용) */
+.rm-tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   모션 — 페이지 진입 fade-up + stagger
+   사용: <div className="rm-enter" style={{ animationDelay: '60ms' }}>
+   prefers-reduced-motion이 켜져 있으면 즉시 표시.
+   ──────────────────────────────────────────────────────────────────────── */
+@keyframes rm-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rm-enter {
+  animation: rm-fade-up 360ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+
+/* Stagger - 자식들에 자동 delay 부여 */
+.rm-stagger > * {
+  animation: rm-fade-up 320ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+.rm-stagger > *:nth-child(1) { animation-delay: 30ms; }
+.rm-stagger > *:nth-child(2) { animation-delay: 60ms; }
+.rm-stagger > *:nth-child(3) { animation-delay: 90ms; }
+.rm-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.rm-stagger > *:nth-child(5) { animation-delay: 150ms; }
+.rm-stagger > *:nth-child(6) { animation-delay: 180ms; }
+.rm-stagger > *:nth-child(7) { animation-delay: 210ms; }
+.rm-stagger > *:nth-child(8) { animation-delay: 240ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-enter,
+  .rm-stagger > * {
+    animation: none !important;
+  }
+}
+
+/* hover lift — PC만 적용, 모바일은 active 압축 */
+.rm-card-hover {
+  transition: transform 200ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)),
+              box-shadow 200ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1));
+}
+@media (hover: hover) and (pointer: fine) {
+  .rm-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+  }
+}
+.rm-card-hover:active {
+  transform: scale(0.995);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   AI 전용 모션 — glow pulse + gradient shimmer.
+   .rm-ai-glow: 부모(다크 카드) 내부에 빛이 은은하게 맥동
+   .rm-ai-shimmer: 카드 테두리에 천천히 흐르는 그라데이션 (top-only)
+   둘 다 transform 없이 opacity/filter만 — 모바일 GPU 부담 최소.
+   ──────────────────────────────────────────────────────────────────────── */
+@keyframes rm-ai-glow {
+  0%, 100% {
+    opacity: 0.55;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translate3d(-50%, -50%, 0) scale(1.08);
+  }
+}
+.rm-ai-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.rm-ai-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 18%;
+  width: 60%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(99, 102, 241, 0.10) 35%, transparent 70%);
+  filter: blur(28px);
+  animation: rm-ai-glow 6s ease-in-out infinite;
+}
+.rm-ai-glow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 82%;
+  width: 50%;
+  height: 130%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.30) 0%, rgba(56, 189, 248, 0.08) 35%, transparent 70%);
+  filter: blur(32px);
+  animation: rm-ai-glow 7s ease-in-out infinite 1s;
+}
+
+@keyframes rm-ai-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.rm-ai-shimmer-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(96, 165, 250, 0.65) 45%,
+    rgba(167, 139, 250, 0.65) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: rm-ai-shimmer 8s linear infinite;
+  pointer-events: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+/* SparkleAvatar 같은 작은 아이콘용 glow pulse */
+@keyframes rm-ai-icon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.45), 0 0 12px 2px rgba(96, 165, 250, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15), 0 0 18px 4px rgba(96, 165, 250, 0.45);
+  }
+}
+.rm-ai-icon-pulse {
+  animation: rm-ai-icon-pulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-ai-glow::before,
+  .rm-ai-glow::after,
+  .rm-ai-shimmer-top,
+  .rm-ai-icon-pulse {
+    animation: none !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   AI 카드 전용 — 더 강한 gradient shimmer + status dot pulse
+   ──────────────────────────────────────────────────────────────────────── */
+@keyframes rm-ai-status-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6), 0 0 8px 1px rgba(52, 211, 153, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(52, 211, 153, 0), 0 0 14px 3px rgba(52, 211, 153, 0.45);
+  }
+}
+.rm-ai-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #10B981;
+  animation: rm-ai-status-pulse 2.4s ease-in-out infinite;
+}
+
+/* AI 카드용 큰 안쪽 gradient orb — Hero card 내부 배치 */
+@keyframes rm-ai-orb-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.55; }
+  50%     { transform: translate3d(8px, -10px, 0) scale(1.06); opacity: 0.9; }
+}
+.rm-ai-orb {
+  position: absolute;
+  pointer-events: none;
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  filter: blur(40px);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.55) 0%, rgba(56, 189, 248, 0.15) 50%, transparent 75%);
+  animation: rm-ai-orb-drift 9s ease-in-out infinite;
+}
+.rm-ai-orb-violet {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, rgba(167, 139, 250, 0.10) 50%, transparent 75%);
+  animation-delay: 1.5s;
+  animation-duration: 11s;
+}
+
+/* 페이지 전환용 부드러운 opacity/translate */
+@keyframes rm-page-in {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.rm-page {
+  animation: rm-page-in 320ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+
+/* 숫자 카운트업 fade-in (KPI 등장 시) */
+@keyframes rm-num-in {
+  0%   { opacity: 0; transform: translateY(6px); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.rm-num-in {
+  animation: rm-num-in 480ms var(--rm-easing, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-ai-status-dot,
+  .rm-ai-orb,
+  .rm-page,
+  .rm-num-in {
+    animation: none !important;
+  }
+}
