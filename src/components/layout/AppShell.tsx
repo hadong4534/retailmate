@@ -93,6 +93,16 @@ const HIDE_MOBILE_TABBAR_PREFIXES = ['/ai/chat'];
 
 const EXACT_MATCH_ONLY = new Set(['/dashboard', '/employees']);
 
+/** 모바일 헤더에서 뒤로가기 버튼을 숨길 "최상위" 경로 — 그 외 하위 페이지는 뒤로가기 노출. */
+const ROOT_PATHS = new Set([
+  '/dashboard', '/sales', '/expenses', '/reports',
+  '/employees', '/attendance', '/contracts', '/notices', '/settings', '/ai',
+]);
+
+function shouldShowBack(pathname: string): boolean {
+  return !ROOT_PATHS.has(pathname);
+}
+
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
   if (EXACT_MATCH_ONLY.has(href)) return false;
@@ -137,6 +147,7 @@ export function AppShell({
   const [storeSwitching, startStoreSwitch] = useTransition();
   const hasMultipleStores = (storeOptions?.length ?? 0) > 1;
   const hideMobileTabbar = shouldHideMobileTabbar(pathname);
+  const showBack = shouldShowBack(pathname);
 
   function handleSwitchStore(storeId: string) {
     if (!currentStore || storeId === currentStore.storeId) {
@@ -261,6 +272,18 @@ export function AppShell({
         }}
       >
         <div className="flex min-w-0 items-center gap-2">
+          {showBack && (
+            <button
+              type="button"
+              onClick={() => router.back()}
+              aria-label="뒤로가기"
+              className="-ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-600 transition active:scale-90 active:bg-[#EEEEFD]"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+          )}
           <Link href="/dashboard" aria-label="리테일메이트 홈" className="shrink-0">
             <Logo size="sm" />
           </Link>

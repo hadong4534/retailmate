@@ -154,11 +154,11 @@ export default async function EmployeeMePage() {
                             {s.contract.work_start_date} ~ {s.contract.work_end_date ?? '(정규)'}
                           </p>
                           <p className="mt-0.5 text-xs text-slate-500">
-                            ⏰ {s.contract.work_days.map((d) => DAY_KO[d] ?? d).join(', ')}{' '}
+                            근무 {s.contract.work_days.map((d) => DAY_KO[d] ?? d).join(', ')}{' '}
                             · {s.contract.work_start_time.slice(0, 5)}~{s.contract.work_end_time.slice(0, 5)}
                           </p>
                           <p className="mt-0.5 text-xs text-slate-500">
-                            💰 {WAGE_LABEL[s.contract.wage_type]} {formatWon(s.contract.wage_amount)}
+                            {WAGE_LABEL[s.contract.wage_type]} {formatWon(s.contract.wage_amount)}
                             {' · '}매월 {s.contract.pay_day}일 지급
                           </p>
                         </>
@@ -171,7 +171,7 @@ export default async function EmployeeMePage() {
                         href={`/contracts/${s.contract.id}/view`}
                         className="text-xs font-medium text-indigo-600 hover:underline"
                       >
-                        📄 계약서 →
+                        계약서 보기 →
                       </Link>
                     )}
                   </div>
@@ -229,7 +229,7 @@ export default async function EmployeeMePage() {
 
                     {s.contract && s.contract.contract_type !== 'fulltime' && (
                       <p className="mt-2 text-[10px] text-slate-400">
-                        ⓘ {s.contract.contract_type === 'parttime' ? '단시간(시급)' : '일용직'} — 4대보험 본인부담 미적용
+                        {s.contract.contract_type === 'parttime' ? '단시간(시급)' : '일용직'} — 4대보험 본인부담 미적용
                       </p>
                     )}
                   </div>
@@ -242,7 +242,7 @@ export default async function EmployeeMePage() {
         {/* 공지 */}
         {allNotices.length > 0 && (
           <section className="mt-8">
-            <h2 className="mb-3 text-lg font-bold text-slate-900">📢 공지함</h2>
+            <h2 className="mb-3 text-lg font-bold text-slate-900">공지함</h2>
             <ul className="space-y-2">
               {allNotices.slice(0, 10).map((n) => (
                 <li
@@ -257,7 +257,7 @@ export default async function EmployeeMePage() {
                       <div className="flex flex-wrap items-center gap-2">
                         {n.is_pinned && (
                           <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
-                            📌 고정
+                            고정
                           </span>
                         )}
                       </div>

@@ -8,7 +8,7 @@ import { MoneyInput } from '@/components/ui/MoneyInput';
 import { todayInKST } from '@/lib/utils';
 import {
   EXPENSE_CATEGORIES,
-  EXPENSE_CATEGORY_ICON,
+  EXPENSE_CATEGORY_LUCIDE,
   EXPENSE_CATEGORY_LABEL,
   type ExpenseCategory,
 } from '@/lib/constants';
@@ -53,12 +53,15 @@ export function ExpenseNewForm({ defaultDate }: { defaultDate?: string }) {
       <div className="rounded-[20px] border border-[#E9EAF4] bg-white p-4">
         <label className="block text-[13px] font-semibold text-slate-700">카테고리</label>
         <div className="mt-2 grid grid-cols-4 gap-2">
-          {EXPENSE_CATEGORIES.map((c) => (
+          {EXPENSE_CATEGORIES.map((c) => {
+            const CatIcon = EXPENSE_CATEGORY_LUCIDE[c];
+            return (
             <button key={c} type="button" onClick={() => setCategory(c)} className={'flex flex-col items-center gap-1 ' + tile(category === c)}>
-              <span className="text-[17px]" aria-hidden>{EXPENSE_CATEGORY_ICON[c]}</span>
+              <CatIcon className="h-[18px] w-[18px]" aria-hidden />
               <span>{EXPENSE_CATEGORY_LABEL[c]}</span>
             </button>
-          ))}
+            );
+          })}
         </div>
       </div>
 

@@ -53,7 +53,7 @@ export interface CompleteOptions {
   storeId?: string | null;
   userId: string;
   metadata?: Record<string, unknown>;
-  /** ms. 초과 시 abort. 기본 5000 (모바일 브라우저 대응). */
+  /** ms. 초과 시 abort. 기본 20000 (Sonnet JSON 응답이 3초보다 오래 걸려 과거엔 항상 timeout→룰 폴백 됐음). */
   timeoutMs?: number;
 }
 
@@ -101,7 +101,7 @@ export async function complete(opts: CompleteOptions): Promise<AIResult> {
   };
 
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), opts.timeoutMs ?? 3000);
+  const timer = setTimeout(() => ctrl.abort(), opts.timeoutMs ?? 20000);
 
   let res: Response;
   try {

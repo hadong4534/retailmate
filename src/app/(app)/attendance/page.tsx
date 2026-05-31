@@ -28,6 +28,8 @@ interface ProfileRow {
   id: string;
   name: string;
   phone: string | null;
+  avatar_path: string | null;
+  avatar_url?: string | null;
 }
 
 export const metadata = {
@@ -88,9 +90,15 @@ export default async function AttendancePage() {
   if (userIds.length > 0) {
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('id, name, phone')
+      .select('id, name, phone, avatar_path')
       .in('id', userIds);
-    (profiles ?? []).forEach((p) => profileMap.set(p.id, p as ProfileRow));
+    (profiles ?? []).forEach((p) => {
+      const row = p as ProfileRow;
+      if (row.avatar_path) {
+        row.avatar_url = supabase.storage.from('avatars').getPublicUrl(row.avatar_path).data.publicUrl;
+      }
+      profileMap.set(p.id, row);
+    });
   }
 
   const totalMembers = memberRows.length;
@@ -228,9 +236,7 @@ export default async function AttendancePage() {
                   return (
                     <li key={a.id} className="flex items-center justify-between py-2.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-600">
-                          {profile?.name?.charAt(0) ?? '?'}
-                        </div>
+                        <MemberAvatar profile={profile} sizeClass="h-8 w-8" textClass="text-xs" />
                         <div>
                           <p className="text-sm font-medium text-slate-900">{profile?.name ?? '이름 미입력'}</p>
                           <p className="text-[10px] text-slate-500">
@@ -391,9 +397,7 @@ export default async function AttendancePage() {
                     <li key={m.id} className="px-4 py-3">
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex min-w-0 items-center gap-2.5">
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">
-                            {profile?.name?.charAt(0) ?? '?'}
-                          </div>
+                          <MemberAvatar profile={profile} sizeClass="h-9 w-9" textClass="text-sm" />
                           <p className="truncate text-[14px] font-semibold text-slate-900">
                             {profile?.name ?? '이름 미입력'}
                           </p>
@@ -454,9 +458,7 @@ export default async function AttendancePage() {
                         <tr key={m.id} className="hover:bg-slate-50">
                           <td className="whitespace-nowrap px-4 py-3">
                             <div className="flex items-center gap-2">
-                              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-600">
-                                {profile?.name?.charAt(0) ?? '?'}
-                              </div>
+                              <MemberAvatar profile={profile} sizeClass="h-7 w-7" textClass="text-xs" />
                               <span className="font-medium text-slate-900">{profile?.name ?? '이름 미입력'}</span>
                             </div>
                           </td>
@@ -492,7 +494,7 @@ export default async function AttendancePage() {
         </section>
 
         <p className="mt-6 rounded-md bg-emerald-50 px-4 py-3 text-xs text-emerald-900">
-          ✓ 위치 권한을 허용하고 매장 반경 안에서 출퇴근 버튼을 눌러주세요.
+          위치 권한을 허용하고 매장 반경 안에서 출퇴근 버튼을 눌러주세요.
         </p>
       </div>
     </div>
@@ -518,6 +520,21 @@ function KpiCard({
           <Icon className="h-5 w-5" strokeWidth={2.2} />
         </div>
       </div>
+    </div>
+  );
+}
+
+function MemberAvatar({ profile, sizeClass, textClass }: {
+  profile?: ProfileRow; sizeClass: string; textClass: string;
+}) {
+  return (
+    <div className={`flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-100 ${textClass} font-semibold text-slate-600`}>
+      {profile?.avatar_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={profile.avatar_url} alt={profile.name ?? ''} className="h-full w-full object-cover" />
+      ) : (
+        profile?.name?.charAt(0) ?? '?'
+      )}
     </div>
   );
 }

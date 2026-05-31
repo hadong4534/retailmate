@@ -173,6 +173,38 @@ export function generateRuleBasedInsights(input: InsightInput): InsightItem[] {
     });
   }
 
+  // 8. 목표 미설정 (데이터는 있는데 비교 기준이 없을 때)
+  if (input.monthlyTarget === 0 && input.monthSales > 0) {
+    items.push({
+      id: 'no-target',
+      tone: 'tip',
+      title: '월 매출 목표를 설정해보세요',
+      body: '목표를 정하면 진행률과 달성 추세를 자동으로 분석해드려요.',
+      action: { label: '목표 설정', href: '/reports' },
+    });
+  }
+
+  // 9. 항상 1개 이상 보장 — 위 룰에 걸린 게 없으면 일반 운영 가이드를 채운다.
+  if (items.length === 0) {
+    if (input.monthSales > 0 && input.monthExpenses > 0) {
+      items.push({
+        id: 'steady',
+        tone: 'positive',
+        title: '매장 흐름이 안정적이에요',
+        body: '매출·비용이 꾸준히 기록되고 있어요. 리포트에서 채널·요일별 패턴을 확인해 성장 포인트를 찾아보세요.',
+        action: { label: '리포트 보기', href: '/reports' },
+      });
+    } else {
+      items.push({
+        id: 'getting-started',
+        tone: 'tip',
+        title: '데이터를 쌓을수록 분석이 정확해져요',
+        body: '매출·비용을 꾸준히 입력하면 손익·목표 달성·인건비 비중까지 자동으로 분석해드려요.',
+        action: { label: '매출 입력', href: '/sales/new' },
+      });
+    }
+  }
+
   return items
     .sort((a, b) => TONE_RANK[a.tone] - TONE_RANK[b.tone])
     .slice(0, 4);

@@ -36,10 +36,17 @@ export async function POST(request: Request) {
   }
 
   // generateAIInsights 내부에서 OpenRouter 호출 + 실패 시 룰 기반 fallback
+  const { data: storeRow } = await supabase
+    .from('stores')
+    .select('industry')
+    .eq('id', adminStore.storeId)
+    .maybeSingle();
+
   const result = await generateAIInsights(body.input, {
     storeId: adminStore.storeId,
     userId: user.id,
     storeName: adminStore.storeName,
+    storeIndustry: storeRow?.industry ?? null,
   });
 
   return NextResponse.json({

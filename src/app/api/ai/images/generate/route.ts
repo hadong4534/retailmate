@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import {
@@ -11,6 +11,7 @@ import {
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 interface GenerateRequest {
   prompt: string;
@@ -87,8 +88,12 @@ export async function POST(request: Request) {
   //  - 성공/실패 모두 row 상태로 기록되므로 클라이언트는 폴링으로 추적
   //  - dev/Node 런타임에서는 fire-and-forget이 안전하게 동작
   //  - 프로덕션 Vercel에서는 함수 종료가 일찍 끊길 수 있어 추후 queue 도입 필요
-  void runImageGeneration(row, input).catch((err) => {
-    console.error('[generate] background run failed', err);
+  after(async () => {
+    try {
+      await runImageGeneration(row, input);
+    } catch (err) {
+      console.error('[generate] background run failed', err);
+    }
   });
 
   return NextResponse.json(

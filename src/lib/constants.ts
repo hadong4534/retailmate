@@ -81,8 +81,24 @@ import {
   Megaphone,
   FileText,
   Package,
+  CreditCard,
+  Banknote,
+  Receipt,
+  Landmark,
+  Bike,
+  Wallet,
   type LucideIcon,
 } from 'lucide-react';
+
+/** 결제수단 lucide 아이콘 — 이모지 대신 일관된 벡터 아이콘 사용. */
+export const SALE_CHANNEL_LUCIDE: Record<SaleChannel, LucideIcon> = {
+  card: CreditCard,
+  cash: Banknote,
+  cash_receipt: Receipt,
+  transfer: Landmark,
+  delivery: Bike,
+  other: Wallet,
+};
 
 export const EXPENSE_CATEGORY_LUCIDE: Record<ExpenseCategory, LucideIcon> = {
   material: Apple,

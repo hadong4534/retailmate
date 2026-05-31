@@ -45,8 +45,10 @@ export function HomeView(p: HomeViewProps) {
   const baseChange = p.prevSales > 0
     ? Math.round(((p.baseSales - p.prevSales) / p.prevSales) * 1000) / 10 : null;
 
+  const expectedPace = p.daysInMonth > 0 ? Math.round((p.daysIntoMonth / p.daysInMonth) * 100) : 0;
   const ai = pickAIInsight({
     monthSales: p.monthSales, monthExpenses: p.monthExpenses, monthCostRatio,
+    monthSalesChange, baseChange, goalRate, expectedPace, monthProfitRate,
     hasBaseSales, hasBaseExpenses, totalEmployees: p.totalEmployees, hasAttendance,
   });
   const series = (p.dailySeries && p.dailySeries.length > 0) ? p.dailySeries : null;
@@ -256,25 +258,44 @@ function ClosingCard({ hasBaseSales, hasBaseExpenses, baseProfit, baseProfitRate
   );
 }
 
-// ── AI 한 줄 진단 ────────────────────────────────────────────────────────────
+// ── AI 한 줄 진단 (데이터 점검 + 이상치 + 가이드. 항상 비지 않음) ─────────────
 function pickAIInsight(s: {
   monthSales: number; monthExpenses: number; monthCostRatio: number | null;
+  monthSalesChange: number | null; baseChange: number | null;
+  goalRate: number | null; expectedPace: number; monthProfitRate: number | null;
   hasBaseSales: boolean; hasBaseExpenses: boolean; totalEmployees: number; hasAttendance: boolean;
 }): { text: string; ctaLabel: string; ctaHref: string } {
   const hasAny = s.monthSales > 0 || s.monthExpenses > 0;
+
   if (!hasAny && s.totalEmployees === 0)
-    return { text: '매출·비용·근무 데이터를 입력하면 매장 손익이 자동으로 정리돼요.', ctaLabel: '첫 데이터 입력', ctaHref: '/sales/new' };
+    return { text: '매출·비용·근무 데이터를 입력하면 매장 손익과 목표 달성률이 자동으로 정리돼요.', ctaLabel: '첫 데이터 입력', ctaHref: '/sales/new' };
   if (s.monthSales === 0)
-    return { text: '아직 매출이 부족해요. 입력하면 목표 달성률과 순이익 분석이 시작돼요.', ctaLabel: '매출 입력', ctaHref: '/sales/new' };
-  if (s.monthSales > 0 && (s.monthCostRatio === null || s.monthCostRatio < 10))
-    return { text: '매출은 확인됐지만 비용 입력이 부족해 순이익 정확도가 낮아요.', ctaLabel: '비용 입력', ctaHref: '/expenses/new' };
-  if (s.monthCostRatio !== null && s.monthCostRatio >= 50)
-    return { text: '비용 비중이 평소보다 높아요. 원재료비와 인건비를 확인해보세요.', ctaLabel: '비용 분석', ctaHref: '/expenses' };
+    return { text: '아직 이번 달 매출이 없어요. 입력하면 목표 달성률·순이익 분석이 시작됩니다.', ctaLabel: '매출 입력', ctaHref: '/sales/new' };
+  if (s.monthCostRatio === null || s.monthCostRatio < 10)
+    return { text: '매출은 확인됐지만 비용 입력이 부족해 순이익 정확도가 낮아요. 원재료비·인건비·임대료부터 입력해보세요.', ctaLabel: '비용 입력', ctaHref: '/expenses/new' };
+
+  if (s.baseChange !== null && s.baseChange <= -25)
+    return { text: `어제 매출이 직전일 대비 ${Math.abs(s.baseChange)}% 급감했어요. 요일·날씨·이벤트 등 외부 요인을 점검해보세요.`, ctaLabel: '매출 추이', ctaHref: '/sales' };
+  if (s.monthSalesChange !== null && s.monthSalesChange <= -20)
+    return { text: `이번 달 매출이 지난달보다 ${Math.abs(s.monthSalesChange)}% 낮아요. 채널 비중과 마케팅을 점검할 시점입니다.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };
+  if (s.monthCostRatio !== null && s.monthCostRatio >= 80)
+    return { text: `비용률이 매출의 ${s.monthCostRatio}%로 매우 높아요. 영업이익이 거의 남지 않는 수준이라 원재료비·인건비 점검이 필요해요.`, ctaLabel: '비용 분석', ctaHref: '/expenses' };
+  if (s.monthCostRatio !== null && s.monthCostRatio >= 60)
+    return { text: `비용 비중이 ${s.monthCostRatio}%로 다소 높아요. 카테고리별로 줄일 항목이 있는지 확인해보세요.`, ctaLabel: '비용 분석', ctaHref: '/expenses' };
+
+  if (s.goalRate !== null && s.goalRate - s.expectedPace <= -15)
+    return { text: `목표 진행률 ${s.goalRate}%로 정상 추세(${s.expectedPace}%)보다 더뎌요. 남은 기간 매출 전략을 점검해보세요.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };
+  if (s.goalRate !== null && s.goalRate - s.expectedPace >= 10)
+    return { text: `목표 달성률이 추세보다 ${s.goalRate - s.expectedPace}%p 앞서 있어요. 이대로면 월말 목표 초과 달성이 기대돼요.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };
+
   if (!s.hasBaseSales || !s.hasBaseExpenses)
-    return { text: '어제 마감이 비어 있어요. 입력하면 이번 달 리포트가 더 정확해져요.', ctaLabel: '마감 입력', ctaHref: '/sales/new' };
+    return { text: '어제 마감이 비어 있어요. 입력하면 이번 달 리포트가 더 정확해집니다.', ctaLabel: '마감 입력', ctaHref: '/sales/new' };
   if (s.totalEmployees > 0 && !s.hasAttendance)
     return { text: '오늘 출근 기록이 없어요. 근무자를 확인하면 인건비 계산이 정확해져요.', ctaLabel: '출근 확인', ctaHref: '/attendance' };
-  return { text: '이번 달 매장 흐름은 안정적이에요. 순이익과 비용 비중을 계속 확인해보세요.', ctaLabel: '리포트 보기', ctaHref: '/reports' };
+
+  if (s.monthProfitRate !== null && s.monthProfitRate >= 25)
+    return { text: `이익률 ${s.monthProfitRate}%로 안정적이에요. 여유 자금을 마케팅·시설 개선에 투자하면 매출 성장으로 이어집니다.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };
+  return { text: '이번 달 매장 흐름은 안정적이에요. 채널·요일별 패턴을 분석해 성장 포인트를 찾아보세요.', ctaLabel: '리포트 보기', ctaHref: '/reports' };
 }
 
 // ── 유틸 ─────────────────────────────────────────────────────────────────────

@@ -15,18 +15,23 @@ import {
 } from '@/lib/insights/rules';
 
 const SYSTEM_PROMPT = `당신은 한국 자영업자(매장 사장님)를 돕는 AI 운영 분석가입니다.
-주어진 매장 데이터를 분석해 사장님에게 도움이 될 인사이트 3-4개를 JSON 배열로 반환합니다.
+주어진 매장 데이터를 분석해 사장님에게 실제로 도움이 될 인사이트를 항상 3-4개 JSON 배열로 반환합니다.
 
 응답 규칙:
 - 각 인사이트는 {id, tone, title, body, action?} 형식
 - tone은 정확히 다음 중 하나: "positive" | "warning" | "tip" | "neutral"
-- title은 12자 이내 짧은 한 문장 (이모지 금지)
-- body는 1-2문장, 데이터를 인용한 구체적인 분석
+- title은 14자 이내 짧은 한 문장 (이모지 금지)
+- body는 1-2문장. 데이터가 있으면 수치를 정확히 인용, 없으면 업종 특성에 맞는 구체적 조언
 - action은 선택. {label: 짧은 동사구, href: 경로} 형식
   - href는 다음 중 하나만: /sales/new, /expenses/new, /reports, /contracts/new, /attendance, /employees
 - 우선순위: warning > tip > neutral > positive
-- 친근한 존댓말, 외식업·소매업 자영업자 톤
-- 추측·일반론 금지. 데이터 수치를 정확히 인용`;
+
+[중요] 절대 빈 배열을 반환하지 마세요. 데이터가 부족해도 다음을 활용해 항상 3-4개를 채웁니다:
+1) 데이터 점검: 입력 누락(매출·비용·목표·직원)이나 이상치(매출 급감/급증, 비용률 과다, 특정 채널 편중, 0원 영업일 등)를 짚어줍니다.
+2) 업종 맞춤 조언: 사장님 매장 업종과 계절·요일 흐름에 맞는 운영 팁(메뉴·재고·인력·마케팅)을 제안합니다.
+3) 데이터가 충분하면 수치 기반 분석을 우선합니다.
+
+- 친근한 존댓말, 외식업·소매업 자영업자 톤. 추측성 단정은 피하고 "확인해보세요/검토해보세요"처럼 행동을 권합니다.`;
 
 interface AIInsightsResult {
   items: InsightItem[];
@@ -36,14 +41,14 @@ interface AIInsightsResult {
 
 export async function generateAIInsights(
   input: InsightInput,
-  context: { storeId: string; userId: string; storeName: string },
+  context: { storeId: string; userId: string; storeName: string; storeIndustry?: string | null },
 ): Promise<AIInsightsResult> {
   // OPENROUTER_API_KEY 없으면 즉시 룰 기반
   if (!process.env.OPENROUTER_API_KEY) {
     return { items: generateRuleBasedInsights(input), source: 'rule' };
   }
 
-  const userPrompt = buildPrompt(input, context.storeName);
+  const userPrompt = buildPrompt(input, context.storeName, context.storeIndustry ?? null);
 
   try {
     const result = await complete({
@@ -54,8 +59,9 @@ export async function generateAIInsights(
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.6,
-      maxTokens: 800,
+      maxTokens: 900,
       jsonMode: true,
+      timeoutMs: 25000,
       storeId: context.storeId,
       userId: context.userId,
       metadata: { source: 'dashboard_insight' },
@@ -77,7 +83,7 @@ export async function generateAIInsights(
   }
 }
 
-function buildPrompt(input: InsightInput, storeName: string): string {
+function buildPrompt(input: InsightInput, storeName: string, industry: string | null): string {
   const monthProfit = input.monthSales - input.monthExpenses;
   const profitRate = input.monthSales > 0 ? ((monthProfit / input.monthSales) * 100).toFixed(1) : '0';
   const cardPct = input.monthSales > 0
@@ -87,7 +93,7 @@ function buildPrompt(input: InsightInput, storeName: string): string {
     ? ((input.channelShare.delivery / input.monthSales) * 100).toFixed(1)
     : '0';
 
-  return `매장 "${storeName}" 의 ${input.daysIntoMonth}일차 데이터:
+  return `매장 "${storeName}"${industry ? ` (업종: ${industry})` : ''} 의 ${input.daysIntoMonth}일차 데이터:
 
 이번 달 매출: ${input.monthSales.toLocaleString('ko-KR')}원
 이번 달 비용: ${input.monthExpenses.toLocaleString('ko-KR')}원

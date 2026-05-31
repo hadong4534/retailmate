@@ -8,7 +8,7 @@ import { MoneyInput } from '@/components/ui/MoneyInput';
 import { formatWon, todayInKST } from '@/lib/utils';
 import {
   SALE_CHANNELS,
-  SALE_CHANNEL_ICON,
+  SALE_CHANNEL_LUCIDE,
   SALE_CHANNEL_LABEL,
   type SaleChannel,
 } from '@/lib/constants';
@@ -76,10 +76,14 @@ export function SaleNewForm({ defaultDate }: { defaultDate?: string }) {
       <div className="rounded-[20px] border border-[#E9EAF4] bg-white p-4">
         <p className="mb-3 text-[12px] text-slate-500">결제수단별로 입력하세요. 비워둔 채널은 저장되지 않아요.</p>
         <div className="space-y-3">
-          {SALE_CHANNELS.map((c) => (
+          {SALE_CHANNELS.map((c) => {
+            const ChannelIcon = SALE_CHANNEL_LUCIDE[c];
+            return (
             <div key={c} className="rounded-2xl border border-[#EEF0F6] bg-[#FBFBFE] p-3">
               <div className="flex items-center gap-2">
-                <span className="text-[15px]" aria-hidden>{SALE_CHANNEL_ICON[c]}</span>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#EEF0FE] text-[#6366F1]" aria-hidden>
+                  <ChannelIcon className="h-4 w-4" />
+                </span>
                 <span className="flex-1 text-[13.5px] font-semibold text-slate-700">{SALE_CHANNEL_LABEL[c]}</span>
                 <div className="w-[44%] sm:w-[200px]">
                   <MoneyInput label="" value={amounts[c]} onChange={(n) => setChannel(c, n)} size="md" />
@@ -98,7 +102,8 @@ export function SaleNewForm({ defaultDate }: { defaultDate?: string }) {
                 )}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

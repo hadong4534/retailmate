@@ -56,7 +56,7 @@ export default async function PostersPage() {
 
           <aside className="space-y-3">
             <div className="rounded-2xl border border-[#EAECF5] bg-white p-5">
-              <h3 className="text-sm font-semibold text-slate-900">📂 내 작업물</h3>
+              <h3 className="text-sm font-semibold text-slate-900">내 작업물</h3>
               <div className="mt-3 space-y-1.5">
                 <div className="flex items-baseline justify-between">
                   <span className="text-xs text-slate-500">진행 중</span>

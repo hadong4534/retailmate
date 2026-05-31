@@ -63,6 +63,15 @@ function monthRangeIso(month: string): { start: string; end: string } {
   return { start, end };
 }
 
+/** 'YYYY-MM-DD' → 그 주 월요일 'YYYY-MM-DD' (주휴수당 주 단위 집계 키). */
+function weekStartKey(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00Z');
+  const day = d.getUTCDay();              // 0=일 ~ 6=토
+  const diff = day === 0 ? -6 : 1 - day;  // 월요일로 이동
+  d.setUTCDate(d.getUTCDate() + diff);
+  return d.toISOString().slice(0, 10);
+}
+
 /** 매장 전체 급여 집계. 매장의 모든 멤버(owner 제외)를 행으로 반환. */
 export async function getStorePayroll(
   supabase: SupabaseClient,
@@ -125,12 +134,16 @@ export async function getStorePayroll(
     .gte('check_in_at', start)
     .lt('check_in_at', end);
 
-  const workByUser = new Map<string, { minutes: number; days: Set<string> }>();
+  const workByUser = new Map<string, { minutes: number; days: Set<string>; weekMinutes: Map<string, number> }>();
   (atts ?? []).forEach((a) => {
-    if (!workByUser.has(a.user_id)) workByUser.set(a.user_id, { minutes: 0, days: new Set() });
+    if (!workByUser.has(a.user_id)) workByUser.set(a.user_id, { minutes: 0, days: new Set(), weekMinutes: new Map() });
     const agg = workByUser.get(a.user_id)!;
-    agg.minutes += Number(a.work_minutes ?? 0);
-    agg.days.add(String(a.check_in_at).slice(0, 10));
+    const mins = Number(a.work_minutes ?? 0);
+    agg.minutes += mins;
+    const dayStr = String(a.check_in_at).slice(0, 10);
+    agg.days.add(dayStr);
+    const wk = weekStartKey(dayStr);
+    agg.weekMinutes.set(wk, (agg.weekMinutes.get(wk) ?? 0) + mins);
   });
 
   // 5) 행 조립
@@ -148,7 +161,20 @@ export async function getStorePayroll(
     if (contract) {
       const hours = workMinutes / 60;
       if (contract.wage_type === 'hourly') {
-        grossPay = Math.round(hours * contract.wage_amount);
+        const base = Math.round(hours * contract.wage_amount);
+        // 주휴수당: 계약서에 '지급'이고 시급제일 때, 주 15시간 이상 근무한 주마다
+        // (주 근로시간/40)×8×시급 만큼 추가 (8시간분 상한). 4대보험 산정 기준에도 포함됨.
+        let weeklyHoliday = 0;
+        if (contract.weekly_holiday_allowance && work) {
+          for (const wkMin of work.weekMinutes.values()) {
+            const wkHours = wkMin / 60;
+            if (wkHours >= 15) {
+              const paidHours = Math.min(wkHours, 40) / 40 * 8;
+              weeklyHoliday += Math.round(paidHours * contract.wage_amount);
+            }
+          }
+        }
+        grossPay = base + weeklyHoliday;
       } else if (contract.wage_type === 'monthly') {
         // 월급제는 근무 여부와 무관하게 wage_amount.
         // 단 퇴사자의 그 다음 달은 0으로 (resign_date 이후 월).

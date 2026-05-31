@@ -69,7 +69,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
     >
       {!hasLogo && (
         <div className="mb-4 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900">
-          ⚠ 매장 로고가 등록되지 않았습니다. <a href="/ai/brand" className="underline">로고를 먼저 등록</a>하면 포스터에 자동 반영됩니다.
+          매장 로고가 등록되지 않았습니다. <a href="/ai/brand" className="underline">로고를 먼저 등록</a>하면 포스터에 자동 반영됩니다.
         </div>
       )}
 
@@ -142,7 +142,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
         </div>
 
         {error && (
-          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">⚠ {error}</p>
+          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
         )}
 
         {queued && (
