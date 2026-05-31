@@ -520,9 +520,9 @@ function Step3({
         onChange={(n) => update('wage_amount', n)}
         size="lg"
       />
-      {data.wage_type === 'hourly' && data.wage_amount > 0 && data.wage_amount < 10030 && (
+      {data.wage_type === 'hourly' && data.wage_amount > 0 && data.wage_amount < 10320 && (
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700">
-          2025년 최저시급(10,030원) 미만이에요. 금액을 확인해주세요.
+          2026년 최저시급(10,320원) 미만이에요. 금액을 확인해주세요.
         </p>
       )}
 
