@@ -69,9 +69,13 @@ export async function gpsCheckIn(input: { lat: number; lng: number }): Promise<R
     };
   }
 
-  // 오늘 이미 미완료 출근 row가 있으면 차단
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // 오늘(KST 기준) 이미 미완료 출근 row가 있으면 차단.
+  // 서버는 UTC라 new Date().setHours(0,0,0,0)는 UTC 자정 → 한국 자정과 9시간 어긋남.
+  // KST(UTC+9) 자정에 해당하는 UTC 시각을 계산한다.
+  const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const todayStart = new Date(
+    Date.UTC(kstNow.getUTCFullYear(), kstNow.getUTCMonth(), kstNow.getUTCDate()) - 9 * 60 * 60 * 1000,
+  );
   const { data: openRow } = await supabase
     .from('attendances')
     .select('id')
