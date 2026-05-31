@@ -114,7 +114,7 @@ export default async function DrivePage({
                 className={
                   'rounded-lg px-3 py-1.5 text-sm font-medium transition ' +
                   (active
-                    ? 'bg-indigo-600 text-white shadow-sm'
+                    ? 'bg-[#7177EE] text-white shadow-sm'
                     : 'text-slate-600 hover:bg-slate-100')
                 }
               >
@@ -135,7 +135,7 @@ export default async function DrivePage({
             </p>
             <Link
               href="/ai/posters"
-              className="mt-4 rounded-md bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700"
+              className="mt-4 rounded-md bg-[#7177EE] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5E64E6]"
             >
               + 첫 디자인 만들기
             </Link>

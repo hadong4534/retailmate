@@ -103,7 +103,7 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
               type="button"
               onClick={() => handle('in')}
               disabled={disabled}
-              className="min-w-[88px] rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50"
+              className="min-w-[88px] rounded-lg bg-[#7177EE] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#5E64E6] active:scale-[0.98] disabled:opacity-50"
             >
               {busy ? '확인 중…' : '출근'}
             </button>

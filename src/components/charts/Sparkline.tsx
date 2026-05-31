@@ -21,7 +21,7 @@ interface SparklineProps {
 /** 미니 라인 차트 — KPI 카드 안에 들어가는 추세 표시용 */
 export function Sparkline({
   data,
-  color = '#2563eb',
+  color = '#7177EE',
   height = 36,
   showTooltip = false,
   dotLast = false,

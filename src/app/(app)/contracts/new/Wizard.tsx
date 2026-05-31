@@ -250,7 +250,7 @@ function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
               <span className={
                 'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ' +
                 (active
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-[#7177EE] text-white'
                   : done
                   ? 'bg-emerald-600 text-white'
                   : 'bg-slate-200 text-slate-600')
@@ -402,7 +402,7 @@ function Step2({
                 className={
                   'h-10 w-10 rounded-md border text-sm font-semibold transition ' +
                   (active
-                    ? 'border-indigo-400 bg-indigo-600 text-white'
+                    ? 'border-indigo-400 bg-[#7177EE] text-white'
                     : 'border-[#EAECF5] bg-white text-slate-600 hover:bg-slate-50')
                 }
               >

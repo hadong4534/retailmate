@@ -258,7 +258,7 @@ export async function loadBrandContext(storeId: string): Promise<BrandContext | 
   return {
     storeName: store.name,
     industry: store.industry,
-    brandColor: store.brand_color ?? '#2563eb',
+    brandColor: store.brand_color ?? '#7177EE',
     brandSlogan: store.brand_slogan,
     brandDescription: store.brand_description,
     logoUrl,

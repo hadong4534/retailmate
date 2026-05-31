@@ -276,7 +276,7 @@ function EditProfileModal({
             <button
               type="submit"
               disabled={pending || !name.trim()}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+              className="rounded-md bg-[#7177EE] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5E64E6] disabled:opacity-50"
             >
               {pending ? '저장 중…' : '저장'}
             </button>

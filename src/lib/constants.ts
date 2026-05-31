@@ -38,7 +38,7 @@ export const SALE_CHANNELS: SaleChannel[] = [
 ];
 
 export const SALE_CHANNEL_COLOR: Record<SaleChannel, string> = {
-  card: '#2563eb',
+  card: '#7177EE',
   cash: '#10b981',
   cash_receipt: '#0ea5e9',
   transfer: '#6366f1',
@@ -107,7 +107,7 @@ export const EXPENSE_CATEGORIES: ExpenseCategory[] = [
 ];
 
 export const EXPENSE_CATEGORY_COLOR: Record<ExpenseCategory, string> = {
-  material: '#2563eb',
+  material: '#7177EE',
   labor: '#059669',
   rent: '#f59e0b',
   utility: '#ef4444',

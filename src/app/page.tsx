@@ -29,7 +29,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/login"
-                className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+                className="rounded-md bg-[#7177EE] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#5E64E6]"
               >
                 로그인
               </Link>
@@ -72,7 +72,7 @@ export default function LandingPage() {
             <div className="mt-7 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex h-14 items-center justify-center rounded-2xl bg-indigo-600 px-6 text-[17px] font-semibold text-white shadow-lg shadow-indigo-600/20 transition active:scale-[0.98] hover:bg-indigo-700"
+                className="inline-flex h-14 items-center justify-center rounded-2xl bg-[#7177EE] px-6 text-[17px] font-semibold text-white shadow-lg shadow-indigo-600/20 transition active:scale-[0.98] hover:bg-[#5E64E6]"
               >
                 로그인
               </Link>
@@ -142,7 +142,7 @@ export default function LandingPage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-indigo-700"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7177EE] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-[#5E64E6]"
                 >
                   로그인
                 </Link>
@@ -308,7 +308,7 @@ function MiniLine() {
       <path
         d="M0 38 L20 33 L40 35 L60 27 L80 30 L100 22 L120 24 L140 16 L160 20 L180 12 L200 6"
         fill="none"
-        stroke="#2563EB"
+        stroke="#7177EE"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -445,7 +445,7 @@ function SideItem({ label, active = false }: { label: string; active?: boolean }
     <li
       className={
         'flex items-center gap-1.5 rounded-md px-2 py-1.5 ' +
-        (active ? 'bg-indigo-600 text-white' : 'text-slate-600')
+        (active ? 'bg-[#7177EE] text-white' : 'text-slate-600')
       }
     >
       <span className={'h-1 w-1 rounded-full ' + (active ? 'bg-white' : 'bg-slate-400')} />
@@ -499,7 +499,7 @@ function MiniLineChart() {
           <path
             d="M0 50 L20 45 L40 48 L60 38 L80 40 L100 30 L120 32 L140 22 L160 25 L180 18 L200 10"
             fill="none"
-            stroke="#2563EB"
+            stroke="#7177EE"
             strokeWidth="2"
             strokeLinecap="round"
           />
@@ -525,7 +525,7 @@ function AIInsightCard() {
     <div className="rounded-lg border border-slate-100 bg-gradient-to-br from-indigo-50 to-cyan-50 p-3">
       <div className="flex items-center justify-between">
         <p className="text-[11px] font-semibold text-slate-900">AI 인사이트</p>
-        <span className="rounded bg-indigo-600 px-1 py-0.5 text-[8px] font-bold text-white">NEW</span>
+        <span className="rounded bg-[#7177EE] px-1 py-0.5 text-[8px] font-bold text-white">NEW</span>
       </div>
       <p className="mt-1.5 text-[10px] leading-relaxed text-slate-600">
         이번 달 순이익이 전월 대비

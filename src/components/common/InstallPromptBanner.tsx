@@ -133,7 +133,7 @@ export function InstallPromptBanner() {
                 <button
                   type="button"
                   onClick={installAndroid}
-                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-indigo-700 active:scale-[0.98]"
+                  className="rounded-lg bg-[#7177EE] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#5E64E6] active:scale-[0.98]"
                 >
                   지금 설치
                 </button>
@@ -310,7 +310,7 @@ function InstallGuideModal({
                   <button
                     type="button"
                     onClick={onInstall}
-                    className="mt-4 flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white shadow-sm transition active:scale-[0.98] hover:bg-indigo-700"
+                    className="mt-4 flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-[#7177EE] px-4 text-sm font-bold text-white shadow-sm transition active:scale-[0.98] hover:bg-[#5E64E6]"
                   >
                     <Download className="h-4 w-4" strokeWidth={2.4} />
                     지금 앱 설치
@@ -423,7 +423,7 @@ function SectionTitle({ label }: { label: string }) {
 function Step({ n, children }: { n: number; children: React.ReactNode }) {
   return (
     <div className="mb-2 flex gap-2.5">
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[11px] font-bold text-white">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#7177EE] text-[11px] font-bold text-white">
         {n}
       </span>
       <p className="text-[13px] leading-relaxed text-slate-700">{children}</p>

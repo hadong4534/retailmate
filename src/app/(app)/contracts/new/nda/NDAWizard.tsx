@@ -131,7 +131,7 @@ export function NDAWizard() {
               setResult(null);
               router.refresh();
             }}
-            className="inline-flex h-10 items-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white"
+            className="inline-flex h-10 items-center rounded-md bg-[#7177EE] px-4 text-sm font-semibold text-white"
           >
             새 서약서 작성
           </button>
@@ -155,7 +155,7 @@ export function NDAWizard() {
                   (done
                     ? 'bg-emerald-500 text-white'
                     : active
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-[#7177EE] text-white'
                     : 'bg-slate-200 text-slate-500')
                 }
               >

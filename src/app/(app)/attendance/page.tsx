@@ -301,7 +301,7 @@ export default async function AttendancePage() {
               <WeekBarChart
                 data={weekData.map((d) => ({ label: d.label, value: d.value, highlighted: d.isToday }))}
                 color="#93c5fd"
-                highlightColor="#2563eb"
+                highlightColor="#7177EE"
                 valueLabel="출근 인원"
                 height={220}
               />
@@ -343,7 +343,7 @@ export default async function AttendancePage() {
                   className={
                     'flex aspect-square items-center justify-center rounded text-[10px] ' +
                     (c.isToday
-                      ? 'bg-indigo-600 font-bold text-white ring-2 ring-indigo-300'
+                      ? 'bg-[#7177EE] font-bold text-white ring-2 ring-indigo-300'
                       : c.count >= 10
                       ? 'bg-emerald-500 text-white'
                       : c.count >= 6

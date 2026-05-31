@@ -38,7 +38,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
           type="button"
           onClick={save}
           disabled={pending}
-          className="rounded bg-indigo-600 px-2 py-1 text-[10px] font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+          className="rounded bg-[#7177EE] px-2 py-1 text-[10px] font-semibold text-white hover:bg-[#5E64E6] disabled:opacity-50"
         >
           {pending ? '저장…' : '저장'}
         </button>

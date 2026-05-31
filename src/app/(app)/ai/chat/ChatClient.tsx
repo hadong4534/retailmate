@@ -123,13 +123,9 @@ export function ChatClient({
           {isEmpty && (
             <div className="flex flex-col items-center py-8 text-center lg:py-12">
               {/* AI orb — glow pulse + 별 + 외곽 보라 그라데이션 후광 */}
-              <div className="relative">
-                <span
-                  aria-hidden
-                  className="absolute -inset-6 rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.18)_0%,transparent_70%)] blur-md"
-                />
-                <span aria-hidden className="rm-ai-icon-pulse absolute inset-0 rounded-full" />
-                <SparkleAvatar size={88} withGlow className="relative" />
+              <div className="rm-ai-live relative flex h-24 w-24 items-center justify-center rounded-full">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/aurora-orb.png" alt="" aria-hidden className="rm-ai-float h-20 w-20 object-contain" />
               </div>
               <h2 className="mt-5 text-[20px] font-bold text-slate-900 lg:text-2xl">
                 무엇을 도와드릴까요?
@@ -177,7 +173,7 @@ export function ChatClient({
                   onClick={() => send(s)}
                   disabled={streaming}
                   title={s}
-                  className="max-w-[180px] shrink-0 truncate rounded-full border border-[#EAECF5] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
+                  className="max-w-[180px] shrink-0 truncate rounded-full border border-[#EAECF5] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-[#C9CCF7] hover:bg-[#EEF0FE] hover:text-[#5961E6] disabled:opacity-50"
                 >
                   {s}
                 </button>
@@ -192,7 +188,7 @@ export function ChatClient({
         </div>
 
         <form onSubmit={handleSubmit} className="px-4 py-3 lg:px-8">
-          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-[#E3E5F0] bg-white px-3 py-2 shadow-sm transition focus-within:border-indigo-400 focus-within:shadow-md">
+          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-[#E3E5F0] bg-white px-3 py-2 shadow-sm transition focus-within:border-[#7177EE] focus-within:shadow-md">
             <SparkleAvatar size={24} />
             <input
               type="text"
@@ -209,7 +205,7 @@ export function ChatClient({
               type="submit"
               disabled={streaming || !input.trim()}
               aria-label="전송"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white shadow-sm transition hover:bg-indigo-700 active:scale-95 disabled:opacity-40"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#7177EE] text-white shadow-sm transition hover:bg-[#5E64E6] active:scale-95 disabled:opacity-40"
             >
               <SendIcon />
             </button>
@@ -277,7 +273,7 @@ function Bubble({
               </span>
             )}
             {streaming && message.content && (
-              <span className="ml-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-indigo-500 align-middle" />
+              <span className="ml-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#7177EE] align-middle" />
             )}
           </div>
           {message.ts && !streaming && (

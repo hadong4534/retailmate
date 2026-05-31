@@ -112,7 +112,7 @@ export default async function PayrollPage({
             </p>
             <Link
               href="/contracts/new"
-              className="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-indigo-700"
+              className="mt-4 inline-flex items-center rounded-md bg-[#7177EE] px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-[#5E64E6]"
             >
               + 계약서 작성하기
             </Link>
@@ -193,7 +193,7 @@ function KpiCard({
   tone: 'blue' | 'emerald' | 'slate';
 }) {
   const tint = {
-    blue: { bg: 'bg-indigo-50', text: 'text-indigo-600', accent: 'linear-gradient(90deg, #2563EB, #60A5FA)' },
+    blue: { bg: 'bg-indigo-50', text: 'text-indigo-600', accent: 'linear-gradient(90deg, #7177EE, #60A5FA)' },
     emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', accent: 'linear-gradient(90deg, #10B981, #34D399)' },
     slate: { bg: 'bg-slate-100', text: 'text-slate-600', accent: 'linear-gradient(90deg, #475569, #94A3B8)' },
   }[tone];

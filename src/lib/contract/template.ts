@@ -120,7 +120,7 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
     margin: 12pt 0 18pt 0;
     padding: 10pt 12pt;
     background: #f8fafc;
-    border-left: 3px solid #2563eb;
+    border-left: 3px solid #7177EE;
     font-size: 10pt;
   }
   .party-line { margin: 8pt 0; }
@@ -176,7 +176,7 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
   .badge {
     display: inline-block;
     padding: 2pt 8pt;
-    background: #2563eb;
+    background: #7177EE;
     color: white;
     border-radius: 999px;
     font-size: 9pt;
@@ -225,7 +225,7 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
     <th>6. 임금</th>
     <td>
       <strong>${WAGE_TYPE_KO[contract.wage_type]}</strong>:
-      <strong style="color:#2563eb">${formatMoney(contract.wage_amount)}원</strong><br />
+      <strong style="color:#7177EE">${formatMoney(contract.wage_amount)}원</strong><br />
       주휴수당: ${contract.weekly_holiday_allowance ? '포함' : '미포함'}<br />
       지급일: 매월 ${contract.pay_day}일<br />
       지급방법: ${contract.pay_method ?? '계좌이체'}
@@ -366,7 +366,7 @@ export function getEmptyContractPreview(storeName = '(매장명)', ownerName = '
       wage_calc_mode: 'hourly', weekly_holiday_default: true,
       pay_day_default: 25, tax_filing_mode: 'simple',
       business_name: null, logo_path: null,
-      brand_color: '#2563eb', brand_slogan: null, brand_description: null,
+      brand_color: '#7177EE', brand_slogan: null, brand_description: null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -536,7 +536,7 @@ function renderNDAHTML(data: ContractTemplateData): string {
     margin: 12pt 0 18pt 0;
     padding: 12pt 14pt;
     background: #f8fafc;
-    border-left: 3px solid #2563eb;
+    border-left: 3px solid #7177EE;
     font-size: 10.5pt;
   }
   .party {

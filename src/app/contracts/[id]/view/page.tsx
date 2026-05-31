@@ -155,7 +155,7 @@ function scopedStyles(raw: string): string {
     .contract-print-area { font-family: 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif; font-size: 11pt; line-height: 1.6; color: #111; }
     .contract-print-area h1 { text-align: center; font-size: 20pt; margin: 0 0 4pt 0; letter-spacing: 8pt; }
     .contract-print-area .subtitle { text-align: center; font-size: 10pt; color: #555; margin-bottom: 18pt; }
-    .contract-print-area .intro { margin: 12pt 0 18pt 0; padding: 10pt 12pt; background: #f8fafc; border-left: 3px solid #2563eb; font-size: 10pt; }
+    .contract-print-area .intro { margin: 12pt 0 18pt 0; padding: 10pt 12pt; background: #f8fafc; border-left: 3px solid #7177EE; font-size: 10pt; }
     .contract-print-area table.contract { width: 100%; border-collapse: collapse; margin-top: 10pt; }
     .contract-print-area table.contract th, .contract-print-area table.contract td { border: 1px solid #999; padding: 6pt 8pt; vertical-align: top; text-align: left; }
     .contract-print-area table.contract th { width: 22%; background: #f1f5f9; font-weight: 600; }
@@ -168,7 +168,7 @@ function scopedStyles(raw: string): string {
     .contract-print-area .sig-box .sig-area { margin-top: 16pt; min-height: 60pt; border-bottom: 1px solid #ccc; }
     .contract-print-area .sig-placeholder { color: #999; font-size: 10pt; }
     .contract-print-area .footer { margin-top: 20pt; padding-top: 10pt; border-top: 1px dashed #ccc; font-size: 9pt; color: #555; text-align: center; }
-    .contract-print-area .badge { display: inline-block; padding: 2pt 8pt; background: #2563eb; color: white; border-radius: 999px; font-size: 9pt; margin-left: 8pt; }
+    .contract-print-area .badge { display: inline-block; padding: 2pt 8pt; background: #7177EE; color: white; border-radius: 999px; font-size: 9pt; margin-left: 8pt; }
     @media print {
       @page { size: A4; margin: 20mm 18mm; }
       body { background: white !important; }

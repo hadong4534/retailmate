@@ -369,7 +369,7 @@ function AuthStep({
                   type="button"
                   onClick={handleVerifySms}
                   disabled={smsStage !== 'sent' || smsCode.length !== 6 || verifyLoading}
-                  className="h-11 shrink-0 rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                  className="h-11 shrink-0 rounded-md bg-[#7177EE] px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
                 >
                   {smsStage === 'verified' ? '확인됨' : verifyLoading ? '확인 중…' : '확인'}
                 </button>
@@ -675,7 +675,7 @@ function DoneStep({
       {contractId && (
         <a
           href={`/contracts/${contractId}/view`}
-          className="block rounded-md bg-indigo-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
+          className="block rounded-md bg-[#7177EE] px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#5E64E6]"
         >
           📄 내 계약서 보기 / 인쇄
         </a>

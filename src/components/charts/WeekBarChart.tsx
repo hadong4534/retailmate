@@ -25,7 +25,7 @@ function formatTick(n: number): string {
 
 export function WeekBarChart({
   data,
-  color = '#2563eb',
+  color = '#7177EE',
   highlightColor = '#1d4ed8',
   height = 240,
   valueLabel = '비용',

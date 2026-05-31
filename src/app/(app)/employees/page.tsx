@@ -175,7 +175,7 @@ export default async function EmployeesPage() {
   const presentCount = checkedIn.size;
   const attDonut = totalActive > 0
     ? [
-        { name: '출근', value: presentCount, color: '#2563eb' },
+        { name: '출근', value: presentCount, color: '#7177EE' },
         { name: '미출근', value: Math.max(0, totalActive - presentCount), color: '#cbd5e1' },
       ].filter((d) => d.value > 0)
     : [];

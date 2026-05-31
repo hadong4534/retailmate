@@ -88,7 +88,7 @@ export function DailyTrendChart({ data }: { data: DailyDatum[] }) {
               return labels[value] ?? value;
             }}
           />
-          <Line type="monotone" dataKey="sales" stroke="#2563eb" strokeWidth={2} dot={false} connectNulls={false} />
+          <Line type="monotone" dataKey="sales" stroke="#7177EE" strokeWidth={2} dot={false} connectNulls={false} />
           <Line type="monotone" dataKey="expenses" stroke="#ef4444" strokeWidth={2} dot={false} connectNulls={false} />
           <Line type="monotone" dataKey="profit" stroke="#059669" strokeWidth={2} dot={false} connectNulls={false} />
         </LineChart>

@@ -44,7 +44,7 @@ export default async function BrandSettingsPage() {
 
         <BrandClient
           initial={{
-            brand_color: store.brand_color ?? '#2563eb',
+            brand_color: store.brand_color ?? '#7177EE',
             brand_slogan: store.brand_slogan ?? '',
             brand_description: store.brand_description ?? '',
             logoUrl,

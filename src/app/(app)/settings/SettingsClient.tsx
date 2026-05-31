@@ -98,7 +98,7 @@ export function SettingsClient({
                   className={
                     'flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition ' +
                     (active
-                      ? 'bg-indigo-600 text-white shadow-sm'
+                      ? 'bg-[#7177EE] text-white shadow-sm'
                       : 'text-slate-300 hover:bg-slate-800')
                   }
                 >
@@ -581,7 +581,7 @@ function Toggle({
         disabled={pending}
         className={
           'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition disabled:opacity-50 ' +
-          (checked ? 'bg-indigo-600' : 'bg-slate-300')
+          (checked ? 'bg-[#7177EE]' : 'bg-slate-300')
         }
         aria-pressed={checked}
       >

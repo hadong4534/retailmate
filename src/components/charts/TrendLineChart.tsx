@@ -24,7 +24,7 @@ function formatTick(n: number): string {
 
 export function TrendLineChart({
   data,
-  color = '#2563eb',
+  color = '#7177EE',
   valueLabel = '매출',
   height = 240,
 }: {

@@ -61,7 +61,7 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
             type="button"
             onClick={handleAck}
             disabled={pending}
-            className="ml-auto rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:opacity-60"
+            className="ml-auto rounded-md bg-[#7177EE] px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#5E64E6] disabled:opacity-60"
           >
             {pending ? '처리 중…' : total > 1 ? '확인하고 다음' : '확인'}
           </button>

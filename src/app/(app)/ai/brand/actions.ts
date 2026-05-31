@@ -24,7 +24,7 @@ export async function updateBrandSettings(input: UpdateBrandInput): Promise<Resu
   const { error } = await supabase
     .from('stores')
     .update({
-      brand_color: input.brand_color || '#2563eb',
+      brand_color: input.brand_color || '#7177EE',
       brand_slogan: input.brand_slogan.trim() || null,
       brand_description: input.brand_description.trim() || null,
     })
