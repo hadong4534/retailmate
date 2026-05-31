@@ -139,7 +139,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="h-12 w-full rounded-md bg-indigo-600 px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
+          className="h-12 w-full rounded-md bg-[#7177EE] px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-[#5E64E6] disabled:opacity-60"
         >
           {loading ? '로그인 중...' : '로그인'}
         </button>

@@ -28,8 +28,8 @@ export function MonthSalesChart({ data, height = 200 }: { data: Datum[]; height?
         <AreaChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="salesArea" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2563eb" stopOpacity={0.25} />
-              <stop offset="100%" stopColor="#2563eb" stopOpacity={0} />
+              <stop offset="0%" stopColor="#7177EE" stopOpacity={0.25} />
+              <stop offset="100%" stopColor="#7177EE" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid stroke="#f1f5f9" vertical={false} />
@@ -65,7 +65,7 @@ export function MonthSalesChart({ data, height = 200 }: { data: Datum[]; height?
           <Area
             type="monotone"
             dataKey="sales"
-            stroke="#2563eb"
+            stroke="#7177EE"
             strokeWidth={2.2}
             fill="url(#salesArea)"
             isAnimationActive={false}

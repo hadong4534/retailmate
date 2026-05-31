@@ -131,6 +131,16 @@ export default async function DashboardPage() {
     ? Math.round(pastValues.reduce((a, b) => a + b, 0) / pastValues.length)
     : null;
 
+  // ── 일별 매출 시계열 (차트용) ───────────────────────────────────────────────
+  const dailyMap = new Map<number, number>();
+  monthSalesRows.forEach((r) => {
+    const dd = parseInt(String(r.sale_date).slice(8, 10), 10);
+    if (!Number.isNaN(dd)) dailyMap.set(dd, (dailyMap.get(dd) ?? 0) + Number(r.amount ?? 0));
+  });
+  const dailySeries = Array.from(dailyMap.entries())
+    .sort((a, b) => a[0] - b[0])
+    .map(([day, sales]) => ({ day, sales }));
+
   return (
     <HomeView
       baseDate={baseDate}
@@ -151,6 +161,7 @@ export default async function DashboardPage() {
       // 직원/출근
       workingCount={workingRes.data?.length ?? 0}
       totalEmployees={employeeCountRes.count ?? 0}
+      dailySeries={dailySeries}
     />
   );
 }

@@ -200,7 +200,7 @@ export function AppShell({
                       className={cn(
                         'flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-150 active:scale-[0.97]',
                         active
-                          ? 'bg-[#6366F1] text-white shadow-[0_6px_16px_-6px_rgba(108,92,231,0.6)]'
+                          ? 'bg-[#EEF0FE] text-[#5961E6]'
                           : 'text-slate-600 hover:bg-[#EEEEFD] hover:text-[#5458E6] active:bg-[#E4E4FB]',
                       )}
                     >

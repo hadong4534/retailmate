@@ -282,7 +282,7 @@ export default function SignupPage() {
                 type="button"
                 onClick={handleVerifyCode}
                 disabled={!canVerify}
-                className="h-11 shrink-0 rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                className="h-11 shrink-0 rounded-md bg-[#7177EE] px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
               >
                 {(stage as Stage) === 'verified' ? '확인됨' : verifyLoading ? '확인 중...' : '확인'}
               </button>
@@ -325,7 +325,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="h-12 w-full rounded-md bg-indigo-600 px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-50"
+          className="h-12 w-full rounded-md bg-[#7177EE] px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-[#5E64E6] disabled:opacity-50"
         >
           {signupLoading ? '가입 중...' : '가입하기'}
         </button>
