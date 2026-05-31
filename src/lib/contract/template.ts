@@ -60,6 +60,16 @@ function formatTime(t: string): string {
  * - fulltime/parttime/daily: renderLaborContractHTML (기존 근로계약서)
  * - nda: renderNDAHTML (비밀유지 서약서)
  */
+/** HTML 이스케이프 — dangerouslySetInnerHTML로 렌더되므로 사용자 입력은 반드시 거친다(XSS 방지). */
+function esc(v: string | number | null | undefined): string {
+  return String(v ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export function renderContractHTML(data: ContractTemplateData): string {
   if (data.contract.contract_type === 'nda') {
     return renderNDAHTML(data);
@@ -93,7 +103,7 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>표준근로계약서 — ${employee.name}</title>
+<title>표준근로계약서 — ${esc(employee.name)}</title>
 <style>
   @page { size: A4; margin: 20mm 18mm; }
   * { box-sizing: border-box; }
@@ -190,8 +200,8 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
 <div class="subtitle">${CONTRACT_TYPE_KO[contract.contract_type]}</div>
 
 <div class="intro">
-  <strong>사용자</strong> ${store.name} 대표 <strong>${owner.name}</strong>(이하 "사업주")와<br />
-  <strong>근로자</strong> <strong>${employee.name}</strong>(이하 "근로자")은 다음과 같이 근로계약을 체결한다.
+  <strong>사용자</strong> ${esc(store.name)} 대표 <strong>${esc(owner.name)}</strong>(이하 "사업주")와<br />
+  <strong>근로자</strong> <strong>${esc(employee.name)}</strong>(이하 "근로자")은 다음과 같이 근로계약을 체결한다.
 </div>
 
 <table class="contract">
@@ -204,11 +214,11 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
   </tr>
   <tr>
     <th>2. 근무 장소</th>
-    <td>${contract.workplace_address}</td>
+    <td>${esc(contract.workplace_address)}</td>
   </tr>
   <tr>
     <th>3. 업무의 내용</th>
-    <td>${contract.job_description.replace(/\n/g, '<br/>')}</td>
+    <td>${esc(contract.job_description).replace(/\n/g, '<br/>')}</td>
   </tr>
   <tr>
     <th>4. 소정근로일</th>
@@ -228,7 +238,7 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
       <strong style="color:#7177EE">${formatMoney(contract.wage_amount)}원</strong><br />
       주휴수당: ${contract.weekly_holiday_allowance ? '포함' : '미포함'}<br />
       지급일: 매월 ${contract.pay_day}일<br />
-      지급방법: ${contract.pay_method ?? '계좌이체'}
+      지급방법: ${esc(contract.pay_method ?? '계좌이체')}
     </td>
   </tr>
   <tr>
@@ -237,12 +247,12 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
   </tr>
   <tr>
     <th>8. 연차유급휴가</th>
-    <td>${contract.annual_leave_policy ?? '근로기준법에 따라 부여'}</td>
+    <td>${esc(contract.annual_leave_policy ?? '근로기준법에 따라 부여')}</td>
   </tr>
   ${contract.additional_terms ? `
   <tr>
     <th>9. 기타 약정</th>
-    <td>${contract.additional_terms.replace(/\n/g, '<br/>')}</td>
+    <td>${esc(contract.additional_terms).replace(/\n/g, '<br/>')}</td>
   </tr>` : ''}
 </table>
 
@@ -274,19 +284,19 @@ ${renderTypeSpecificClauses(contract)}
   <div class="sig-box">
     <div class="label">사업주 (사용자)</div>
     <div class="meta">
-      사업장명: ${store.name}<br />
-      사업자등록번호: ${store.business_no ?? '________________'}<br />
-      주소: ${store.address}<br />
-      대표자: ${owner.name}
+      사업장명: ${esc(store.name)}<br />
+      사업자등록번호: ${esc(store.business_no ?? '________________')}<br />
+      주소: ${esc(store.address)}<br />
+      대표자: ${esc(owner.name)}
     </div>
     <div class="sig-area">${ownerSig}</div>
   </div>
   <div class="sig-box">
     <div class="label">근로자</div>
     <div class="meta">
-      성명: ${employee.name}<br />
-      연락처: ${employee.phone ?? '________________'}<br />
-      이메일: ${employee.email}
+      성명: ${esc(employee.name)}<br />
+      연락처: ${esc(employee.phone ?? '________________')}<br />
+      이메일: ${esc(employee.email)}
     </div>
     <div class="sig-area">${employeeSig}</div>
   </div>
@@ -503,13 +513,13 @@ function renderNDAHTML(data: ContractTemplateData): string {
 
   const effectiveDate = contract.work_start_date;
   const retentionYears = contract.nda_retention_years ?? 3;
-  const extraScope = contract.nda_info_scope?.trim();
+  const extraScope = contract.nda_info_scope ? esc(contract.nda_info_scope.trim()) : undefined;
 
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>비밀유지 및 손해배상 서약서 — ${employee.name}</title>
+<title>비밀유지 및 손해배상 서약서 — ${esc(employee.name)}</title>
 <style>
   @page { size: A4; margin: 20mm 18mm; }
   * { box-sizing: border-box; }
@@ -610,8 +620,8 @@ function renderNDAHTML(data: ContractTemplateData): string {
 </div>
 
 <div class="party">
-  <div class="row"><strong>사업주</strong> ${store.name} 대표 <strong>${owner.name}</strong> (이하 "사업주")</div>
-  <div class="row"><strong>근로자</strong> <strong>${employee.name}</strong> (이하 "근로자")</div>
+  <div class="row"><strong>사업주</strong> ${esc(store.name)} 대표 <strong>${esc(owner.name)}</strong> (이하 "사업주")</div>
+  <div class="row"><strong>근로자</strong> <strong>${esc(employee.name)}</strong> (이하 "근로자")</div>
   <div class="row"><strong>시행일</strong> ${formatDate(effectiveDate)}</div>
 </div>
 
@@ -686,19 +696,19 @@ function renderNDAHTML(data: ContractTemplateData): string {
   <div class="sig-box">
     <div class="label">사업주 (사용자)</div>
     <div class="meta">
-      사업장명: ${store.name}<br />
-      사업자등록번호: ${store.business_no ?? '________________'}<br />
-      주소: ${store.address}<br />
-      대표자: ${owner.name}
+      사업장명: ${esc(store.name)}<br />
+      사업자등록번호: ${esc(store.business_no ?? '________________')}<br />
+      주소: ${esc(store.address)}<br />
+      대표자: ${esc(owner.name)}
     </div>
     <div class="sig-area">${ownerSig}</div>
   </div>
   <div class="sig-box">
     <div class="label">근로자</div>
     <div class="meta">
-      성명: ${employee.name}<br />
-      연락처: ${employee.phone ?? '________________'}<br />
-      이메일: ${employee.email}
+      성명: ${esc(employee.name)}<br />
+      연락처: ${esc(employee.phone ?? '________________')}<br />
+      이메일: ${esc(employee.email)}
     </div>
     <div class="sig-area">${employeeSig}</div>
   </div>

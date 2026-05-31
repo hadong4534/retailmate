@@ -36,7 +36,7 @@ export function NDAWizard() {
   const [signature, setSignature] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-  const [result, setResult] = useState<{ contractId: string; signToken: string; expiresAt: string } | null>(null);
+  const [result, setResult] = useState<{ contractId: string; signToken: string; expiresAt: string | null } | null>(null);
   const [copied, setCopied] = useState(false);
 
   const update = <K extends keyof NDAFormData>(key: K, value: NDAFormData[K]) => {
@@ -63,8 +63,8 @@ export function NDAWizard() {
         setError(res.error);
         return;
       }
-      if (res.contractId && res.signToken && res.expiresAt) {
-        setResult({ contractId: res.contractId, signToken: res.signToken, expiresAt: res.expiresAt });
+      if (res.contractId && res.signToken) {
+        setResult({ contractId: res.contractId, signToken: res.signToken, expiresAt: res.expiresAt ?? null });
         setStep('done');
       }
     });
@@ -72,8 +72,8 @@ export function NDAWizard() {
 
   // Done step
   if (step === 'done' && result) {
-    const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/contracts/${result.contractId}/sign?token=${result.signToken}`;
-    const expiresStr = new Date(result.expiresAt).toLocaleDateString('ko-KR');
+    const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/contracts/${result.signToken}/sign`;
+    const expiresStr = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString('ko-KR') : null;
 
     async function copy() {
       try {
@@ -95,7 +95,7 @@ export function NDAWizard() {
         </div>
 
         <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
-          <label className="text-xs font-medium text-slate-500">서명 링크 (7일 후 만료)</label>
+          <label className="text-xs font-medium text-slate-500">서명 링크{expiresStr ? ` (${expiresStr} 만료)` : ''}</label>
           <div className="mt-2 break-all rounded-md border border-[#EAECF5] bg-slate-50 px-3 py-3 font-mono text-xs text-slate-800">
             {url}
           </div>
@@ -107,7 +107,7 @@ export function NDAWizard() {
               </span>
             </Button>
             <a
-              href={`sms:?body=${encodeURIComponent(`[리테일메이트] 비밀유지서약서 서명 링크 (${expiresStr} 만료)\n${url}`)}`}
+              href={`sms:?body=${encodeURIComponent(`[리테일메이트] 비밀유지서약서 서명 링크${expiresStr ? ` (${expiresStr} 만료)` : ''}\n${url}`)}`}
               className="inline-flex h-9 items-center rounded-md border border-[#E3E5F0] px-3 text-sm font-medium text-slate-700"
             >
               문자로 보내기
