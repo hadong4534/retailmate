@@ -126,12 +126,11 @@ export function SettingsClient({
 
       <aside className="space-y-3">
         <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-900">최근 저장 정보</h3>
+          <h3 className="text-sm font-semibold text-slate-900">설정 안내</h3>
           <div className="mt-3 flex items-start gap-2">
-            <span className="mt-0.5 text-emerald-500">✓</span>
             <div className="text-xs">
-              <p className="font-medium text-slate-700">모든 설정이 저장되었습니다.</p>
-              <p className="mt-1 text-slate-400">최근 저장 시간</p>
+              <p className="font-medium text-slate-700">각 섹션의 저장 버튼을 눌러야 반영됩니다.</p>
+              <p className="mt-1 text-slate-400">현재 시각</p>
               <p className="mt-0.5 font-mono text-slate-600">
                 {savedAt.toLocaleString('ko-KR')}
               </p>
