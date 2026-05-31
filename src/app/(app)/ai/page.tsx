@@ -47,7 +47,7 @@ const TOOLS: Tool[] = [
 ];
 
 const ACCENT: Record<Tool['accent'], { ring: string; bg: string; text: string }> = {
-  blue:    { ring: 'group-hover:ring-blue-300',    bg: 'bg-blue-50',    text: 'text-blue-700' },
+  blue:    { ring: 'group-hover:ring-indigo-300',    bg: 'bg-indigo-50',    text: 'text-indigo-700' },
   violet:  { ring: 'group-hover:ring-violet-300',  bg: 'bg-violet-50',  text: 'text-violet-700' },
   pink:    { ring: 'group-hover:ring-pink-300',    bg: 'bg-pink-50',    text: 'text-pink-700' },
   emerald: { ring: 'group-hover:ring-emerald-300', bg: 'bg-emerald-50', text: 'text-emerald-700' },
@@ -127,11 +127,11 @@ export default async function AIHubPage() {
                   </span>
                 </div>
                 <SparkleAvatar size={36} className={c.text} />
-                <h2 className="mt-4 text-lg font-bold text-slate-900 group-hover:text-blue-700">
+                <h2 className="mt-4 text-lg font-bold text-slate-900 group-hover:text-indigo-700">
                   {t.title}
                 </h2>
                 <p className="mt-1.5 text-sm text-slate-500">{t.desc}</p>
-                <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-blue-600">
+                <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-indigo-600">
                   열기
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12 H19 M12 5 L19 12 L12 19" />

@@ -68,7 +68,7 @@ export default async function EditDayPage({
           </div>
           <Link
             href={`/sales?month=${month}`}
-            className="text-xs font-medium text-blue-600 hover:underline"
+            className="text-xs font-medium text-indigo-600 hover:underline"
           >
             ← 목록
           </Link>

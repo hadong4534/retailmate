@@ -162,7 +162,7 @@ export function BrandClient({ initial }: Props) {
 - "정성을 담은 한끼" — 손님에게 항상 이 마음으로
 - 메인 컬러는 차분한 블랙·골드 톤
 - 30~50대 가족 단위 손님 위주`}
-            className="w-full rounded-md border border-slate-300 px-3 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-slate-300 px-3 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
 
           <div className="flex items-center justify-between">

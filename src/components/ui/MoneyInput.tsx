@@ -58,7 +58,7 @@ export function MoneyInput({
           onChange={handleChange}
           placeholder={placeholder}
           className={cn(
-            'w-full rounded-md border border-slate-300 text-right font-mono tabular-nums text-slate-900 placeholder:text-slate-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-50',
+            'w-full rounded-md border border-slate-300 text-right font-mono tabular-nums text-slate-900 placeholder:text-slate-300 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50',
             size === 'lg' ? 'h-12 px-4 text-lg' : 'h-11 px-3 text-base',
           )}
         />

@@ -203,7 +203,7 @@ export default async function EmployeesPage() {
         <div className="rm-stagger grid grid-cols-1 gap-4 lg:grid-cols-4">
           <div className="rounded-xl border border-slate-200 bg-white p-5 lg:col-span-1">
             <p className="text-xs text-slate-500">전체 직원</p>
-            <p className="mt-1 text-3xl font-bold text-blue-600">{members.length}명</p>
+            <p className="mt-1 text-3xl font-bold text-indigo-600">{members.length}명</p>
             <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
               <SmallStat label="정규직" value={`${fulltimeCount}명`} />
               <SmallStat label="아르바이트" value={`${partCount}명`} />
@@ -213,8 +213,8 @@ export default async function EmployeesPage() {
           </div>
           <KpiCard
             Icon={Wallet}
-            iconBg="bg-blue-100"
-            iconColor="text-blue-600"
+            iconBg="bg-indigo-100"
+            iconColor="text-indigo-600"
             label="평균 시급"
             value={avgWage > 0 ? formatWon(avgWage) : '미설정'}
             sub={wagedMembers.length > 0 ? `${wagedMembers.length}명 평균` : '시급 입력 필요'}
@@ -307,20 +307,20 @@ export default async function EmployeesPage() {
             ) : (
               <div className="mt-3 grid grid-cols-2 gap-3">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-blue-600">{presentCount}/{totalActive}</p>
+                  <p className="text-3xl font-bold text-indigo-600">{presentCount}/{totalActive}</p>
                   <p className="mt-1 text-[10px] text-slate-500">
                     출근율 {((presentCount / totalActive) * 100).toFixed(1)}%
                   </p>
                 </div>
                 <div className="space-y-1.5 text-xs">
-                  <Stat dot="bg-blue-500" label="출근" value={`${presentCount}명`} />
+                  <Stat dot="bg-indigo-500" label="출근" value={`${presentCount}명`} />
                   <Stat dot="bg-slate-300" label="미출근" value={`${offCount}명`} />
                 </div>
               </div>
             )}
             <Link
               href="/attendance"
-              className="mt-3 block text-right text-[11px] font-medium text-blue-600 hover:underline"
+              className="mt-3 block text-right text-[11px] font-medium text-indigo-600 hover:underline"
             >
               근태 현황 보기 →
             </Link>

@@ -30,7 +30,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
           inputMode="numeric"
           value={wage === 0 ? '' : wage.toLocaleString('ko-KR')}
           onChange={(e) => setWage(parseMoney(e.target.value))}
-          className="h-7 w-24 rounded border border-slate-300 px-2 text-right text-xs tabular-nums focus:border-blue-500 focus:outline-none"
+          className="h-7 w-24 rounded border border-slate-300 px-2 text-right text-xs tabular-nums focus:border-indigo-500 focus:outline-none"
           autoFocus
           placeholder="0"
         />
@@ -38,7 +38,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
           type="button"
           onClick={save}
           disabled={pending}
-          className="rounded bg-blue-600 px-2 py-1 text-[10px] font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded bg-indigo-600 px-2 py-1 text-[10px] font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
         >
           {pending ? '저장…' : '저장'}
         </button>
@@ -58,10 +58,10 @@ export function WageEditor({ memberId, initialWage }: Props) {
     <button
       type="button"
       onClick={() => setEditing(true)}
-      className="group inline-flex items-center gap-1 text-xs text-slate-700 hover:text-blue-600"
+      className="group inline-flex items-center gap-1 text-xs text-slate-700 hover:text-indigo-600"
     >
       <span className="font-mono tabular-nums">{initialWage ? formatWon(initialWage) : '미설정'}</span>
-      <span className="text-slate-300 group-hover:text-blue-500">✎</span>
+      <span className="text-slate-300 group-hover:text-indigo-500">✎</span>
     </button>
   );
 }

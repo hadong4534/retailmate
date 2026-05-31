@@ -98,7 +98,7 @@ export function SettingsClient({
                   className={
                     'flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition ' +
                     (active
-                      ? 'bg-blue-600 text-white shadow-sm'
+                      ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-slate-300 hover:bg-slate-800')
                   }
                 >
@@ -230,7 +230,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
           <select
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           >
             <option value="">선택 안 함</option>
             <option value="restaurant">외식업</option>
@@ -267,7 +267,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
         />
 
         {/* 출퇴근 좌표 + 반경 */}
-        <div className="md:col-span-2 rounded-lg border border-blue-100 bg-blue-50/40 p-4">
+        <div className="md:col-span-2 rounded-lg border border-indigo-100 bg-indigo-50/40 p-4">
           <p className="text-sm font-medium text-slate-800">📍 출퇴근 좌표</p>
           <p className="mt-0.5 text-xs text-slate-500">
             위 주소를 기준으로 자동 등록됩니다. 직원 출퇴근 인증에 사용돼요.
@@ -293,7 +293,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
                 onChange={(e) => setRadius(Number(e.target.value))}
                 className="flex-1"
               />
-              <span className="w-16 text-right font-semibold text-blue-600">{radius}m</span>
+              <span className="w-16 text-right font-semibold text-indigo-600">{radius}m</span>
             </div>
             <p className="mt-1 text-[10px] text-slate-500">
               매장 위치에서 이 반경 안에서만 직원이 출퇴근 가능합니다.
@@ -307,7 +307,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
             type="time"
             value={openTime}
             onChange={(e) => setOpenTime(e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
         <div>
@@ -316,7 +316,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
             type="time"
             value={closeTime}
             onChange={(e) => setCloseTime(e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
 
@@ -436,7 +436,7 @@ function AccountForm({ profile, onSaved }: { profile: ProfileData; onSaved: (d: 
             // eslint-disable-next-line @next/next/no-img-element
             <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-500 to-violet-500 text-2xl font-bold text-white">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-500 text-2xl font-bold text-white">
               {initial}
             </div>
           )}
@@ -463,7 +463,7 @@ function AccountForm({ profile, onSaved }: { profile: ProfileData; onSaved: (d: 
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={photoPending}
-              className="rounded-md border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50 disabled:opacity-50"
+              className="rounded-md border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50 disabled:opacity-50"
             >
               {avatarUrl ? '변경' : '+ 사진 업로드'}
             </button>
@@ -581,7 +581,7 @@ function Toggle({
         disabled={pending}
         className={
           'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition disabled:opacity-50 ' +
-          (checked ? 'bg-blue-600' : 'bg-slate-300')
+          (checked ? 'bg-indigo-600' : 'bg-slate-300')
         }
         aria-pressed={checked}
       >
@@ -643,7 +643,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as 'hourly' | 'monthly')}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           >
             <option value="hourly">기본 시급</option>
             <option value="monthly">월급제</option>
@@ -654,7 +654,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={weekly ? '1' : '0'}
             onChange={(e) => setWeekly(e.target.value === '1')}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           >
             <option value="1">반영함</option>
             <option value="0">반영 안 함</option>
@@ -665,7 +665,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={payDay}
             onChange={(e) => setPayDay(Number(e.target.value))}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           >
             {Array.from({ length: 31 }).map((_, i) => (
               <option key={i + 1} value={i + 1}>매월 {i + 1}일</option>
@@ -677,7 +677,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={taxMode}
             onChange={(e) => setTaxMode(e.target.value as 'simple' | 'general')}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           >
             <option value="simple">간편장부 기준</option>
             <option value="general">복식부기 기준</option>
@@ -685,7 +685,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
         </div>
       </div>
 
-      <p className="mt-3 rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-900">
+      <p className="mt-3 rounded-md bg-indigo-50 px-3 py-2 text-xs text-indigo-900">
         ⓘ 급여 및 세금 정보는 근태 및 급여 계산, 세무 리포트에 반영됩니다.
       </p>
 

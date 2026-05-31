@@ -41,7 +41,7 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white shadow-xl">
         <div className="border-b border-slate-200 px-6 py-4">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-blue-600">📢 매장 공지</p>
+            <p className="text-xs font-semibold text-indigo-600">📢 매장 공지</p>
             <span className="text-xs text-slate-400">
               {idx} / {notices.length}
             </span>
@@ -61,7 +61,7 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
             type="button"
             onClick={handleAck}
             disabled={pending}
-            className="ml-auto rounded-md bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:opacity-60"
+            className="ml-auto rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:opacity-60"
           >
             {pending ? '처리 중…' : total > 1 ? '확인하고 다음' : '확인'}
           </button>

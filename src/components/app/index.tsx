@@ -59,7 +59,7 @@ export function AppCard({
 type BadgeTone = 'info' | 'success' | 'warning' | 'danger' | 'neutral';
 
 const BADGE_TONE: Record<BadgeTone, string> = {
-  info:    'bg-blue-50 text-blue-700 ring-blue-200',
+  info:    'bg-indigo-50 text-indigo-700 ring-indigo-200',
   success: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
   warning: 'bg-amber-50 text-amber-800 ring-amber-200',
   danger:  'bg-red-50 text-red-700 ring-red-200',
@@ -96,7 +96,7 @@ export function AppBadge({
 type CurrencyTone = 'sales' | 'expense' | 'profit' | 'neutral';
 
 const CURRENCY_COLOR: Record<CurrencyTone, string> = {
-  sales:   'text-blue-600',
+  sales:   'text-indigo-600',
   expense: 'text-red-500',
   profit:  'text-emerald-600',
   neutral: 'text-slate-900',
@@ -175,7 +175,7 @@ export function PageHeader({
   className?: string;
 }) {
   const toneCls = {
-    blue:    'bg-blue-50 text-blue-600',
+    blue:    'bg-indigo-50 text-indigo-600',
     emerald: 'bg-emerald-50 text-emerald-600',
     red:     'bg-red-50 text-red-500',
     violet:  'bg-violet-50 text-violet-600',
@@ -253,7 +253,7 @@ export function AccentCard({
   density?: 'default' | 'compact';
 }) {
   const border = {
-    blue: 'border-l-blue-500',
+    blue: 'border-l-indigo-500',
     emerald: 'border-l-emerald-500',
     red: 'border-l-red-500',
     violet: 'border-l-violet-500',
@@ -320,7 +320,7 @@ export function MetricCard({
 type IconTone = 'blue' | 'emerald' | 'red' | 'violet' | 'amber' | 'cyan' | 'slate';
 
 const ICON_BADGE_TONE: Record<IconTone, string> = {
-  blue:    'bg-blue-50 text-blue-600',
+  blue:    'bg-indigo-50 text-indigo-600',
   emerald: 'bg-emerald-50 text-emerald-600',
   red:     'bg-red-50 text-red-500',
   violet:  'bg-violet-50 text-violet-600',

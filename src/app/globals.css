@@ -9,10 +9,13 @@
   /* ────────────────── 색상 ──────────────────
      사용자 요청 토큰명과 별칭을 함께 둠.
      별칭(--rm-primary 등)은 기존 코드 호환용, *-bare(--color-primary)는 새 코드용. */
-  --rm-primary: #6C5CE7;        /* Aurora periwinkle-lavender */
-  --rm-primary-hover: #5A47D6;
-  --rm-primary-soft: #F1EEFE;   /* very light lavender */
-  --rm-primary-bright: #8B7CF5;
+  --rm-primary: #6366F1;        /* Aurora periwinkle-indigo */
+  --rm-primary-hover: #5458E6;
+  --rm-primary-soft: #EEEEFD;   /* pastel lavender */
+  --rm-primary-bright: #8E94F2;
+  --rm-lavender: #C7C9F7;
+  --rm-sky: #BBE4FA;
+  --rm-pink: #F3D6EC;
 
   --rm-navy: #0F172A;
   --rm-navy-card: #111827;
@@ -113,11 +116,12 @@ body {
      - PC: 좌상단 blue / 우상단 cyan / 본문 거의 흰색에 가까운 cool slate
      - 모바일: 톤을 낮춰 눈부심 줄임 (아래 미디어쿼리에서 약화)
      ──────────────────────────────────────────────────────────────────── */
-  background-color: #FAF9FE;
+  background-color: #F5F4FC;
   background-image:
-    radial-gradient(circle at 6% -2%, rgba(124, 108, 240, 0.16), transparent 30%),
-    radial-gradient(circle at 100% 4%, rgba(56, 189, 248, 0.12), transparent 28%),
-    radial-gradient(circle at 50% 102%, rgba(167, 139, 250, 0.12), transparent 38%);
+    radial-gradient(circle at 4% -4%, rgba(168, 170, 246, 0.20), transparent 32%),
+    radial-gradient(circle at 100% 2%, rgba(150, 205, 245, 0.18), transparent 30%),
+    radial-gradient(circle at 88% 100%, rgba(243, 200, 230, 0.16), transparent 36%),
+    radial-gradient(circle at 20% 108%, rgba(167, 139, 250, 0.12), transparent 40%);
   background-attachment: fixed;
 }
 
@@ -163,7 +167,7 @@ body {
   position: relative;
   overflow: hidden;
   border-radius: var(--rm-radius-card);
-  background: linear-gradient(135deg, #2A1E66 0%, #4332A8 50%, #5B2E9E 100%);
+  background: linear-gradient(135deg, #3B3A8C 0%, #5A5BD6 50%, #7E6CE0 100%);
   color: #fff;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.06),
@@ -464,3 +468,20 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+
+/* ── 살아있는 AI 글래스 — 천천히 도는 빛 + 호흡 (AI FAB/오브용) ── */
+@keyframes rm-ai-live-spin { to { transform: rotate(360deg); } }
+@keyframes rm-ai-live-breathe { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:.9;transform:scale(1.06)} }
+.rm-ai-live { position: relative; isolation: isolate; }
+.rm-ai-live::before {
+  content:''; position:absolute; inset:-45%; z-index:-1; border-radius:50%;
+  background: conic-gradient(from 0deg, rgba(142,148,242,0), rgba(187,228,250,.6), rgba(243,214,236,.6), rgba(142,148,242,.6), rgba(187,228,250,0));
+  filter: blur(10px); animation: rm-ai-live-spin 6s linear infinite;
+}
+.rm-ai-live::after {
+  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background: radial-gradient(circle at 34% 28%, rgba(255,255,255,.85), transparent 42%);
+  mix-blend-mode: screen; animation: rm-ai-live-breathe 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce){ .rm-ai-live::before,.rm-ai-live::after{animation:none} }

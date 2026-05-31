@@ -202,7 +202,7 @@ export default async function SalesPage({
         <div className="rm-stagger grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 lg:col-span-2 lg:p-6">
             <p className="text-[12px] text-slate-500">{month} 합계</p>
-            <p className="mt-1 text-[28px] font-extrabold tabular-nums text-blue-600 lg:text-4xl">
+            <p className="mt-1 text-[28px] font-extrabold tabular-nums text-indigo-600 lg:text-4xl">
               {formatWon(grandTotal)}
             </p>
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">

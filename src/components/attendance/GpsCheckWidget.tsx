@@ -86,10 +86,10 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
   const disabled = pending || busy;
 
   return (
-    <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-5">
+    <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5">
       <div className="flex items-center justify-between gap-4">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <MapPin className="h-4 w-4 shrink-0 text-blue-600" strokeWidth={2.2} />
+          <MapPin className="h-4 w-4 shrink-0 text-indigo-600" strokeWidth={2.2} />
           <div className="min-w-0">
             <p className="text-sm font-bold text-slate-900">출퇴근</p>
             <p className="mt-0.5 truncate text-xs text-slate-600">
@@ -103,7 +103,7 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
               type="button"
               onClick={() => handle('in')}
               disabled={disabled}
-              className="min-w-[88px] rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98] disabled:opacity-50"
+              className="min-w-[88px] rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50"
             >
               {busy ? '확인 중…' : '출근'}
             </button>

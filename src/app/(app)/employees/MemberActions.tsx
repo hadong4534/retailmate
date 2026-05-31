@@ -237,7 +237,7 @@ function EditProfileModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="홍길동"
-              className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             />
           </div>
           <div>
@@ -252,7 +252,7 @@ function EditProfileModal({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="010-1234-5678"
-              className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             />
             <p className="mt-1 text-[11px] text-slate-400">선택 입력 · 비워두면 연락처 없음으로 저장됩니다.</p>
           </div>
@@ -276,7 +276,7 @@ function EditProfileModal({
             <button
               type="submit"
               disabled={pending || !name.trim()}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
             >
               {pending ? '저장 중…' : '저장'}
             </button>

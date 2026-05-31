@@ -66,7 +66,7 @@ export function PhoneInput({
         placeholder={placeholder}
         maxLength={13}
         className={cn(
-          'mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-50',
+          'mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50',
         )}
       />
       {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}

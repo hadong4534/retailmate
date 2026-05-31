@@ -177,7 +177,7 @@ export function ChatClient({
                   onClick={() => send(s)}
                   disabled={streaming}
                   title={s}
-                  className="max-w-[180px] shrink-0 truncate rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50"
+                  className="max-w-[180px] shrink-0 truncate rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
                 >
                   {s}
                 </button>
@@ -192,7 +192,7 @@ export function ChatClient({
         </div>
 
         <form onSubmit={handleSubmit} className="px-4 py-3 lg:px-8">
-          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm transition focus-within:border-blue-400 focus-within:shadow-md">
+          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm transition focus-within:border-indigo-400 focus-within:shadow-md">
             <SparkleAvatar size={24} />
             <input
               type="text"
@@ -209,7 +209,7 @@ export function ChatClient({
               type="submit"
               disabled={streaming || !input.trim()}
               aria-label="전송"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:opacity-40"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white shadow-sm transition hover:bg-indigo-700 active:scale-95 disabled:opacity-40"
             >
               <SendIcon />
             </button>
@@ -277,7 +277,7 @@ function Bubble({
               </span>
             )}
             {streaming && message.content && (
-              <span className="ml-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500 align-middle" />
+              <span className="ml-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-indigo-500 align-middle" />
             )}
           </div>
           {message.ts && !streaming && (
@@ -333,7 +333,7 @@ function MarkdownBody({ text }: { text: string }) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 underline-offset-2 hover:underline"
+              className="text-indigo-600 underline-offset-2 hover:underline"
             >
               {children}
             </a>

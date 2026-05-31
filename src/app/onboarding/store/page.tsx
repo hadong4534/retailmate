@@ -130,7 +130,7 @@ export default function StoreOnboardingPage() {
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
               >
                 {INDUSTRIES.map((i) => (
                   <option key={i.value} value={i.value}>{i.label}</option>
@@ -199,7 +199,7 @@ export default function StoreOnboardingPage() {
                   onChange={(e) => setRadius(Number(e.target.value))}
                   className="flex-1"
                 />
-                <span className="w-16 text-right font-semibold text-blue-600">{radius}m</span>
+                <span className="w-16 text-right font-semibold text-indigo-600">{radius}m</span>
               </div>
               <p className="mt-1 text-xs text-slate-500">
                 매장 위치에서 이 반경 안에서만 직원이 출퇴근 체크인 가능

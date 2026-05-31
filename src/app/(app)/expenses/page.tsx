@@ -202,8 +202,8 @@ export default async function ExpensesPage({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
             <KpiSmall
               Icon={PieChart}
-              iconBg="bg-blue-100"
-              iconColor="text-blue-600"
+              iconBg="bg-indigo-100"
+              iconColor="text-indigo-600"
               label="비용률"
               value={`${expenseRatio.toFixed(1)}%`}
               sub={monthSales > 0 ? `매출 대비` : '매출 입력 필요'}

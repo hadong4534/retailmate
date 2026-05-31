@@ -130,7 +130,7 @@ export default async function ReportsPage({
             <tbody className="divide-y divide-slate-100">
               <tr>
                 <td className="whitespace-nowrap py-2 text-slate-700">매출</td>
-                <td className="whitespace-nowrap py-2 text-right font-mono font-semibold tabular-nums text-blue-600">
+                <td className="whitespace-nowrap py-2 text-right font-mono font-semibold tabular-nums text-indigo-600">
                   {formatWon(report.totalSales)}
                 </td>
               </tr>
@@ -256,12 +256,12 @@ function KpiCard({
   label, value, tone, sub,
 }: { label: string; value: string; tone: 'blue' | 'red' | 'emerald'; sub: string }) {
   const colorMap = {
-    blue: 'text-blue-600',
+    blue: 'text-indigo-600',
     red: 'text-red-500',
     emerald: 'text-emerald-600',
   };
   const borderMap = {
-    blue: 'border-l-blue-500',
+    blue: 'border-l-indigo-500',
     red: 'border-l-red-500',
     emerald: 'border-l-emerald-500',
   };

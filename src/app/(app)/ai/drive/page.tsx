@@ -91,7 +91,7 @@ export default async function DrivePage({
               AI로 생성한 모든 이미지가 여기 저장됩니다.
             </p>
           </div>
-          <Link href="/ai" className="text-xs font-medium text-blue-600 hover:underline">
+          <Link href="/ai" className="text-xs font-medium text-indigo-600 hover:underline">
             ← AI 도구
           </Link>
         </div>
@@ -114,7 +114,7 @@ export default async function DrivePage({
                 className={
                   'rounded-lg px-3 py-1.5 text-sm font-medium transition ' +
                   (active
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-indigo-600 text-white shadow-sm'
                     : 'text-slate-600 hover:bg-slate-100')
                 }
               >
@@ -135,7 +135,7 @@ export default async function DrivePage({
             </p>
             <Link
               href="/ai/posters"
-              className="mt-4 rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+              className="mt-4 rounded-md bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-700"
             >
               + 첫 디자인 만들기
             </Link>

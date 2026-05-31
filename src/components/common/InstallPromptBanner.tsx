@@ -122,7 +122,7 @@ export function InstallPromptBanner() {
         className="fixed bottom-[calc(76px+env(safe-area-inset-bottom))] left-3 right-3 z-40 rounded-2xl border border-slate-200 bg-white/95 p-3.5 shadow-[0_12px_30px_-12px_rgba(15,23,42,0.25)] backdrop-blur-md lg:hidden"
       >
         <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white">
             <Download className="h-5 w-5" strokeWidth={2.2} />
           </span>
           <div className="min-w-0 flex-1">
@@ -133,7 +133,7 @@ export function InstallPromptBanner() {
                 <button
                   type="button"
                   onClick={installAndroid}
-                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-blue-700 active:scale-[0.98]"
+                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-indigo-700 active:scale-[0.98]"
                 >
                   지금 설치
                 </button>
@@ -263,13 +263,13 @@ function InstallGuideModal({
               <SectionTitle label={platform === 'ios-other' ? 'Safari로 열고 난 다음' : '아이폰 Safari에서'} />
               <Step n={1}>
                 화면 <strong>하단 가운데</strong>의{' '}
-                <Share2 className="mx-0.5 inline h-3.5 w-3.5 align-[-2px] text-blue-600" strokeWidth={2.2} />{' '}
+                <Share2 className="mx-0.5 inline h-3.5 w-3.5 align-[-2px] text-indigo-600" strokeWidth={2.2} />{' '}
                 <strong>공유</strong> 버튼을 누릅니다. (사각형 위로 화살표가 솟은 모양)
               </Step>
               <Step n={2}>
                 메뉴를 위로 살짝 올린 뒤{' '}
                 <strong>"홈 화면에 추가"</strong>를 선택합니다.
-                <span className="ml-1 inline-flex items-center gap-0.5 text-blue-600">
+                <span className="ml-1 inline-flex items-center gap-0.5 text-indigo-600">
                   <Plus className="h-3 w-3" strokeWidth={2.2} /> Add to Home Screen
                 </span>
               </Step>
@@ -282,7 +282,7 @@ function InstallGuideModal({
                 주소창 없이 앱처럼 사용할 수 있어요.
               </Step>
 
-              <div className="mt-4 rounded-xl bg-blue-50 p-3 text-[12px] leading-relaxed text-blue-900">
+              <div className="mt-4 rounded-xl bg-indigo-50 p-3 text-[12px] leading-relaxed text-indigo-900">
                 <p className="font-semibold">참고</p>
                 <p className="mt-0.5">
                   iPhone은 <strong>Safari에서만</strong> 홈 화면 추가가 됩니다.
@@ -310,7 +310,7 @@ function InstallGuideModal({
                   <button
                     type="button"
                     onClick={onInstall}
-                    className="mt-4 flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white shadow-sm transition active:scale-[0.98] hover:bg-blue-700"
+                    className="mt-4 flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white shadow-sm transition active:scale-[0.98] hover:bg-indigo-700"
                   >
                     <Download className="h-4 w-4" strokeWidth={2.4} />
                     지금 앱 설치
@@ -348,7 +348,7 @@ function InstallGuideModal({
               <Step n={3}>
                 이름을 확인하고 <strong>"추가"</strong>를 누르면 홈 화면에 아이콘 생성.
               </Step>
-              <div className="mt-4 rounded-xl bg-blue-50 p-3 text-[12px] leading-relaxed text-blue-900">
+              <div className="mt-4 rounded-xl bg-indigo-50 p-3 text-[12px] leading-relaxed text-indigo-900">
                 <p className="font-semibold">팁</p>
                 <p className="mt-0.5">
                   더 매끄러운 앱 설치를 원하면 <strong>Chrome</strong>으로 열어보세요.
@@ -423,7 +423,7 @@ function SectionTitle({ label }: { label: string }) {
 function Step({ n, children }: { n: number; children: React.ReactNode }) {
   return (
     <div className="mb-2 flex gap-2.5">
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[11px] font-bold text-white">
         {n}
       </span>
       <p className="text-[13px] leading-relaxed text-slate-700">{children}</p>

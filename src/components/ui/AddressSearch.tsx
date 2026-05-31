@@ -242,7 +242,7 @@ export function AddressSearch({
           type="button"
           onClick={handleOpen}
           disabled={disabled || loading}
-          className="h-11 shrink-0 rounded-md border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50"
+          className="h-11 shrink-0 rounded-md border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
         >
           {loading ? '여는 중…' : '주소 검색'}
         </button>
@@ -255,7 +255,7 @@ export function AddressSearch({
         required={required}
         className="mt-2 h-11 w-full rounded-md border border-slate-300 bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400"
       />
-      {geocoding && <p className="mt-1 text-[11px] text-blue-600">📍 좌표 확인 중…</p>}
+      {geocoding && <p className="mt-1 text-[11px] text-indigo-600">📍 좌표 확인 중…</p>}
       {error && <p className="mt-1 text-[11px] text-red-600">⚠ {error}</p>}
 
       {/* 인라인 모달 — 모바일/PC 모두에서 안정 */}

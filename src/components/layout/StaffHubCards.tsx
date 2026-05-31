@@ -32,21 +32,21 @@ export function StaffHubCards({ activeHref }: { activeHref?: string }) {
             className={
               'flex items-center gap-3 rounded-xl border p-3 transition ' +
               (active
-                ? 'border-blue-300 bg-blue-50'
+                ? 'border-indigo-300 bg-indigo-50'
                 : 'border-slate-200 bg-white hover:bg-slate-50')
             }
           >
             <span
               className={
                 'flex h-9 w-9 shrink-0 items-center justify-center rounded-md ' +
-                (active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600')
+                (active ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600')
               }
             >
               <Icon className="h-5 w-5" />
             </span>
             <div className="min-w-0">
               <p className={
-                'text-sm font-semibold ' + (active ? 'text-blue-700' : 'text-slate-900')
+                'text-sm font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')
               }>
                 {item.label}
               </p>

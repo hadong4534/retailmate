@@ -16,9 +16,9 @@ export default function LandingPage() {
             <Logo size="sm" className="md:hidden" />
             <Logo size="md" className="hidden md:inline-flex" />
             <nav className="hidden items-center gap-7 text-sm font-medium text-slate-700 md:flex">
-              <a href="#features" className="hover:text-blue-600">기능</a>
-              <a href="#preview" className="hover:text-blue-600">미리보기</a>
-              <a href="#trust" className="hover:text-blue-600">신뢰</a>
+              <a href="#features" className="hover:text-indigo-600">기능</a>
+              <a href="#preview" className="hover:text-indigo-600">미리보기</a>
+              <a href="#trust" className="hover:text-indigo-600">신뢰</a>
             </nav>
             <div className="flex items-center gap-2">
               <Link
@@ -29,7 +29,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/login"
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
               >
                 로그인
               </Link>
@@ -51,8 +51,8 @@ export default function LandingPage() {
 
           {/* ── 모바일 전용 hero ────────────────────── */}
           <div className="relative mx-auto max-w-[420px] px-6 pb-8 pt-10 md:hidden">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-[12px] font-semibold text-blue-700 ring-1 ring-blue-100">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-2.5 py-1 text-[12px] font-semibold text-indigo-700 ring-1 ring-indigo-100">
+              <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
               매장 운영을 더 똑똑하게
             </span>
 
@@ -60,9 +60,9 @@ export default function LandingPage() {
               className="mt-5 text-[36px] font-extrabold tracking-tight text-slate-900"
               style={{ lineHeight: 1.18, wordBreak: 'keep-all' }}
             >
-              사장님은 <span className="text-blue-600">숫자만</span> 입력하세요.
+              사장님은 <span className="text-indigo-600">숫자만</span> 입력하세요.
               <br />
-              정리는 <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">AI</span>가 합니다.
+              정리는 <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">AI</span>가 합니다.
             </h1>
 
             <p className="mt-4 text-[15px] leading-7 text-slate-500">
@@ -72,7 +72,7 @@ export default function LandingPage() {
             <div className="mt-7 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex h-14 items-center justify-center rounded-2xl bg-blue-600 px-6 text-[17px] font-semibold text-white shadow-lg shadow-blue-600/20 transition active:scale-[0.98] hover:bg-blue-700"
+                className="inline-flex h-14 items-center justify-center rounded-2xl bg-indigo-600 px-6 text-[17px] font-semibold text-white shadow-lg shadow-indigo-600/20 transition active:scale-[0.98] hover:bg-indigo-700"
               >
                 로그인
               </Link>
@@ -117,8 +117,8 @@ export default function LandingPage() {
           {/* ── PC 전용 hero (md 이상) ──────────────── */}
           <div className="relative mx-auto hidden max-w-7xl grid-cols-[1.05fr_1fr] gap-12 px-8 py-20 md:grid">
             <div className="flex flex-col justify-center">
-              <span className="inline-flex w-fit items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 ring-1 ring-blue-100">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+              <span className="inline-flex w-fit items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 ring-1 ring-indigo-100">
+                <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
                 매장 운영을 더 똑똑하게
               </span>
 
@@ -126,10 +126,10 @@ export default function LandingPage() {
                 className="mt-5 text-4xl font-bold tracking-tight text-slate-900 lg:text-5xl xl:text-[3.2rem]"
                 style={{ lineHeight: 1.18, wordBreak: 'keep-all' }}
               >
-                사장님은 <span className="text-blue-600">숫자만</span> 입력하세요.
+                사장님은 <span className="text-indigo-600">숫자만</span> 입력하세요.
                 <br />
                 정리는{' '}
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">
                   리테일메이트 AI
                 </span>
                 가 합니다.
@@ -142,7 +142,7 @@ export default function LandingPage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-indigo-700"
                 >
                   로그인
                 </Link>
@@ -245,10 +245,10 @@ export default function LandingPage() {
               </p>
             </div>
             <nav className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500">
-              <a href="#" className="hover:text-blue-600">회사소개</a>
-              <a href="#" className="hover:text-blue-600">이용약관</a>
-              <a href="#" className="hover:text-blue-600">개인정보처리방침</a>
-              <a href="#" className="hover:text-blue-600">문의하기</a>
+              <a href="#" className="hover:text-indigo-600">회사소개</a>
+              <a href="#" className="hover:text-indigo-600">이용약관</a>
+              <a href="#" className="hover:text-indigo-600">개인정보처리방침</a>
+              <a href="#" className="hover:text-indigo-600">문의하기</a>
             </nav>
             <p className="text-[11px] text-slate-400">
               © 2026 리테일메이트. All rights reserved.
@@ -271,7 +271,7 @@ function Chip({ label }: { label: string }) {
 }
 
 function SafetyDot() {
-  return <span className="h-1 w-1 rounded-full bg-blue-500/80" aria-hidden />;
+  return <span className="h-1 w-1 rounded-full bg-indigo-500/80" aria-hidden />;
 }
 
 function Row({
@@ -283,7 +283,7 @@ function Row({
   value: string;
   tone: 'blue' | 'red' | 'emerald';
 }) {
-  const cls = { blue: 'text-blue-600', red: 'text-red-500', emerald: 'text-emerald-600' }[tone];
+  const cls = { blue: 'text-indigo-600', red: 'text-red-500', emerald: 'text-emerald-600' }[tone];
   return (
     <div className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
       <span className="text-[12px] text-slate-500">{label}</span>
@@ -319,7 +319,7 @@ function MiniLine() {
 function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
     <div className="flex items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
         {icon}
       </div>
       <div className="text-left">
@@ -344,7 +344,7 @@ function FeatureCard({
   bullets: string[];
 }) {
   const tone = {
-    blue:    { bg: 'bg-blue-50',    text: 'text-blue-600' },
+    blue:    { bg: 'bg-indigo-50',    text: 'text-indigo-600' },
     emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600' },
     violet:  { bg: 'bg-violet-50',  text: 'text-violet-600' },
     cyan:    { bg: 'bg-cyan-50',    text: 'text-cyan-600' },
@@ -387,7 +387,7 @@ function DashboardPreview() {
       {/* AI assistant bubble (떠있는 둥근 칩) */}
       <span
         aria-hidden
-        className="absolute -bottom-3 right-3 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 via-violet-500 to-cyan-500 text-white shadow-xl shadow-blue-500/40 ring-4 ring-white"
+        className="absolute -bottom-3 right-3 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 text-white shadow-xl shadow-indigo-500/40 ring-4 ring-white"
       >
         <span className="rm-ai-icon-pulse absolute inset-0 rounded-full" />
         <span className="relative text-xs font-bold">AI</span>
@@ -403,7 +403,7 @@ function DashboardPreview() {
         <div className="grid grid-cols-[120px_1fr]">
           <aside className="border-r border-slate-100 bg-slate-50/60 p-3">
             <div className="mb-3 flex items-center gap-1.5">
-              <RetailMateLogoIcon className="h-[18px] w-[18px] text-blue-600" />
+              <RetailMateLogoIcon className="h-[18px] w-[18px] text-indigo-600" />
               <span className="text-[11px] font-bold text-slate-900">리테일메이트</span>
             </div>
             <ul className="space-y-1 text-[11px]">
@@ -445,7 +445,7 @@ function SideItem({ label, active = false }: { label: string; active?: boolean }
     <li
       className={
         'flex items-center gap-1.5 rounded-md px-2 py-1.5 ' +
-        (active ? 'bg-blue-600 text-white' : 'text-slate-600')
+        (active ? 'bg-indigo-600 text-white' : 'text-slate-600')
       }
     >
       <span className={'h-1 w-1 rounded-full ' + (active ? 'bg-white' : 'bg-slate-400')} />
@@ -466,7 +466,7 @@ function KpiTile({
   tone: 'blue' | 'red' | 'emerald' | 'slate';
 }) {
   const cls = {
-    blue: 'text-blue-600',
+    blue: 'text-indigo-600',
     red: 'text-red-500',
     emerald: 'text-emerald-600',
     slate: 'text-slate-600',
@@ -513,7 +513,7 @@ function MiniLineChart() {
         </svg>
       </div>
       <div className="mt-1 flex gap-3 text-[9px] text-slate-500">
-        <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-blue-500" /> 매출</span>
+        <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-indigo-500" /> 매출</span>
         <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> 순이익</span>
       </div>
     </div>
@@ -522,15 +522,15 @@ function MiniLineChart() {
 
 function AIInsightCard() {
   return (
-    <div className="rounded-lg border border-slate-100 bg-gradient-to-br from-blue-50 to-cyan-50 p-3">
+    <div className="rounded-lg border border-slate-100 bg-gradient-to-br from-indigo-50 to-cyan-50 p-3">
       <div className="flex items-center justify-between">
         <p className="text-[11px] font-semibold text-slate-900">AI 인사이트</p>
-        <span className="rounded bg-blue-600 px-1 py-0.5 text-[8px] font-bold text-white">NEW</span>
+        <span className="rounded bg-indigo-600 px-1 py-0.5 text-[8px] font-bold text-white">NEW</span>
       </div>
       <p className="mt-1.5 text-[10px] leading-relaxed text-slate-600">
         이번 달 순이익이 전월 대비
       </p>
-      <p className="text-base font-bold text-blue-600">18.7% 증가했어요!</p>
+      <p className="text-base font-bold text-indigo-600">18.7% 증가했어요!</p>
       <p className="mt-1.5 text-[9px] leading-snug text-slate-500">
         특히 &apos;상품 매출&apos;이 22% 증가하며 성장을 이끌고 있어요.
       </p>

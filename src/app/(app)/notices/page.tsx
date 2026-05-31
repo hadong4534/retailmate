@@ -67,7 +67,7 @@ export default async function NoticesPage() {
                   className={
                     'rounded-xl border bg-white p-5 ' +
                     (n.is_pinned && !isExpired
-                      ? 'border-blue-300 ring-1 ring-blue-100'
+                      ? 'border-indigo-300 ring-1 ring-indigo-100'
                       : 'border-slate-200')
                   }
                 >
@@ -75,7 +75,7 @@ export default async function NoticesPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         {n.is_pinned && (
-                          <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
+                          <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
                             고정
                           </span>
                         )}

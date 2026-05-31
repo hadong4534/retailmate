@@ -280,16 +280,16 @@ function AISlimCard({
   ctaHref: string;
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-white to-blue-50">
+    <section className="overflow-hidden rounded-xl rm-ai-live border border-[#E4E4FB] bg-gradient-to-br from-white to-[#F2F2FD]">
       <div className="flex items-start gap-2.5 px-4 pt-3.5">
         <span
           aria-hidden
-          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-sm"
+          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[#8E94F2] to-[#6366F1] text-white shadow-sm"
         >
           <Sparkles className="h-3.5 w-3.5" strokeWidth={2.4} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-violet-600">
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-[#6366F1]">
             RetailMate AI
           </p>
           <p className="mt-0.5 line-clamp-2 text-[13px] leading-snug text-slate-900">{text}</p>
@@ -297,7 +297,7 @@ function AISlimCard({
       </div>
       <Link
         href={ctaHref}
-        className="mt-3 flex items-center justify-between border-t border-blue-100 bg-white/60 px-4 py-2.5 text-[13px] font-semibold text-blue-700 transition active:bg-blue-100"
+        className="mt-3 flex items-center justify-between border-t border-[#E4E4FB] bg-white/60 px-4 py-2.5 text-[13px] font-semibold text-[#5458E6] transition active:bg-[#EEEEFD]"
       >
         <span>{ctaLabel}</span>
         <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
@@ -330,7 +330,7 @@ function MonthOverviewCard({
   const done = goalPct >= 100;
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <section className="rounded-2xl border border-[#E9EAF4] bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-baseline justify-between">
         <h2 className="text-[14px] font-bold text-slate-900">이번 달 매장 현황</h2>
         <span className="text-[10px] text-slate-400">{daysIntoMonth}/{daysInMonth}일</span>
@@ -377,7 +377,7 @@ function MonthOverviewCard({
         <div className="mt-4">
           <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
             <div
-              className={'h-full rounded-full transition-[width] duration-500 ' + (done ? 'bg-emerald-500' : 'bg-blue-600')}
+              className={'h-full rounded-full transition-[width] duration-500 ' + (done ? 'bg-emerald-500' : 'bg-[#6366F1]')}
               style={{ width: `${goalPctClamped}%` }}
             />
           </div>
@@ -390,7 +390,7 @@ function MonthOverviewCard({
       {!hasTarget && (
         <Link
           href="/settings"
-          className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600"
+          className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-[#6366F1]"
         >
           목표 설정하기 <ChevronRight className="h-3 w-3" strokeWidth={2.4} />
         </Link>
@@ -448,7 +448,7 @@ function KpiSmall({
       ? 'text-emerald-600'
       : 'text-slate-500';
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
+    <div className="rounded-2xl border border-[#E9EAF4] bg-white p-3">
       <p className="text-[10px] font-medium text-slate-500">{title}</p>
       <p className={`mt-0.5 text-[15px] font-bold tabular-nums ${valueCls}`}>{value}</p>
       <p className={`mt-0.5 inline-flex items-center gap-0.5 text-[10px] ${subToneCls}`}>
@@ -521,7 +521,7 @@ function ClosingCard({
       : null;
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white">
+    <section className="rounded-2xl border border-[#E9EAF4] bg-white">
       <div className="px-4 pt-3.5">
         <div className="flex items-baseline justify-between">
           <h2 className="text-[13px] font-semibold text-slate-900">마감 상태</h2>
@@ -537,7 +537,7 @@ function ClosingCard({
       </div>
       <Link
         href={ctaHref}
-        className="mt-3 flex items-center justify-between border-t border-slate-200 bg-blue-600 px-4 py-2.5 text-[13px] font-semibold text-white transition active:bg-blue-700"
+        className="mt-3 flex items-center justify-between border-t border-[#E9EAF4] bg-[#6366F1] px-4 py-2.5 text-[13px] font-semibold text-white transition active:bg-[#5458E6]"
       >
         <span>{ctaLabel}</span>
         <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
@@ -559,7 +559,7 @@ function QuickButton({
   return (
     <Link
       href={href}
-      className="flex h-14 flex-col items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white text-[12px] font-medium text-slate-700 transition hover:bg-slate-50 active:bg-slate-100"
+      className="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl border border-[#E9EAF4] bg-white text-[12px] font-medium text-slate-700 transition hover:bg-slate-50 active:bg-slate-100"
     >
       {icon}
       <span>{label}</span>
@@ -587,7 +587,7 @@ function RemainingInputs({
 
   if (remaining === 0) {
     return (
-      <section className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5">
+      <section className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2.5">
         <p className="text-[12px] font-semibold text-emerald-800">남은 입력 없음</p>
         <p className="mt-0.5 text-[11px] text-emerald-700">오늘 필요한 입력이 완료됐어요</p>
       </section>
@@ -595,7 +595,7 @@ function RemainingInputs({
   }
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white px-4 py-2.5">
+    <section className="rounded-2xl border border-[#E9EAF4] bg-white px-4 py-2.5">
       <div className="flex items-baseline justify-between">
         <p className="text-[12px] font-semibold text-slate-900">남은 입력</p>
         <span className="text-[10px] text-slate-400">{remaining}개</span>

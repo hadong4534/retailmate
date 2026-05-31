@@ -262,7 +262,7 @@ function AuthStep({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 text-sm text-blue-900">
+      <div className="rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-sm text-indigo-900">
         <p className="font-semibold">근로계약서 서명 페이지</p>
         <p className="mt-1 text-xs">
           본인 확인을 위해 회원가입 또는 로그인이 필요합니다. 가입 후 약관 동의·서명 단계로 이어집니다.
@@ -276,7 +276,7 @@ function AuthStep({
             onClick={() => setMode('signup')}
             className={
               'flex-1 rounded px-3 py-1.5 text-sm font-medium transition ' +
-              (mode === 'signup' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600')
+              (mode === 'signup' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600')
             }
           >
             처음이에요
@@ -286,7 +286,7 @@ function AuthStep({
             onClick={() => setMode('login')}
             className={
               'flex-1 rounded px-3 py-1.5 text-sm font-medium transition ' +
-              (mode === 'login' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600')
+              (mode === 'login' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600')
             }
           >
             계정이 있어요
@@ -336,13 +336,13 @@ function AuthStep({
                   placeholder="010-0000-0000"
                   maxLength={13}
                   disabled={smsStage === 'verified'}
-                  className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-50 disabled:text-slate-500"
+                  className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500"
                 />
                 <button
                   type="button"
                   onClick={handleSendSms}
                   disabled={!isValidPhone || smsLoading || smsStage === 'verified'}
-                  className="h-11 shrink-0 rounded-md border border-blue-600 px-3 text-sm font-semibold text-blue-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                  className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                 >
                   {smsStage === 'verified' ? '인증완료' : smsLoading ? '발송 중…' : smsStage === 'sent' ? '재발송' : '인증번호 받기'}
                 </button>
@@ -363,13 +363,13 @@ function AuthStep({
                   placeholder="123456"
                   maxLength={6}
                   disabled={smsStage === 'verified'}
-                  className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base tracking-widest font-mono focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-50 disabled:text-slate-500"
+                  className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base tracking-widest font-mono focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500"
                 />
                 <button
                   type="button"
                   onClick={handleVerifySms}
                   disabled={smsStage !== 'sent' || smsCode.length !== 6 || verifyLoading}
-                  className="h-11 shrink-0 rounded-md bg-blue-600 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                  className="h-11 shrink-0 rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
                 >
                   {smsStage === 'verified' ? '확인됨' : verifyLoading ? '확인 중…' : '확인'}
                 </button>
@@ -399,7 +399,7 @@ function AuthStep({
             <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
           )}
           {info && !error && (
-            <p className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700">{info}</p>
+            <p className="rounded-md bg-indigo-50 px-3 py-2 text-sm text-indigo-700">{info}</p>
           )}
 
           <Button type="submit" size="lg" className="w-full" disabled={pending}>
@@ -675,13 +675,13 @@ function DoneStep({
       {contractId && (
         <a
           href={`/contracts/${contractId}/view`}
-          className="block rounded-md bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+          className="block rounded-md bg-indigo-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
         >
           📄 내 계약서 보기 / 인쇄
         </a>
       )}
 
-      <div className="rounded-md bg-blue-50 px-4 py-3 text-xs text-blue-900">
+      <div className="rounded-md bg-indigo-50 px-4 py-3 text-xs text-indigo-900">
         [인쇄 / PDF 저장] 버튼으로 PDF로 저장해 보관하세요. 자동 PDF 다운로드는 다음 업데이트에서 추가됩니다.
       </div>
     </div>

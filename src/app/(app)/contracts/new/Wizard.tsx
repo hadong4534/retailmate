@@ -241,7 +241,7 @@ function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
               className={
                 'flex flex-1 items-center justify-center gap-1.5 rounded-md border px-2 py-2 sm:gap-2 sm:px-3 ' +
                 (active
-                  ? 'border-blue-300 bg-blue-50 text-blue-700'
+                  ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
                   : done
                   ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                   : 'border-slate-200 bg-white text-slate-500')
@@ -250,7 +250,7 @@ function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
               <span className={
                 'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ' +
                 (active
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-indigo-600 text-white'
                   : done
                   ? 'bg-emerald-600 text-white'
                   : 'bg-slate-200 text-slate-600')
@@ -318,7 +318,7 @@ function Step1({
                 className={
                   'rounded-md border px-3 py-2 text-sm font-medium transition ' +
                   (active
-                    ? 'border-blue-400 bg-blue-50 text-blue-700'
+                    ? 'border-indigo-400 bg-indigo-50 text-indigo-700'
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
                 }
               >
@@ -336,7 +336,7 @@ function Step1({
             type="date"
             value={data.work_start_date}
             onChange={(e) => update('work_start_date', e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
         <div>
@@ -348,7 +348,7 @@ function Step1({
             value={data.work_end_date ?? ''}
             min={data.work_start_date}
             onChange={(e) => update('work_end_date', e.target.value || null)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
       </div>
@@ -369,7 +369,7 @@ function Step1({
           rows={2}
           maxLength={200}
           placeholder="홀 서빙, 매장 정리, 음료 제조 등"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
     </div>
@@ -402,7 +402,7 @@ function Step2({
                 className={
                   'h-10 w-10 rounded-md border text-sm font-semibold transition ' +
                   (active
-                    ? 'border-blue-400 bg-blue-600 text-white'
+                    ? 'border-indigo-400 bg-indigo-600 text-white'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50')
                 }
               >
@@ -420,7 +420,7 @@ function Step2({
             type="time"
             value={data.work_start_time}
             onChange={(e) => update('work_start_time', e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
         <div>
@@ -429,7 +429,7 @@ function Step2({
             type="time"
             value={data.work_end_time}
             onChange={(e) => update('work_end_time', e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
         <div>
@@ -441,7 +441,7 @@ function Step2({
             inputMode="numeric"
             value={data.break_minutes}
             onChange={(e) => update('break_minutes', Math.max(0, Number(e.target.value) || 0))}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
       </div>
@@ -484,7 +484,7 @@ function Step3({
                 className={
                   'rounded-md border px-3 py-2 text-sm font-medium transition ' +
                   (active
-                    ? 'border-blue-400 bg-blue-50 text-blue-700'
+                    ? 'border-indigo-400 bg-indigo-50 text-indigo-700'
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
                 }
               >
@@ -563,7 +563,7 @@ function Step3({
               if (!n || n < 1) update('pay_day', 1);
               else if (n > 31) update('pay_day', 31);
             }}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
         <Input
@@ -584,7 +584,7 @@ function Step3({
           rows={2}
           maxLength={200}
           placeholder="근로기준법에 따라 부여"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
 
@@ -598,7 +598,7 @@ function Step3({
           rows={2}
           maxLength={500}
           placeholder="복리후생, 비밀유지 등"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
     </div>
@@ -769,8 +769,8 @@ function IssuedCard({
         </p>
       </div>
 
-      <div className="flex items-start gap-2 rounded-md bg-blue-50 px-4 py-3 text-xs text-blue-900">
-        <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600" strokeWidth={2.2} />
+      <div className="flex items-start gap-2 rounded-md bg-indigo-50 px-4 py-3 text-xs text-indigo-900">
+        <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-indigo-600" strokeWidth={2.2} />
         <span>
           직원이 링크를 열면 회원가입 → 동의 → 서명 → 자동 직원 등록 순으로 진행됩니다.
           서명 완료 후 양측 보관함에서 PDF를 확인할 수 있습니다.
@@ -801,7 +801,7 @@ function IssuedCard({
 function TypeBanner({ type }: { type: 'fulltime' | 'parttime' | 'daily' }) {
   const meta = {
     fulltime: {
-      tone: 'bg-blue-50 border-blue-200 text-blue-900',
+      tone: 'bg-indigo-50 border-indigo-200 text-indigo-900',
       title: '정규직',
       desc: '기간의 정함 없음. 4대보험 의무 가입. 퇴직금 발생(1년 이상 근로).',
     },

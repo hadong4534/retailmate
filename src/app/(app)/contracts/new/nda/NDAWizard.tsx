@@ -131,7 +131,7 @@ export function NDAWizard() {
               setResult(null);
               router.refresh();
             }}
-            className="inline-flex h-10 items-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white"
+            className="inline-flex h-10 items-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white"
           >
             새 서약서 작성
           </button>
@@ -155,7 +155,7 @@ export function NDAWizard() {
                   (done
                     ? 'bg-emerald-500 text-white'
                     : active
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-indigo-600 text-white'
                     : 'bg-slate-200 text-slate-500')
                 }
               >
@@ -196,7 +196,7 @@ export function NDAWizard() {
                 type="date"
                 value={data.effective_date}
                 onChange={(e) => update('effective_date', e.target.value)}
-                className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
               />
             </div>
             <div>
@@ -209,7 +209,7 @@ export function NDAWizard() {
                 max={10}
                 value={data.retention_years}
                 onChange={(e) => update('retention_years', Math.max(1, Math.min(10, parseInt(e.target.value) || 1)))}
-                className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
               />
               <p className="mt-1 text-[11px] text-slate-400">일반적으로 1~3년 권장. 너무 길면 법원이 무효 판단할 수 있어요.</p>
             </div>
@@ -225,7 +225,7 @@ export function NDAWizard() {
               rows={3}
               maxLength={500}
               placeholder="기본 4가지(매출·레시피·인사·기술정보) 외 추가로 보호하고 싶은 정보 예: 신메뉴 개발 계획, 거래처 단가표 등"
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             />
             <p className="mt-1 text-[11px] text-slate-400">비워두면 기본 범위(매장 운영 데이터·레시피·인사·기술정보)만 적용</p>
           </div>

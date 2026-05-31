@@ -238,13 +238,13 @@ export default function SignupPage() {
               placeholder="010-0000-0000"
               maxLength={13}
               disabled={stage === 'verified'}
-              className={`h-11 flex-1 rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-50 disabled:text-slate-500`}
+              className={`h-11 flex-1 rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500`}
             />
             <button
               type="button"
               onClick={handleSendSms}
               disabled={!canSendSms}
-              className="h-11 shrink-0 rounded-md border border-blue-600 px-3 text-sm font-semibold text-blue-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+              className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
             >
               {stage === 'verified'
                 ? '인증완료'
@@ -276,13 +276,13 @@ export default function SignupPage() {
                 placeholder="123456"
                 maxLength={6}
                 disabled={stage === 'verified'}
-                className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base tracking-widest font-mono focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-50 disabled:text-slate-500"
+                className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base tracking-widest font-mono focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500"
               />
               <button
                 type="button"
                 onClick={handleVerifyCode}
                 disabled={!canVerify}
-                className="h-11 shrink-0 rounded-md bg-blue-600 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                className="h-11 shrink-0 rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
               >
                 {(stage as Stage) === 'verified' ? '확인됨' : verifyLoading ? '확인 중...' : '확인'}
               </button>
@@ -319,13 +319,13 @@ export default function SignupPage() {
           <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</div>
         )}
         {info && !error && (
-          <div className="rounded-md bg-blue-50 p-3 text-sm text-blue-700">{info}</div>
+          <div className="rounded-md bg-indigo-50 p-3 text-sm text-indigo-700">{info}</div>
         )}
 
         <button
           type="submit"
           disabled={!canSubmit}
-          className="h-12 w-full rounded-md bg-blue-600 px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-blue-700 disabled:opacity-50"
+          className="h-12 w-full rounded-md bg-indigo-600 px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-50"
         >
           {signupLoading ? '가입 중...' : '가입하기'}
         </button>
@@ -333,7 +333,7 @@ export default function SignupPage() {
 
       <div className="mt-6 text-center text-sm text-slate-500">
         이미 계정이 있으신가요?{' '}
-        <Link href="/login" className="font-semibold text-blue-600 hover:underline">
+        <Link href="/login" className="font-semibold text-indigo-600 hover:underline">
           로그인
         </Link>
       </div>
@@ -349,7 +349,7 @@ function formatPhone(input: string): string {
 }
 
 const inputCls =
-  'mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200';
+  'mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200';
 
 function Field({
   label, id, children,

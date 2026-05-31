@@ -46,7 +46,7 @@ export default async function PostersPage() {
               매장 로고·소개를 자동 반영해 마케팅 디자인물을 만듭니다.
             </p>
           </div>
-          <Link href="/ai" className="text-xs font-medium text-blue-600 hover:underline">
+          <Link href="/ai" className="text-xs font-medium text-indigo-600 hover:underline">
             ← AI 도구
           </Link>
         </div>
@@ -60,7 +60,7 @@ export default async function PostersPage() {
               <div className="mt-3 space-y-1.5">
                 <div className="flex items-baseline justify-between">
                   <span className="text-xs text-slate-500">진행 중</span>
-                  <span className="font-mono text-sm font-bold text-blue-600 tabular-nums">
+                  <span className="font-mono text-sm font-bold text-indigo-600 tabular-nums">
                     {pendingCount ?? 0}
                   </span>
                 </div>
@@ -79,7 +79,7 @@ export default async function PostersPage() {
               </Link>
             </div>
 
-            <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 text-xs leading-relaxed text-blue-900">
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-xs leading-relaxed text-indigo-900">
               <p className="font-semibold">알림 받기</p>
               <p className="mt-1">
                 생성을 시작하면 다른 탭에 갔다 와도 <strong>화면 상단에 완료 알림</strong>이 표시됩니다. 매장 운영을 멈출 필요 없어요.

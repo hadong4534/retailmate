@@ -24,15 +24,15 @@ export function SparkleAvatar({ size = 40, className, withGlow = false }: Props)
       >
         {/* 글로우 펄스 */}
         <span
-          className="absolute inset-0 animate-ping rounded-full bg-blue-400/40"
+          className="absolute inset-0 animate-ping rounded-full bg-indigo-400/40"
           style={{ animationDuration: '2.5s' }}
         />
-        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 via-violet-500 to-pink-500 opacity-90 shadow-lg shadow-violet-500/40" />
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-400 via-violet-500 to-pink-500 opacity-90 shadow-lg shadow-violet-500/40" />
         <SparkleSvg size={Math.round(size * 0.6)} className="relative text-white" />
       </span>
     );
   }
-  return <SparkleSvg size={size} className={cn('text-blue-500', className)} />;
+  return <SparkleSvg size={size} className={cn('text-indigo-500', className)} />;
 }
 
 function SparkleSvg({ size, className }: { size: number; className?: string }) {

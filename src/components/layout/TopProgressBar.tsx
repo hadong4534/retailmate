@@ -27,7 +27,7 @@ export function TopProgressBar() {
     >
       <div
         className={
-          'h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 ' +
+          'h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 ' +
           'transition-[width,opacity] duration-500 ease-out ' +
           (active ? 'w-full opacity-100' : 'w-0 opacity-0')
         }

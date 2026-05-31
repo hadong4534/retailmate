@@ -205,8 +205,8 @@ export default async function ContractsPage() {
 
           <KpiCard
             Icon={FilePlus}
-            iconBg="bg-blue-100"
-            iconColor="text-blue-600"
+            iconBg="bg-indigo-100"
+            iconColor="text-indigo-600"
             label="이번 달 신규 계약"
             value={`${newThisMonth}건`}
             sub={newThisMonth > 0 ? '활발한 채용' : '신규 없음'}
@@ -277,7 +277,7 @@ export default async function ContractsPage() {
                       href={href}
                       className="flex cursor-pointer items-center gap-2.5 rounded-md border border-slate-200 p-2.5 transition-colors hover:bg-slate-50 active:bg-slate-100"
                     >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-blue-50 text-base text-blue-600">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-indigo-50 text-base text-indigo-600">
                         {KIND_ICON[t.template_kind] ?? '문서'}
                       </span>
                       <div className="min-w-0 flex-1">
@@ -472,13 +472,13 @@ function StatusCard({
   tone: 'blue' | 'emerald' | 'amber' | 'red';
 }) {
   const colorMap = {
-    blue: 'text-blue-600',
+    blue: 'text-indigo-600',
     emerald: 'text-emerald-600',
     amber: 'text-amber-600',
     red: 'text-red-500',
   };
   const borderMap = {
-    blue: 'border-l-blue-500',
+    blue: 'border-l-indigo-500',
     emerald: 'border-l-emerald-500',
     amber: 'border-l-amber-500',
     red: 'border-l-red-500',

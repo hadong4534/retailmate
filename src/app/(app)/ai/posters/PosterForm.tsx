@@ -97,11 +97,11 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
                   className={
                     'rounded-md border px-3 py-2.5 text-left transition ' +
                     (active
-                      ? 'border-blue-400 bg-blue-50'
+                      ? 'border-indigo-400 bg-indigo-50'
                       : 'border-slate-200 bg-white hover:bg-slate-50')
                   }
                 >
-                  <p className={'text-sm font-semibold ' + (active ? 'text-blue-700' : 'text-slate-900')}>
+                  <p className={'text-sm font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')}>
                     {k.label}
                   </p>
                   <p className="text-[10px] text-slate-500">{k.desc}</p>
@@ -119,7 +119,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
             rows={4}
             maxLength={500}
             placeholder="예: 봄맞이 신메뉴 출시, 벚꽃 분위기로 따뜻하게"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
           <div className="mt-1 flex items-center justify-between">
             <p className="text-[10px] text-slate-400">매장 로고·소개·메인 컬러는 자동으로 반영됩니다.</p>
@@ -134,7 +134,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
               type="button"
               onClick={() => setPrompt(t)}
               disabled={pending}
-              className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50"
+              className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
             >
               {t}
             </button>
@@ -146,7 +146,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
         )}
 
         {queued && (
-          <p className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700">
+          <p className="rounded-md bg-indigo-50 px-3 py-2 text-sm text-indigo-700">
             생성을 시작했습니다. 다른 작업 중에도 완료되면 화면 상단에 알림이 표시됩니다.
           </p>
         )}

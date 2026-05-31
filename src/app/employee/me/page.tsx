@@ -169,7 +169,7 @@ export default async function EmployeeMePage() {
                     {s.contract && (
                       <Link
                         href={`/contracts/${s.contract.id}/view`}
-                        className="text-xs font-medium text-blue-600 hover:underline"
+                        className="text-xs font-medium text-indigo-600 hover:underline"
                       >
                         📄 계약서 →
                       </Link>
@@ -249,14 +249,14 @@ export default async function EmployeeMePage() {
                   key={n.id}
                   className={
                     'rounded-xl border bg-white p-4 ' +
-                    (n.is_pinned ? 'border-blue-300 ring-1 ring-blue-100' : 'border-slate-200')
+                    (n.is_pinned ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-slate-200')
                   }
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         {n.is_pinned && (
-                          <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
+                          <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
                             📌 고정
                           </span>
                         )}
@@ -297,7 +297,7 @@ function KpiCard({
   tone: 'blue' | 'emerald' | 'slate';
 }) {
   const colorClass =
-    tone === 'blue' ? 'text-blue-600'
+    tone === 'blue' ? 'text-indigo-600'
     : tone === 'emerald' ? 'text-emerald-600'
     : 'text-slate-900';
   return (

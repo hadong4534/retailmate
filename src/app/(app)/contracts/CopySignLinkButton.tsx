@@ -25,7 +25,7 @@ export function CopySignLinkButton({ signToken }: { signToken: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] font-semibold text-blue-700 hover:bg-blue-100"
+      className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border border-indigo-200 bg-indigo-50 px-2 py-1 text-[11px] font-semibold text-indigo-700 hover:bg-indigo-100"
       aria-label="직원 서명 링크 복사"
     >
       {copied ? '✓ 복사됨' : '서명 링크 복사'}

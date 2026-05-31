@@ -52,7 +52,7 @@ export function SaleNewForm({ defaultDate }: { defaultDate?: string }) {
           value={saleDate}
           max={todayInKST()}
           onChange={(e) => setSaleDate(e.target.value)}
-          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
 
@@ -82,14 +82,14 @@ export function SaleNewForm({ defaultDate }: { defaultDate?: string }) {
           rows={2}
           maxLength={200}
           placeholder="단체 손님, 비 오는 날 등"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
 
-      <div className="rounded-xl border border-blue-200 bg-blue-50 px-5 py-4">
+      <div className="rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-4">
         <div className="flex items-baseline justify-between">
-          <span className="text-sm font-medium text-blue-700">합계</span>
-          <span className="text-2xl font-bold text-blue-700">{formatWon(total)}</span>
+          <span className="text-sm font-medium text-indigo-700">합계</span>
+          <span className="text-2xl font-bold text-indigo-700">{formatWon(total)}</span>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ export function SaleNewForm({ defaultDate }: { defaultDate?: string }) {
 
       <p className="text-center text-xs text-slate-500">
         상품별 상세 입력은 추후 지원됩니다.{' '}
-        <Link href="/sales" className="text-blue-600 hover:underline">
+        <Link href="/sales" className="text-indigo-600 hover:underline">
           매출 목록으로
         </Link>
       </p>

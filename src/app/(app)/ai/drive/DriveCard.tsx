@@ -64,7 +64,7 @@ export function DriveCard({
           </div>
         ) : status === 'pending' ? (
           <div className="flex h-full flex-col items-center justify-center gap-2">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-200 border-t-blue-600" />
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600" />
             <p className="text-[10px] text-slate-400">생성 중…</p>
           </div>
         ) : signedUrl ? (
@@ -114,7 +114,7 @@ export function DriveCard({
             <a
               href={`/api/ai/images/${id}`}
               download
-              className="text-[10px] font-medium text-blue-600 hover:underline"
+              className="text-[10px] font-medium text-indigo-600 hover:underline"
             >
               다운로드 ↓
             </a>

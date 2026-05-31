@@ -53,7 +53,7 @@ export function ExpenseNewForm({ defaultDate }: { defaultDate?: string }) {
           value={expenseDate}
           max={todayInKST()}
           onChange={(e) => setExpenseDate(e.target.value)}
-          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
 
@@ -105,7 +105,7 @@ export function ExpenseNewForm({ defaultDate }: { defaultDate?: string }) {
                 className={
                   'rounded-md border px-3 py-2 text-sm font-medium transition ' +
                   (active
-                    ? 'border-blue-400 bg-blue-50 text-blue-700'
+                    ? 'border-indigo-400 bg-indigo-50 text-indigo-700'
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
                 }
               >
@@ -131,7 +131,7 @@ export function ExpenseNewForm({ defaultDate }: { defaultDate?: string }) {
           onChange={(e) => setMemo(e.target.value)}
           rows={2}
           maxLength={200}
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
 

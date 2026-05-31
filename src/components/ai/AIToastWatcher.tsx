@@ -160,7 +160,7 @@ function ToastCard({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
           <Link
             href="/ai/drive"
             onClick={onDismiss}
-            className="mt-1 inline-flex items-center gap-0.5 text-xs font-medium text-blue-600 hover:underline"
+            className="mt-1 inline-flex items-center gap-0.5 text-xs font-medium text-indigo-600 hover:underline"
           >
             바로 확인 →
           </Link>

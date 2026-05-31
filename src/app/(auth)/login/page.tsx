@@ -99,7 +99,7 @@ function LoginForm() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 h-12 w-full rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-12 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             placeholder="owner@example.com"
           />
         </div>
@@ -115,7 +115,7 @@ function LoginForm() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 h-12 w-full rounded-md border border-slate-300 px-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-1 h-12 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
         </div>
 
@@ -124,7 +124,7 @@ function LoginForm() {
             type="checkbox"
             checked={remember}
             onChange={(e) => setRemember(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-200"
+            className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-200"
           />
           <span>자동 로그인 <span className="text-[11px] text-slate-400">(직접 로그아웃 전까지 유지)</span></span>
         </label>
@@ -139,7 +139,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="h-12 w-full rounded-md bg-blue-600 px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-blue-700 disabled:opacity-60"
+          className="h-12 w-full rounded-md bg-indigo-600 px-4 text-base font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
         >
           {loading ? '로그인 중...' : '로그인'}
         </button>
@@ -147,7 +147,7 @@ function LoginForm() {
 
       <div className="mt-6 text-center text-sm text-slate-500">
         사장님이신가요?{' '}
-        <Link href="/signup" className="font-semibold text-blue-600 hover:underline">
+        <Link href="/signup" className="font-semibold text-indigo-600 hover:underline">
           회원가입
         </Link>
       </div>

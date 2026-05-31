@@ -175,8 +175,8 @@ export default async function AttendancePage() {
         <div className="rm-stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
           <KpiCard
             Icon={CheckCircle2}
-            iconBg="bg-blue-100"
-            iconColor="text-blue-600"
+            iconBg="bg-indigo-100"
+            iconColor="text-indigo-600"
             label="오늘 출근"
             value={`${checkedInToday.size}명`}
             sub={`전체 ${totalMembers}명 중 ${totalMembers > 0 ? Math.round((checkedInToday.size / totalMembers) * 100) : 0}%`}
@@ -238,7 +238,7 @@ export default async function AttendancePage() {
                           </p>
                         </div>
                       </div>
-                      <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">
+                      <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700">
                         {formatHM(elapsedMin)} 근무
                       </span>
                     </li>
@@ -267,7 +267,7 @@ export default async function AttendancePage() {
                 </div>
               </li>
               <li className="flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50/60 p-3">
-                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" aria-hidden />
+                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500" aria-hidden />
                 <div className="min-w-0">
                   <p className="font-semibold text-slate-900">
                     평균 근무 시간 {hasEnoughAvgSample ? formatHM(avgWorkMinutes) : '데이터 부족'}
@@ -343,7 +343,7 @@ export default async function AttendancePage() {
                   className={
                     'flex aspect-square items-center justify-center rounded text-[10px] ' +
                     (c.isToday
-                      ? 'bg-blue-600 font-bold text-white ring-2 ring-blue-300'
+                      ? 'bg-indigo-600 font-bold text-white ring-2 ring-indigo-300'
                       : c.count >= 10
                       ? 'bg-emerald-500 text-white'
                       : c.count >= 6
@@ -403,7 +403,7 @@ export default async function AttendancePage() {
                         ) : att.check_out_at ? (
                           <span className="whitespace-nowrap rounded bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700">퇴근</span>
                         ) : (
-                          <span className="whitespace-nowrap rounded bg-blue-100 px-2 py-0.5 text-[11px] font-medium text-blue-700">근무 중</span>
+                          <span className="whitespace-nowrap rounded bg-indigo-100 px-2 py-0.5 text-[11px] font-medium text-indigo-700">근무 중</span>
                         )}
                       </div>
                       <div className="mt-2 grid grid-cols-3 gap-2 rounded-lg bg-slate-50 px-3 py-2 text-center">
@@ -478,7 +478,7 @@ export default async function AttendancePage() {
                             ) : att.check_out_at ? (
                               <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-700">퇴근</span>
                             ) : (
-                              <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">근무 중</span>
+                              <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700">근무 중</span>
                             )}
                           </td>
                         </tr>

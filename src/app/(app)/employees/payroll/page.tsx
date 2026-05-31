@@ -112,7 +112,7 @@ export default async function PayrollPage({
             </p>
             <Link
               href="/contracts/new"
-              className="mt-4 inline-flex items-center rounded-md bg-blue-600 px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-blue-700"
+              className="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-indigo-700"
             >
               + 계약서 작성하기
             </Link>
@@ -121,7 +121,7 @@ export default async function PayrollPage({
 
         {/* 계약서 없는 직원만 있는 경우 */}
         {payroll.rows.length > 0 && !hasAnyContract && (
-          <div className="mt-6 flex items-start gap-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-[12px] text-blue-900">
+          <div className="mt-6 flex items-start gap-2 rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-[12px] text-indigo-900">
             <FileText className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2.2} />
             <span>
               직원은 등록되어 있지만 서명된 계약서가 없어 급여 계산이 불가능합니다.
@@ -162,7 +162,7 @@ export default async function PayrollPage({
                 <tfoot className="border-t-2 border-slate-200 bg-slate-50">
                   <tr>
                     <td colSpan={4} className="px-4 py-3 text-right text-[12px] font-semibold text-slate-700">합계</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-blue-600">
+                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-indigo-600">
                       {formatWon(payroll.totals.grossPay)}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-mono tabular-nums text-red-500">
@@ -193,7 +193,7 @@ function KpiCard({
   tone: 'blue' | 'emerald' | 'slate';
 }) {
   const tint = {
-    blue: { bg: 'bg-blue-50', text: 'text-blue-600', accent: 'linear-gradient(90deg, #2563EB, #60A5FA)' },
+    blue: { bg: 'bg-indigo-50', text: 'text-indigo-600', accent: 'linear-gradient(90deg, #2563EB, #60A5FA)' },
     emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', accent: 'linear-gradient(90deg, #10B981, #34D399)' },
     slate: { bg: 'bg-slate-100', text: 'text-slate-600', accent: 'linear-gradient(90deg, #475569, #94A3B8)' },
   }[tone];
@@ -257,7 +257,7 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
           </div>
           <div>
             <p className="text-[10px] text-slate-500">세전</p>
-            <p className="mt-0.5 rm-tnum text-[12px] font-semibold text-blue-600">{formatWon(row.grossPay)}</p>
+            <p className="mt-0.5 rm-tnum text-[12px] font-semibold text-indigo-600">{formatWon(row.grossPay)}</p>
           </div>
           <div>
             <p className="text-[10px] text-slate-500">본인부담</p>
@@ -314,7 +314,7 @@ function PcPayrollRow({ row }: { row: MemberPayrollRow }) {
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono tabular-nums text-slate-600">
         {row.contract ? formatWon(row.contract.wage_amount) : '-'}
       </td>
-      <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-semibold tabular-nums text-blue-600">
+      <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-semibold tabular-nums text-indigo-600">
         {row.contract ? formatWon(row.grossPay) : '-'}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono tabular-nums text-red-500">

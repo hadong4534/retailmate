@@ -53,7 +53,7 @@ export function NoticeForm() {
           rows={6}
           maxLength={2000}
           placeholder="공지 내용을 입력해주세요. 직원이 로그인 시 자동으로 팝업으로 표시됩니다."
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
           required
         />
       </div>
@@ -72,7 +72,7 @@ export function NoticeForm() {
               className={
                 'rounded-md border px-3 py-2 text-sm font-medium transition ' +
                 (target === v
-                  ? 'border-blue-400 bg-blue-50 text-blue-700'
+                  ? 'border-indigo-400 bg-indigo-50 text-indigo-700'
                   : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
               }
             >
@@ -91,7 +91,7 @@ export function NoticeForm() {
           value={expiresAt}
           onChange={(e) => setExpiresAt(e.target.value)}
           min={new Date().toISOString().slice(0, 10)}
-          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         />
       </div>
 

@@ -113,7 +113,7 @@ function ViewTabButton({
       className={
         'rounded-lg px-3.5 py-1.5 text-sm font-medium transition ' +
         (active
-          ? 'bg-blue-600 text-white shadow-sm'
+          ? 'bg-indigo-600 text-white shadow-sm'
           : 'text-slate-600 hover:bg-slate-100')
       }
     >
@@ -186,7 +186,7 @@ function DailyView({
                     )}
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1">
-                    <p className="rm-tnum text-[15px] font-bold text-blue-600">{formatWon(entry.dayTotal)}</p>
+                    <p className="rm-tnum text-[15px] font-bold text-indigo-600">{formatWon(entry.dayTotal)}</p>
                     <EditDayLink date={entry.date} />
                   </div>
                 </div>
@@ -236,7 +236,7 @@ function DailyView({
                         {entry.channelDay[c] > 0 ? formatWon(entry.channelDay[c]) : <span className="text-slate-300">-</span>}
                       </td>
                     ))}
-                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-blue-600">
+                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-indigo-600">
                       {formatWon(entry.dayTotal)}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right">
@@ -298,12 +298,12 @@ function MonthlyView({
                 return (
                   <tr
                     key={entry.month}
-                    className={isCurrent ? 'bg-blue-50/40 hover:bg-blue-50' : 'hover:bg-slate-50'}
+                    className={isCurrent ? 'bg-indigo-50/40 hover:bg-indigo-50' : 'hover:bg-slate-50'}
                   >
                     <td className="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">
                       {entry.month}
                       {isCurrent && (
-                        <span className="ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-medium text-blue-700">
+                        <span className="ml-2 rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
                           이번 달
                         </span>
                       )}
@@ -313,7 +313,7 @@ function MonthlyView({
                         {entry.channels[c] > 0 ? formatWon(entry.channels[c]) : <span className="text-slate-300">-</span>}
                       </td>
                     ))}
-                    <td className="px-4 py-3 text-right font-mono font-bold tabular-nums text-blue-600 whitespace-nowrap">
+                    <td className="px-4 py-3 text-right font-mono font-bold tabular-nums text-indigo-600 whitespace-nowrap">
                       {formatWon(entry.total)}
                     </td>
                   </tr>

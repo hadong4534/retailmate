@@ -62,7 +62,7 @@ export function NewStoreForm() {
         <select
           value={industry}
           onChange={(e) => setIndustry(e.target.value)}
-          className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         >
           {INDUSTRIES.map((i) => (
             <option key={i.value} value={i.value}>{i.label}</option>
@@ -97,7 +97,7 @@ export function NewStoreForm() {
         maxLength={50}
       />
 
-      <div className="rounded-md bg-blue-50 px-4 py-3 text-xs text-blue-900">
+      <div className="rounded-md bg-indigo-50 px-4 py-3 text-xs text-indigo-900">
         매장 등록 후 <strong>[설정 → 매장 정보]</strong>에서 월 매출 목표·GPS 좌표·영업 시간 등 세부 항목을 설정할 수 있습니다.
       </div>
 

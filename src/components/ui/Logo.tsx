@@ -76,7 +76,7 @@ export function Logo({
 }: Props) {
   const s = sizeMap[size];
   const textClass = onDark ? 'text-white' : 'text-slate-900';
-  const markClass = onDark ? 'text-white' : 'text-blue-600';
+  const markClass = onDark ? 'text-white' : 'text-indigo-600';
   return (
     <span className={cn('inline-flex items-center', s.box, className)}>
       <LogoMark size={s.mark} className={markClass} />
