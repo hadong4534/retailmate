@@ -87,14 +87,13 @@ export default async function AIHubPage() {
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">
       <div className="mx-auto max-w-5xl">
-        {/* 헤더 */}
-        <div className="mb-8 flex items-center gap-4">
-          <SparkleAvatar size={48} withGlow />
+        {/* 헤더 — 3D 오브 파스텔 배너 */}
+        <div className="mb-7 flex items-center gap-4 overflow-hidden rounded-[24px] border border-[#E6E5FB] bg-gradient-to-br from-[#F6F5FE] to-[#EAF1FE] p-5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/aurora-orb.png" alt="" aria-hidden className="rm-ai-float h-14 w-14 shrink-0 object-contain" />
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">AI 도구</h1>
-            <p className="mt-1 text-sm text-slate-500">
-              매장에 맞춘 챗봇·디자인·드라이브를 한 곳에서 사용하세요.
-            </p>
+            <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 lg:text-[28px]">AI 도구</h1>
+            <p className="mt-1 text-[13.5px] text-slate-500">매장에 맞춘 챗봇·디자인·드라이브를 한 곳에서.</p>
           </div>
         </div>
 
