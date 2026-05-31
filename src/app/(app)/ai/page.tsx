@@ -117,7 +117,7 @@ export default async function AIHubPage() {
                 key={t.href}
                 href={t.href}
                 className={
-                  'group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 ring-1 ring-transparent transition hover:shadow-md ' +
+                  'group relative overflow-hidden rounded-2xl border border-[#EAECF5] bg-white p-6 ring-1 ring-transparent transition hover:shadow-md ' +
                   c.ring
                 }
               >
@@ -164,7 +164,7 @@ function Stat({
     : tone === 'warning' ? 'text-amber-600'
     : 'text-slate-900';
   return (
-    <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+    <div className="rounded-xl border border-[#EAECF5] bg-white px-4 py-3">
       <p className="text-[11px] text-slate-500">{label}</p>
       <p className={`mt-0.5 text-base font-bold ${cls}`}>{value}</p>
     </div>

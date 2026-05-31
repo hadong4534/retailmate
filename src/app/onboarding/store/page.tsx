@@ -94,14 +94,14 @@ export default function StoreOnboardingPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-[#EAECF5] bg-white">
         <div className="mx-auto flex h-14 max-w-3xl items-center px-6">
           <Logo size="md" />
         </div>
       </header>
 
       <main className="mx-auto max-w-2xl px-4 py-10">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border border-[#EAECF5] bg-white p-8 shadow-sm">
           <h1 className="text-2xl font-bold text-slate-900">매장 등록</h1>
           <p className="mt-2 text-sm text-slate-500">
             마지막 단계예요. 매장 정보를 입력하면 바로 시작할 수 있습니다.
@@ -130,7 +130,7 @@ export default function StoreOnboardingPage() {
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
               >
                 {INDUSTRIES.map((i) => (
                   <option key={i.value} value={i.value}>{i.label}</option>

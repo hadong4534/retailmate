@@ -86,7 +86,7 @@ export function SignaturePad({ onChange, height = 160, className }: Props) {
   return (
     <div className={className}>
       <div
-        className="relative rounded-md border border-slate-300 bg-white"
+        className="relative rounded-md border border-[#E3E5F0] bg-white"
         style={{ height }}
       >
         <canvas

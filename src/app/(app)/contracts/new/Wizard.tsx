@@ -244,7 +244,7 @@ function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
                   ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
                   : done
                   ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                  : 'border-slate-200 bg-white text-slate-500')
+                  : 'border-[#EAECF5] bg-white text-slate-500')
               }
             >
               <span className={
@@ -281,7 +281,7 @@ function Step1({
   update: <K extends keyof ContractFormData>(key: K, value: ContractFormData[K]) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-5">
+    <div className="space-y-5 rounded-xl border border-[#EAECF5] bg-white p-5">
       <h2 className="text-lg font-bold text-slate-900">Step 1 · 기본 정보</h2>
 
       <TypeBanner type={data.contract_type} />
@@ -319,7 +319,7 @@ function Step1({
                   'rounded-md border px-3 py-2 text-sm font-medium transition ' +
                   (active
                     ? 'border-indigo-400 bg-indigo-50 text-indigo-700'
-                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
+                    : 'border-[#EAECF5] bg-white text-slate-700 hover:bg-slate-50')
                 }
               >
                 {l}
@@ -336,7 +336,7 @@ function Step1({
             type="date"
             value={data.work_start_date}
             onChange={(e) => update('work_start_date', e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
         <div>
@@ -348,7 +348,7 @@ function Step1({
             value={data.work_end_date ?? ''}
             min={data.work_start_date}
             onChange={(e) => update('work_end_date', e.target.value || null)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
       </div>
@@ -369,7 +369,7 @@ function Step1({
           rows={2}
           maxLength={200}
           placeholder="홀 서빙, 매장 정리, 음료 제조 등"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
         />
       </div>
     </div>
@@ -386,7 +386,7 @@ function Step2({
   toggleDay: (d: WeekDay) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-5">
+    <div className="space-y-5 rounded-xl border border-[#EAECF5] bg-white p-5">
       <h2 className="text-lg font-bold text-slate-900">Step 2 · 근무 시간</h2>
 
       <div>
@@ -403,7 +403,7 @@ function Step2({
                   'h-10 w-10 rounded-md border text-sm font-semibold transition ' +
                   (active
                     ? 'border-indigo-400 bg-indigo-600 text-white'
-                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50')
+                    : 'border-[#EAECF5] bg-white text-slate-600 hover:bg-slate-50')
                 }
               >
                 {d.label}
@@ -420,7 +420,7 @@ function Step2({
             type="time"
             value={data.work_start_time}
             onChange={(e) => update('work_start_time', e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
         <div>
@@ -429,7 +429,7 @@ function Step2({
             type="time"
             value={data.work_end_time}
             onChange={(e) => update('work_end_time', e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
         <div>
@@ -441,7 +441,7 @@ function Step2({
             inputMode="numeric"
             value={data.break_minutes}
             onChange={(e) => update('break_minutes', Math.max(0, Number(e.target.value) || 0))}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
       </div>
@@ -464,7 +464,7 @@ function Step3({
   }
 
   return (
-    <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-5">
+    <div className="space-y-5 rounded-xl border border-[#EAECF5] bg-white p-5">
       <h2 className="text-lg font-bold text-slate-900">Step 3 · 임금</h2>
 
       <div>
@@ -485,7 +485,7 @@ function Step3({
                   'rounded-md border px-3 py-2 text-sm font-medium transition ' +
                   (active
                     ? 'border-indigo-400 bg-indigo-50 text-indigo-700'
-                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
+                    : 'border-[#EAECF5] bg-white text-slate-700 hover:bg-slate-50')
                 }
               >
                 {l}
@@ -523,7 +523,7 @@ function Step3({
           ] as const).map(([k, l]) => (
             <label
               key={k}
-              className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+              className="flex items-center gap-2 rounded-md border border-[#EAECF5] bg-white px-3 py-2 text-sm"
             >
               <input
                 type="checkbox"
@@ -563,7 +563,7 @@ function Step3({
               if (!n || n < 1) update('pay_day', 1);
               else if (n > 31) update('pay_day', 31);
             }}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
         <Input
@@ -584,7 +584,7 @@ function Step3({
           rows={2}
           maxLength={200}
           placeholder="근로기준법에 따라 부여"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
         />
       </div>
 
@@ -598,7 +598,7 @@ function Step3({
           rows={2}
           maxLength={500}
           placeholder="복리후생, 비밀유지 등"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
         />
       </div>
     </div>
@@ -630,7 +630,7 @@ function Step4({
 
   return (
     <div className="space-y-5">
-      <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-5">
+      <div className="space-y-3 rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-lg font-bold text-slate-900">Step 4 · 미리보기</h2>
 
         <Row label="직원" value={`${data.invite_name} (${data.invite_phone})`} />
@@ -667,7 +667,7 @@ function Step4({
         {data.additional_terms && <Row label="부가 조항" value={data.additional_terms} />}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <h3 className="text-base font-semibold text-slate-900">사장 서명</h3>
         <p className="mt-1 text-xs text-slate-500">
           마우스 또는 손가락으로 서명해주세요. 서명 완료 후 직원에게 보낼 링크가 발급됩니다.
@@ -741,9 +741,9 @@ function IssuedCard({
         </p>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <label className="text-xs font-medium text-slate-500">서명 링크 (시간 제한 없음)</label>
-        <div className="mt-2 break-all rounded-md border border-slate-200 bg-slate-50 px-3 py-3 font-mono text-xs text-slate-800">
+        <div className="mt-2 break-all rounded-md border border-[#EAECF5] bg-slate-50 px-3 py-3 font-mono text-xs text-slate-800">
           {url}
         </div>
         <div className="mt-3 flex flex-wrap gap-2">

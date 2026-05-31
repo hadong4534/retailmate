@@ -47,7 +47,7 @@ export function StoreSwitcher({
 
   const containerCls = onDark
     ? 'border-slate-700 bg-slate-800'
-    : 'border-slate-200 bg-white';
+    : 'border-[#EAECF5] bg-white';
   const titleCls = onDark ? 'text-white' : 'text-slate-900';
   const subCls = onDark ? 'text-slate-400' : 'text-slate-400';
   const arrowCls = onDark ? 'text-slate-400' : 'text-slate-400';
@@ -79,7 +79,7 @@ export function StoreSwitcher({
             onClick={() => setOpen(false)}
             aria-hidden
           />
-          <div className="absolute left-0 right-0 z-20 mt-1 rounded-md border border-slate-200 bg-white shadow-lg">
+          <div className="absolute left-0 right-0 z-20 mt-1 rounded-md border border-[#EAECF5] bg-white shadow-lg">
             <ul className="max-h-60 overflow-y-auto py-1">
               {options.map((o) => {
                 const active = o.storeId === current.storeId;
@@ -107,7 +107,7 @@ export function StoreSwitcher({
                 );
               })}
             </ul>
-            <div className="border-t border-slate-200 p-1">
+            <div className="border-t border-[#EAECF5] p-1">
               <Link
                 href="/stores/new"
                 onClick={() => setOpen(false)}

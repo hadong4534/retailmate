@@ -99,7 +99,7 @@ function LoginForm() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 h-12 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-12 w-full rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
             placeholder="owner@example.com"
           />
         </div>
@@ -115,7 +115,7 @@ function LoginForm() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 h-12 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-12 w-full rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
 
@@ -124,7 +124,7 @@ function LoginForm() {
             type="checkbox"
             checked={remember}
             onChange={(e) => setRemember(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-200"
+            className="h-4 w-4 rounded border-[#E3E5F0] text-indigo-600 focus:ring-2 focus:ring-[#E4E6FB]"
           />
           <span>자동 로그인 <span className="text-[11px] text-slate-400">(직접 로그아웃 전까지 유지)</span></span>
         </label>

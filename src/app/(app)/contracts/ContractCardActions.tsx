@@ -42,7 +42,7 @@ export function ContractCardActions({ contractId, status, signToken, inviteName 
       {showView && (
         <Link
           href={`/contracts/${contractId}/view`}
-          className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50"
+          className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md border border-[#EAECF5] bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:bg-slate-50"
         >
           보기
         </Link>
@@ -54,7 +54,7 @@ export function ContractCardActions({ contractId, status, signToken, inviteName 
         aria-label="더보기"
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[#EAECF5] bg-white text-slate-600 hover:bg-slate-50"
       >
         <MoreIcon className="h-4 w-4" />
       </button>
@@ -62,7 +62,7 @@ export function ContractCardActions({ contractId, status, signToken, inviteName 
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg"
+          className="absolute right-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-lg border border-[#EAECF5] bg-white shadow-lg"
           onClick={() => setOpen(false)}
         >
           {status === 'sent' && signToken && (

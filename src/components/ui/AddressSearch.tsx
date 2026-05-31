@@ -236,13 +236,13 @@ export function AddressSearch({
           value={postcode ?? ''}
           readOnly
           placeholder="우편번호"
-          className="h-11 w-24 rounded-md border border-slate-300 bg-slate-50 px-3 text-center font-mono text-sm text-slate-700 placeholder:text-slate-300"
+          className="h-11 w-24 rounded-md border border-[#E3E5F0] bg-slate-50 px-3 text-center font-mono text-sm text-slate-700 placeholder:text-slate-300"
         />
         <button
           type="button"
           onClick={handleOpen}
           disabled={disabled || loading}
-          className="h-11 shrink-0 rounded-md border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
+          className="h-11 shrink-0 rounded-md border border-[#EAECF5] bg-white px-4 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
         >
           {loading ? '여는 중…' : '주소 검색'}
         </button>
@@ -253,7 +253,7 @@ export function AddressSearch({
         readOnly
         placeholder="주소 검색을 눌러 주소를 선택하세요"
         required={required}
-        className="mt-2 h-11 w-full rounded-md border border-slate-300 bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400"
+        className="mt-2 h-11 w-full rounded-md border border-[#E3E5F0] bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400"
       />
       {geocoding && <p className="mt-1 text-[11px] text-indigo-600">📍 좌표 확인 중…</p>}
       {error && <p className="mt-1 text-[11px] text-red-600">⚠ {error}</p>}
@@ -270,7 +270,7 @@ export function AddressSearch({
           }}
         >
           <div className="flex w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+            <div className="flex items-center justify-between border-b border-[#EAECF5] px-4 py-3">
               <p className="text-sm font-semibold text-slate-900">주소 검색</p>
               <button
                 type="button"

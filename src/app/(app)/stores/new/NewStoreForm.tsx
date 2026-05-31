@@ -62,7 +62,7 @@ export function NewStoreForm() {
         <select
           value={industry}
           onChange={(e) => setIndustry(e.target.value)}
-          className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
         >
           {INDUSTRIES.map((i) => (
             <option key={i.value} value={i.value}>{i.label}</option>

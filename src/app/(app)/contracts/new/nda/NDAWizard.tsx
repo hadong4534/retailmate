@@ -94,9 +94,9 @@ export function NDAWizard() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
           <label className="text-xs font-medium text-slate-500">서명 링크 (7일 후 만료)</label>
-          <div className="mt-2 break-all rounded-md border border-slate-200 bg-slate-50 px-3 py-3 font-mono text-xs text-slate-800">
+          <div className="mt-2 break-all rounded-md border border-[#EAECF5] bg-slate-50 px-3 py-3 font-mono text-xs text-slate-800">
             {url}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -108,7 +108,7 @@ export function NDAWizard() {
             </Button>
             <a
               href={`sms:?body=${encodeURIComponent(`[리테일메이트] 비밀유지서약서 서명 링크 (${expiresStr} 만료)\n${url}`)}`}
-              className="inline-flex h-9 items-center rounded-md border border-slate-300 px-3 text-sm font-medium text-slate-700"
+              className="inline-flex h-9 items-center rounded-md border border-[#E3E5F0] px-3 text-sm font-medium text-slate-700"
             >
               문자로 보내기
             </a>
@@ -118,7 +118,7 @@ export function NDAWizard() {
         <div className="flex justify-between">
           <Link
             href="/contracts"
-            className="inline-flex h-10 items-center rounded-md border border-slate-300 px-4 text-sm font-medium text-slate-700"
+            className="inline-flex h-10 items-center rounded-md border border-[#E3E5F0] px-4 text-sm font-medium text-slate-700"
           >
             계약서 목록으로
           </Link>
@@ -171,7 +171,7 @@ export function NDAWizard() {
       </div>
 
       {step === 1 && (
-        <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-5">
+        <div className="space-y-5 rounded-xl border border-[#EAECF5] bg-white p-5">
           <h2 className="text-lg font-bold text-slate-900">Step 1 · 직원 정보 + NDA 조건</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -196,7 +196,7 @@ export function NDAWizard() {
                 type="date"
                 value={data.effective_date}
                 onChange={(e) => update('effective_date', e.target.value)}
-                className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
               />
             </div>
             <div>
@@ -209,7 +209,7 @@ export function NDAWizard() {
                 max={10}
                 value={data.retention_years}
                 onChange={(e) => update('retention_years', Math.max(1, Math.min(10, parseInt(e.target.value) || 1)))}
-                className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
               />
               <p className="mt-1 text-[11px] text-slate-400">일반적으로 1~3년 권장. 너무 길면 법원이 무효 판단할 수 있어요.</p>
             </div>
@@ -225,7 +225,7 @@ export function NDAWizard() {
               rows={3}
               maxLength={500}
               placeholder="기본 4가지(매출·레시피·인사·기술정보) 외 추가로 보호하고 싶은 정보 예: 신메뉴 개발 계획, 거래처 단가표 등"
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-sm text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
             />
             <p className="mt-1 text-[11px] text-slate-400">비워두면 기본 범위(매장 운영 데이터·레시피·인사·기술정보)만 적용</p>
           </div>
@@ -243,7 +243,7 @@ export function NDAWizard() {
       )}
 
       {step === 2 && (
-        <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-5">
+        <div className="space-y-5 rounded-xl border border-[#EAECF5] bg-white p-5">
           <h2 className="text-lg font-bold text-slate-900">Step 2 · 사장님 서명</h2>
           <p className="text-sm text-slate-500">
             아래 영역에 서명해주세요. 서명 후 [서명 완료 + 직원에게 전송]을 누르면 직원에게 보낼 서명 링크가 만들어집니다.
@@ -258,7 +258,7 @@ export function NDAWizard() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="inline-flex h-10 items-center rounded-md border border-slate-300 px-4 text-sm font-medium text-slate-700"
+              className="inline-flex h-10 items-center rounded-md border border-[#E3E5F0] px-4 text-sm font-medium text-slate-700"
             >
               이전
             </button>

@@ -86,7 +86,7 @@ export function SettingsClient({
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[200px_1fr_240px]">
-      <aside className="rounded-xl border border-slate-200 bg-slate-900 p-2">
+      <aside className="rounded-xl border border-[#EAECF5] bg-slate-900 p-2">
         <ul className="space-y-1">
           {TABS.map((t) => {
             const active = t.key === tab;
@@ -125,7 +125,7 @@ export function SettingsClient({
       </div>
 
       <aside className="space-y-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
           <h3 className="text-sm font-semibold text-slate-900">최근 저장 정보</h3>
           <div className="mt-3 flex items-start gap-2">
             <span className="mt-0.5 text-emerald-500">✓</span>
@@ -139,7 +139,7 @@ export function SettingsClient({
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
           <h3 className="text-sm font-semibold text-slate-900">연동 상태</h3>
           <ul className="mt-3 space-y-2 text-xs">
             <ConnectStatus label="카드사" status="준비 중" />
@@ -204,7 +204,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-6">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-[#EAECF5] bg-white p-6">
       <div className="flex items-center gap-2">
         
         <div>
@@ -230,7 +230,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
           <select
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           >
             <option value="">선택 안 함</option>
             <option value="restaurant">외식업</option>
@@ -307,7 +307,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
             type="time"
             value={openTime}
             onChange={(e) => setOpenTime(e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
         <div>
@@ -316,7 +316,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
             type="time"
             value={closeTime}
             onChange={(e) => setCloseTime(e.target.value)}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
 
@@ -420,7 +420,7 @@ function AccountForm({ profile, onSaved }: { profile: ProfileData; onSaved: (d: 
   const initial = name.charAt(0) || profile.email.charAt(0) || '?';
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-6">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-[#EAECF5] bg-white p-6">
       <div className="flex items-center gap-2">
         
         <div>
@@ -472,7 +472,7 @@ function AccountForm({ profile, onSaved }: { profile: ProfileData; onSaved: (d: 
                 type="button"
                 onClick={handleRemove}
                 disabled={photoPending}
-                className="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                className="rounded-md border border-[#EAECF5] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
               >
                 제거
               </button>
@@ -539,7 +539,7 @@ function NotificationForm({ prefs, onSaved }: { prefs: NotificationPrefs; onSave
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6">
+    <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
       <div className="flex items-center gap-2">
         
         <div>
@@ -570,7 +570,7 @@ function Toggle({
   pending: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-md border border-slate-200 px-4 py-3">
+    <div className="flex items-center justify-between rounded-md border border-[#EAECF5] px-4 py-3">
       <div>
         <p className="text-sm font-medium text-slate-900">{label}</p>
         <p className="text-xs text-slate-500">{desc}</p>
@@ -628,7 +628,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-6">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-[#EAECF5] bg-white p-6">
       <div className="flex items-center gap-2">
         
         <div>
@@ -643,7 +643,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as 'hourly' | 'monthly')}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           >
             <option value="hourly">기본 시급</option>
             <option value="monthly">월급제</option>
@@ -654,7 +654,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={weekly ? '1' : '0'}
             onChange={(e) => setWeekly(e.target.value === '1')}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           >
             <option value="1">반영함</option>
             <option value="0">반영 안 함</option>
@@ -665,7 +665,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={payDay}
             onChange={(e) => setPayDay(Number(e.target.value))}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           >
             {Array.from({ length: 31 }).map((_, i) => (
               <option key={i + 1} value={i + 1}>매월 {i + 1}일</option>
@@ -677,7 +677,7 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
           <select
             value={taxMode}
             onChange={(e) => setTaxMode(e.target.value as 'simple' | 'general')}
-            className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           >
             <option value="simple">간편장부 기준</option>
             <option value="general">복식부기 기준</option>
@@ -733,7 +733,7 @@ function SecurityForm({ onSaved }: { onSaved: (d: Date) => void }) {
 
   return (
     <div className="space-y-4">
-      <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-6">
+      <form onSubmit={handleSubmit} className="rounded-xl border border-[#EAECF5] bg-white p-6">
         <div className="flex items-center gap-2">
           
           <div>
@@ -790,7 +790,7 @@ function SecurityForm({ onSaved }: { onSaved: (d: Date) => void }) {
 
 function ConnectStatus({ label, status }: { label: string; status: string }) {
   return (
-    <li className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2">
+    <li className="flex items-center justify-between rounded-md border border-[#EAECF5] px-3 py-2">
       <span className="font-medium text-slate-700">{label}</span>
       <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">{status}</span>
     </li>

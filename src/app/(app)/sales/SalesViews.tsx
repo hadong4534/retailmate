@@ -60,7 +60,7 @@ export function SalesViews(p: Props) {
   return (
     <>
       {/* 탭: 일별/월별/결제수단별 — client state */}
-      <div className="mt-6 inline-flex rounded-xl border border-slate-200 bg-white p-1">
+      <div className="mt-6 inline-flex rounded-xl border border-[#EAECF5] bg-white p-1">
         <ViewTabButton label="일별" active={view === 'daily'} onClick={() => setView('daily')} />
         <ViewTabButton label="월별" active={view === 'monthly'} onClick={() => setView('monthly')} />
         <ViewTabButton
@@ -142,7 +142,7 @@ function DailyView({
   return (
     <>
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 lg:col-span-2">
+        <div className="rounded-xl border border-[#EAECF5] bg-white p-5 lg:col-span-2">
           <h2 className="text-sm font-semibold text-slate-900">일별 매출 추이</h2>
           <div className="mt-3">
             <TrendLineChart data={trendData} valueLabel="매출" height={240} />
@@ -151,8 +151,8 @@ function DailyView({
         <PageInsight title={insight.title} body={insight.body} tip={insight.tip} />
       </div>
 
-      <section className="mt-4 rounded-2xl border border-slate-200 bg-white">
-        <h2 className="border-b border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900">
+      <section className="mt-4 rounded-2xl border border-[#EAECF5] bg-white">
+        <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
           일별 매출 내역
         </h2>
 
@@ -265,7 +265,7 @@ function MonthlyView({
 }) {
   return (
     <>
-      <div className="mt-4 rounded-xl border border-slate-200 bg-white p-5">
+      <div className="mt-4 rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-sm font-semibold text-slate-900">월별 매출 추이 (최근 6개월)</h2>
         <p className="mt-1 text-xs text-slate-500">
           월간 합계로 시즌성·성장 추세를 파악하세요.
@@ -275,8 +275,8 @@ function MonthlyView({
         </div>
       </div>
 
-      <section className="mt-4 rounded-xl border border-slate-200 bg-white">
-        <h2 className="border-b border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900">
+      <section className="mt-4 rounded-xl border border-[#EAECF5] bg-white">
+        <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
           월별 채널 분해
         </h2>
         <div className="overflow-x-auto">
@@ -342,7 +342,7 @@ function ChannelView({
   return (
     <>
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
           <h2 className="text-sm font-semibold text-slate-900">결제수단 비중</h2>
           {donutData.length === 0 ? (
             <p className="mt-6 text-center text-xs text-slate-400">데이터 없음</p>
@@ -357,7 +357,7 @@ function ChannelView({
           )}
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
           <h2 className="text-sm font-semibold text-slate-900">결제수단별 합계</h2>
           <div className="mt-3 space-y-2.5">
             {SALE_CHANNELS.map((c) => {
@@ -395,8 +395,8 @@ function ChannelView({
         </div>
       </div>
 
-      <section className="mt-4 rounded-xl border border-slate-200 bg-white">
-        <h2 className="border-b border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900">
+      <section className="mt-4 rounded-xl border border-[#EAECF5] bg-white">
+        <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
           일자 × 결제수단 매트릭스
         </h2>
         <div className="overflow-x-auto">

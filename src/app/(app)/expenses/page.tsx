@@ -164,7 +164,7 @@ export default async function ExpensesPage({
 
         {/* 합계 + 우측 KPI 3개 */}
         <div className="rm-stagger grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 lg:col-span-2 lg:p-6">
+          <div className="rounded-2xl border border-[#EAECF5] bg-white p-5 lg:col-span-2 lg:p-6">
             <p className="text-[12px] text-slate-500">{month} 합계</p>
             <p className="mt-1 text-[28px] font-extrabold tabular-nums text-slate-900 lg:text-4xl">
               {formatWon(grandTotal)}
@@ -233,7 +233,7 @@ export default async function ExpensesPage({
         </div>
 
         {grandTotal === 0 ? (
-          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
               <Receipt className="h-6 w-6" strokeWidth={1.8} />
             </div>
@@ -246,7 +246,7 @@ export default async function ExpensesPage({
         ) : (
           <>
             <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-              <div className="rounded-xl border border-slate-200 bg-white p-5">
+              <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
                 <h2 className="text-sm font-semibold text-slate-900">비용 카테고리 비중</h2>
                 <div className="mt-3">
                   <ChannelDonut
@@ -257,7 +257,7 @@ export default async function ExpensesPage({
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5">
+              <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
                 <h2 className="text-sm font-semibold text-slate-900">주간 비용 추이</h2>
                 <p className="mt-0.5 text-xs text-slate-400">{month} 5주차</p>
                 <div className="mt-3">
@@ -269,8 +269,8 @@ export default async function ExpensesPage({
             </div>
 
             {/* 최근 비용 내역 — 모바일 카드 / PC 테이블 */}
-            <section className="mt-6 rounded-2xl border border-slate-200 bg-white">
-              <h2 className="border-b border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900">
+            <section className="mt-6 rounded-2xl border border-[#EAECF5] bg-white">
+              <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
                 최근 비용 내역
               </h2>
 
@@ -399,7 +399,7 @@ function KpiSmall({
 }) {
   const valueColor = tone === 'red' ? 'text-red-500' : tone === 'emerald' ? 'text-emerald-600' : 'text-slate-900';
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4">
+    <div className="flex items-center gap-3 rounded-xl border border-[#EAECF5] bg-white p-4">
       <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${iconBg} ${iconColor}`}>
         <Icon className="h-5 w-5" strokeWidth={2.2} />
       </div>

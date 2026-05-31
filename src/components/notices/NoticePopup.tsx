@@ -38,8 +38,8 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
-      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white shadow-xl">
-        <div className="border-b border-slate-200 px-6 py-4">
+      <div className="w-full max-w-md rounded-2xl border border-[#EAECF5] bg-white shadow-xl">
+        <div className="border-b border-[#EAECF5] px-6 py-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold text-indigo-600">📢 매장 공지</p>
             <span className="text-xs text-slate-400">
@@ -56,7 +56,7 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
           <p className="whitespace-pre-wrap text-sm text-slate-700">{current.body}</p>
         </div>
 
-        <div className="flex border-t border-slate-200 px-6 py-4">
+        <div className="flex border-t border-[#EAECF5] px-6 py-4">
           <button
             type="button"
             onClick={handleAck}

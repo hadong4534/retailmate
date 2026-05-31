@@ -59,7 +59,7 @@ export default async function SignContractPage({
   return (
     <div className="min-h-screen bg-slate-50">
       <header
-        className="border-b border-slate-200 bg-white"
+        className="border-b border-[#EAECF5] bg-white"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="mx-auto flex h-14 max-w-2xl items-center px-4">

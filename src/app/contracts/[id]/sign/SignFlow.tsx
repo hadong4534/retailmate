@@ -269,7 +269,7 @@ function AuthStep({
         </p>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <div className="mb-4 flex gap-1 rounded-md bg-slate-100 p-1">
           <button
             type="button"
@@ -336,13 +336,13 @@ function AuthStep({
                   placeholder="010-0000-0000"
                   maxLength={13}
                   disabled={smsStage === 'verified'}
-                  className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500"
+                  className="h-11 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500"
                 />
                 <button
                   type="button"
                   onClick={handleSendSms}
                   disabled={!isValidPhone || smsLoading || smsStage === 'verified'}
-                  className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                  className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-[#EAECF5] disabled:text-slate-400"
                 >
                   {smsStage === 'verified' ? '인증완료' : smsLoading ? '발송 중…' : smsStage === 'sent' ? '재발송' : '인증번호 받기'}
                 </button>
@@ -363,7 +363,7 @@ function AuthStep({
                   placeholder="123456"
                   maxLength={6}
                   disabled={smsStage === 'verified'}
-                  className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base tracking-widest font-mono focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500"
+                  className="h-11 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base tracking-widest font-mono focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500"
                 />
                 <button
                   type="button"
@@ -501,14 +501,14 @@ function ReviewStep({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <p className="text-xs text-slate-500">서명 진행자</p>
         <p className="mt-0.5 text-sm font-semibold text-slate-900">
           {currentUserEmail}
         </p>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-lg font-bold text-slate-900">계약 내용</h2>
         <div className="mt-3 space-y-1.5 text-sm">
           <Row label="사업장" value={store.name} />
@@ -549,7 +549,7 @@ function ReviewStep({
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <h3 className="text-base font-semibold text-slate-900">동의 항목</h3>
         <div className="mt-3 space-y-2 text-sm">
           <CheckItem
@@ -575,7 +575,7 @@ function ReviewStep({
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <h3 className="text-base font-semibold text-slate-900">직원 서명</h3>
         <p className="mt-1 text-xs text-slate-500">
           마우스 또는 손가락으로 서명해주세요. 서명 완료 시 즉시 계약이 체결됩니다.
@@ -631,7 +631,7 @@ function CheckItem({
   optional?: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2.5 hover:bg-slate-100">
+    <label className="flex cursor-pointer items-start gap-3 rounded-md border border-[#EAECF5] bg-slate-50 px-3 py-2.5 hover:bg-slate-100">
       <input
         type="checkbox"
         checked={checked}

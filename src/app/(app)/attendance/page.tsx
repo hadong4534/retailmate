@@ -209,7 +209,7 @@ export default async function AttendancePage() {
 
         {/* 현재 근무 중 + 인사이트 */}
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <section className="rounded-xl border border-slate-200 bg-white p-5 lg:col-span-2">
+          <section className="rounded-xl border border-[#EAECF5] bg-white p-5 lg:col-span-2">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-slate-900">현재 근무 중</h2>
               <span className="text-[10px] text-slate-400">{workingNow.length}명</span>
@@ -248,11 +248,11 @@ export default async function AttendancePage() {
             )}
           </section>
 
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <section className="rounded-2xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">근태 인사이트</h2>
             <ul className="mt-3 space-y-2 text-xs">
               {/* 미출근: 인원 있을 때만 amber accent. 없으면 차분한 slate. */}
-              <li className="flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50/60 p-3">
+              <li className="flex items-start gap-2.5 rounded-lg border border-[#EAECF5] bg-slate-50/60 p-3">
                 <span className={
                   'mt-1 h-1.5 w-1.5 shrink-0 rounded-full ' +
                   (statusCounts.absent > 0 ? 'bg-amber-500' : 'bg-emerald-500')
@@ -266,7 +266,7 @@ export default async function AttendancePage() {
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50/60 p-3">
+              <li className="flex items-start gap-2.5 rounded-lg border border-[#EAECF5] bg-slate-50/60 p-3">
                 <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500" aria-hidden />
                 <div className="min-w-0">
                   <p className="font-semibold text-slate-900">
@@ -279,7 +279,7 @@ export default async function AttendancePage() {
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50/60 p-3">
+              <li className="flex items-start gap-2.5 rounded-lg border border-[#EAECF5] bg-slate-50/60 p-3">
                 <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-500" aria-hidden />
                 <div className="min-w-0">
                   <p className="font-semibold text-slate-900">이번 주 출근 인원</p>
@@ -294,7 +294,7 @@ export default async function AttendancePage() {
 
         {/* 주간 + 도넛 + 캘린더 */}
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <section className="rounded-xl border border-slate-200 bg-white p-5">
+          <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">주간 출근 현황</h2>
             <p className="mt-0.5 text-[10px] text-slate-400">월~일 일별 출근 인원</p>
             <div className="mt-3">
@@ -308,7 +308,7 @@ export default async function AttendancePage() {
             </div>
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-5">
+          <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">오늘 근태 분포</h2>
             {donutData.length === 0 ? (
               <p className="mt-3 rounded-md bg-slate-50 px-3 py-12 text-center text-xs text-slate-500">
@@ -326,7 +326,7 @@ export default async function AttendancePage() {
             )}
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-5">
+          <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">{today.getMonth() + 1}월 근태 한눈에</h2>
             <div className="mt-3 grid grid-cols-7 gap-1">
               {DAY_KO.map((d) => (
@@ -370,8 +370,8 @@ export default async function AttendancePage() {
         </div>
 
         {/* 오늘 근무 현황 — 모바일 카드 / PC 테이블 */}
-        <section className="mt-6 rounded-2xl border border-slate-200 bg-white">
-          <h2 className="border-b border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900">
+        <section className="mt-6 rounded-2xl border border-[#EAECF5] bg-white">
+          <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
             오늘 근무 현황
           </h2>
           {memberRows.length === 0 ? (
@@ -507,7 +507,7 @@ function KpiCard({
   label: string; value: string; sub: string;
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
+    <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs text-slate-500">{label}</p>

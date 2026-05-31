@@ -82,7 +82,7 @@ export default async function EmployeeMePage() {
       {unread.length > 0 && <NoticePopup notices={unread} />}
 
       <header
-        className="border-b border-slate-200 bg-white"
+        className="border-b border-[#EAECF5] bg-white"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
@@ -134,7 +134,7 @@ export default async function EmployeeMePage() {
         <section className="mt-8">
           <h2 className="mb-3 text-lg font-bold text-slate-900">소속 매장</h2>
           {overview.storeSummaries.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-slate-300 bg-white px-5 py-8 text-center text-sm text-slate-500">
+            <p className="rounded-xl border border-dashed border-[#E3E5F0] bg-white px-5 py-8 text-center text-sm text-slate-500">
               아직 소속된 매장이 없습니다. 사장님이 보내신 서명 링크를 통해 가입해주세요.
             </p>
           ) : (
@@ -142,7 +142,7 @@ export default async function EmployeeMePage() {
               {overview.storeSummaries.map((s) => (
                 <li
                   key={s.storeId}
-                  className="rounded-xl border border-slate-200 bg-white p-5"
+                  className="rounded-xl border border-[#EAECF5] bg-white p-5"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
@@ -198,7 +198,7 @@ export default async function EmployeeMePage() {
                     </div>
 
                     {s.monthly.insurance.total > 0 && (
-                      <div className="mt-3 space-y-1 border-t border-slate-200 pt-3 text-xs">
+                      <div className="mt-3 space-y-1 border-t border-[#EAECF5] pt-3 text-xs">
                         <p className="font-medium text-slate-600">4대보험 본인부담</p>
                         {s.monthly.insurance.nationalPension > 0 && (
                           <Row label="국민연금 4.5%" value={`−${formatWon(s.monthly.insurance.nationalPension)}`} />
@@ -220,7 +220,7 @@ export default async function EmployeeMePage() {
                       </div>
                     )}
 
-                    <div className="mt-3 flex items-center justify-between border-t border-slate-200 pt-3">
+                    <div className="mt-3 flex items-center justify-between border-t border-[#EAECF5] pt-3">
                       <span className="text-xs font-medium text-slate-700">실수령액</span>
                       <span className="text-base font-bold text-emerald-600 tabular-nums">
                         {formatWon(s.monthly.netPay)}
@@ -249,7 +249,7 @@ export default async function EmployeeMePage() {
                   key={n.id}
                   className={
                     'rounded-xl border bg-white p-4 ' +
-                    (n.is_pinned ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-slate-200')
+                    (n.is_pinned ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-[#EAECF5]')
                   }
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -301,7 +301,7 @@ function KpiCard({
     : tone === 'emerald' ? 'text-emerald-600'
     : 'text-slate-900';
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
+    <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
       <p className="text-sm text-slate-500">{label}</p>
       <p className={`mt-2 text-2xl font-bold ${colorClass}`}>{value}</p>
       <p className="mt-1 text-xs text-slate-400">{sub}</p>

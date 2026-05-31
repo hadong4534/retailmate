@@ -44,7 +44,7 @@ export function AppCard({
   const toneCls =
     tone === 'dark'
       ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 ring-1 ring-white/5 text-white'
-      : 'bg-white border border-slate-200 shadow-[0_1px_3px_rgba(15,23,42,0.05)]';
+      : 'bg-white border border-[#EAECF5] shadow-[0_1px_3px_rgba(15,23,42,0.05)]';
   return (
     <div
       className={cn('rounded-[20px] lg:rounded-[24px]', toneCls, padCls, className)}
@@ -265,7 +265,7 @@ export function AccentCard({
   return (
     <div
       className={cn(
-        'rounded-2xl border border-slate-200 border-l-4 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.05)]',
+        'rounded-2xl border border-[#EAECF5] border-l-4 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.05)]',
         border,
         pad,
         className,
@@ -296,7 +296,7 @@ export function MetricCard({
   className?: string;
 }) {
   return (
-    <div className={cn('rounded-2xl border border-slate-200 bg-white p-4', className)}>
+    <div className={cn('rounded-2xl border border-[#EAECF5] bg-white p-4', className)}>
       <div className="flex items-center justify-between">
         <p className="text-[12px] text-slate-500">{label}</p>
         {Icon && <Icon className="h-4 w-4 text-slate-400" strokeWidth={2.2} />}
@@ -376,7 +376,7 @@ export function ActionCard({
     <Link
       href={href}
       className={cn(
-        'group flex h-[96px] flex-col items-start justify-between rounded-2xl border border-slate-200 bg-white p-3.5 transition',
+        'group flex h-[96px] flex-col items-start justify-between rounded-2xl border border-[#EAECF5] bg-white p-3.5 transition',
         'hover:-translate-y-0.5 hover:shadow-[0_4px_12px_-4px_rgba(15,23,42,0.08)] active:translate-y-0 active:bg-slate-50',
         className,
       )}
@@ -449,7 +449,7 @@ export function EmptyState({
     <div
       className={cn(
         // 모바일 py-8, PC py-12 — 모바일 카드가 너무 길어 보이지 않도록.
-        'flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-8 text-center lg:py-12',
+        'flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-8 text-center lg:py-12',
         className,
       )}
     >

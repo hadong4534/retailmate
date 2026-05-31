@@ -102,7 +102,7 @@ export default async function PayrollPage({
 
         {/* 직원이 없는 경우 */}
         {payroll.rows.length === 0 && (
-          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
               <Users className="h-6 w-6" strokeWidth={1.8} />
             </span>
@@ -132,8 +132,8 @@ export default async function PayrollPage({
 
         {/* 직원별 명세 — 모바일 카드 / PC 테이블 */}
         {payroll.rows.length > 0 && (
-          <section className="mt-6 rounded-2xl border border-slate-200 bg-white">
-            <h2 className="border-b border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900">
+          <section className="mt-6 rounded-2xl border border-[#EAECF5] bg-white">
+            <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
               직원별 명세
             </h2>
 
@@ -159,7 +159,7 @@ export default async function PayrollPage({
                 <tbody className="divide-y divide-slate-100">
                   {payroll.rows.map((r) => <PcPayrollRow key={r.memberId} row={r} />)}
                 </tbody>
-                <tfoot className="border-t-2 border-slate-200 bg-slate-50">
+                <tfoot className="border-t-2 border-[#EAECF5] bg-slate-50">
                   <tr>
                     <td colSpan={4} className="px-4 py-3 text-right text-[12px] font-semibold text-slate-700">합계</td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-indigo-600">

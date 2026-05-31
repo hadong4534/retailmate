@@ -84,12 +84,12 @@ export function BrandClient({ initial }: Props) {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
       {/* 로고 영역 */}
-      <section className="rounded-xl border border-slate-200 bg-white p-5">
+      <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-sm font-bold text-slate-900">🏷 매장 로고</h2>
 
         <div className="mt-3">
           {initial.logoUrl ? (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <div className="rounded-lg border border-[#EAECF5] bg-slate-50 p-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={initial.logoUrl}
@@ -98,7 +98,7 @@ export function BrandClient({ initial }: Props) {
               />
             </div>
           ) : (
-            <div className="flex h-44 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400">
+            <div className="flex h-44 items-center justify-center rounded-lg border border-dashed border-[#E3E5F0] bg-slate-50 text-xs text-slate-400">
               로고 미등록
             </div>
           )}
@@ -141,7 +141,7 @@ export function BrandClient({ initial }: Props) {
       </section>
 
       {/* 매장 프롬프트 */}
-      <section className="rounded-xl border border-slate-200 bg-white p-5">
+      <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <h2 className="text-sm font-bold text-slate-900">AI에게 알려줄 매장 정보</h2>
@@ -162,7 +162,7 @@ export function BrandClient({ initial }: Props) {
 - "정성을 담은 한끼" — 손님에게 항상 이 마음으로
 - 메인 컬러는 차분한 블랙·골드 톤
 - 30~50대 가족 단위 손님 위주`}
-            className="w-full rounded-md border border-slate-300 px-3 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="w-full rounded-md border border-[#E3E5F0] px-3 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
 
           <div className="flex items-center justify-between">

@@ -47,7 +47,7 @@ export default async function NoticesPage() {
         />
 
         {notices.length === 0 ? (
-          <div className="flex flex-col items-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+          <div className="flex flex-col items-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <EmptyMegaphone className="text-slate-400" />
             <p className="mt-3 text-[15px] font-medium text-slate-900">아직 작성된 공지가 없습니다</p>
             <p className="mt-1 text-[12px] text-slate-500">매장 운영 안내·이벤트·휴무 정보를 직원에게 전달해보세요.</p>
@@ -68,7 +68,7 @@ export default async function NoticesPage() {
                     'rounded-xl border bg-white p-5 ' +
                     (n.is_pinned && !isExpired
                       ? 'border-indigo-300 ring-1 ring-indigo-100'
-                      : 'border-slate-200')
+                      : 'border-[#EAECF5]')
                   }
                 >
                   <div className="flex items-start justify-between gap-3">

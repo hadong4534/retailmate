@@ -123,7 +123,7 @@ export default async function ReportsPage({
         </div>
 
         {/* 손익 표 */}
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 lg:p-6">
+        <div className="mt-6 rounded-2xl border border-[#EAECF5] bg-white p-5 lg:p-6">
           <h2 className="text-lg font-bold text-slate-900">손익계산</h2>
           <div className="-mx-6 mt-4 overflow-x-auto px-6">
           <table className="w-full min-w-[320px] text-sm">
@@ -166,7 +166,7 @@ export default async function ReportsPage({
                   );
                 });
               })()}
-              <tr className="border-t-2 border-slate-300">
+              <tr className="border-t-2 border-[#E3E5F0]">
                 <td className="whitespace-nowrap py-3 font-semibold text-slate-900">영업이익</td>
                 <td className={
                   'whitespace-nowrap py-3 text-right font-mono text-lg font-bold tabular-nums ' +
@@ -183,14 +183,14 @@ export default async function ReportsPage({
         {/* 차트 영역 */}
         {hasData ? (
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <div className="rounded-xl border border-slate-200 bg-white p-6">
+            <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
               <h2 className="text-lg font-bold text-slate-900">일별 추이</h2>
               <p className="mt-1 text-xs text-slate-500">매출 · 비용 · 이익</p>
               <div className="mt-4">
                 <DailyTrendChart data={report.dailySeries} />
               </div>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-6">
+            <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
               <h2 className="text-lg font-bold text-slate-900">비용 구성</h2>
               <p className="mt-1 text-xs text-slate-500">카테고리별 비중</p>
               <div className="mt-4">
@@ -219,7 +219,7 @@ export default async function ReportsPage({
             </div>
           </div>
         ) : (
-          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <EmptyChart className="text-slate-400" />
             <p className="mt-3 text-[15px] font-medium text-slate-900">
               {month}에 기록된 매출·비용이 없습니다
@@ -232,7 +232,7 @@ export default async function ReportsPage({
 
         {/* 채널별 매출 */}
         {report.totalSales > 0 && (
-          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+          <div className="mt-6 rounded-xl border border-[#EAECF5] bg-white p-6">
             <h2 className="text-lg font-bold text-slate-900">채널별 매출</h2>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {report.salesByChannel.map((c) => (
@@ -266,7 +266,7 @@ function KpiCard({
     emerald: 'border-l-emerald-500',
   };
   return (
-    <div className={`rounded-2xl border border-slate-200 border-l-4 bg-white p-5 shadow-[0_1px_3px_rgba(15,23,42,0.05)] lg:p-6 ${borderMap[tone]}`}>
+    <div className={`rounded-2xl border border-[#EAECF5] border-l-4 bg-white p-5 shadow-[0_1px_3px_rgba(15,23,42,0.05)] lg:p-6 ${borderMap[tone]}`}>
       <p className="text-[13px] text-slate-500">{label}</p>
       <p className={`mt-1 text-[24px] font-extrabold tabular-nums leading-tight lg:text-3xl ${colorMap[tone]}`}>{value}</p>
       <p className="mt-1 text-[12px] text-slate-500">{sub}</p>

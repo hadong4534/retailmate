@@ -4,7 +4,7 @@ export function EditDayLink({ date }: { date: string }) {
   return (
     <Link
       href={`/sales/edit/${date}`}
-      className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-medium text-slate-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700"
+      className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded-md border border-[#EAECF5] bg-white px-2 py-1 text-[11px] font-medium text-slate-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700"
       aria-label={`${date} 매출 수정`}
     >
       수정

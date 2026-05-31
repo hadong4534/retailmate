@@ -52,7 +52,7 @@ export function DriveCard({
   }
 
   return (
-    <article className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white transition hover:shadow-md">
+    <article className="group relative overflow-hidden rounded-xl border border-[#EAECF5] bg-white transition hover:shadow-md">
       <div className="relative aspect-square bg-slate-100">
         {status === 'failed' ? (
           <div className="flex h-full flex-col items-center justify-center gap-1 px-3 text-center">
@@ -132,7 +132,7 @@ export function DriveCard({
               <button
                 type="button"
                 onClick={() => setConfirmOpen(false)}
-                className="flex-1 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                className="flex-1 rounded-md border border-[#EAECF5] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
               >
                 취소
               </button>

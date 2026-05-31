@@ -52,9 +52,9 @@ export function MemberList({ members }: Props) {
   const visible = members;
 
   return (
-    <section className="mt-6 rounded-2xl border border-slate-200 bg-white">
+    <section className="mt-6 rounded-2xl border border-[#EAECF5] bg-white">
       {/* 헤더 */}
-      <div className="flex items-center justify-between gap-2 border-b border-slate-200 px-4 py-3 lg:px-5">
+      <div className="flex items-center justify-between gap-2 border-b border-[#EAECF5] px-4 py-3 lg:px-5">
         <h2 className="text-[15px] font-bold text-slate-900">
           직원 목록 <span className="ml-1.5 tabular-nums text-slate-400">{visible.length}</span>
         </h2>

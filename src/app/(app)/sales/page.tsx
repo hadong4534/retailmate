@@ -200,7 +200,7 @@ export default async function SalesPage({
 
         {/* 합계 + 우측 KPI 3개 */}
         <div className="rm-stagger grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 lg:col-span-2 lg:p-6">
+          <div className="rounded-2xl border border-[#EAECF5] bg-white p-5 lg:col-span-2 lg:p-6">
             <p className="text-[12px] text-slate-500">{month} 합계</p>
             <p className="mt-1 text-[28px] font-extrabold tabular-nums text-indigo-600 lg:text-4xl">
               {formatWon(grandTotal)}
@@ -238,7 +238,7 @@ export default async function SalesPage({
         </div>
 
         {grandTotal === 0 ? (
-          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+          <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <EmptyReceipt className="text-slate-400" />
             <p className="mt-3 text-[15px] font-medium text-slate-900">
               이번 달 매출 기록이 없습니다
@@ -282,7 +282,7 @@ function KpiSmall({
   delta?: { value: number; suffix: string } | null;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3 lg:p-4">
+    <div className="rounded-2xl border border-[#EAECF5] bg-white p-3 lg:p-4">
       <p className="text-[11px] text-slate-500">{label}</p>
       {/*
         모바일 3-column에서 카드가 좁아 긴 금액이 ...로 잘리지 않도록:

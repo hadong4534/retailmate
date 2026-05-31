@@ -201,7 +201,7 @@ export default async function EmployeesPage() {
 
         {/* 상단 KPI */}
         <div className="rm-stagger grid grid-cols-1 gap-4 lg:grid-cols-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-5 lg:col-span-1">
+          <div className="rounded-xl border border-[#EAECF5] bg-white p-5 lg:col-span-1">
             <p className="text-xs text-slate-500">전체 직원</p>
             <p className="mt-1 text-3xl font-bold text-indigo-600">{members.length}명</p>
             <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
@@ -240,7 +240,7 @@ export default async function EmployeesPage() {
 
         {/* 주요 직원 + 출근 현황 */}
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <section className="rounded-xl border border-slate-200 bg-white p-5 lg:col-span-2">
+          <section className="rounded-xl border border-[#EAECF5] bg-white p-5 lg:col-span-2">
             <h2 className="text-sm font-semibold text-slate-900">주요 직원 현황</h2>
             <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
               {active.slice(0, 6).map((m) => {
@@ -256,7 +256,7 @@ export default async function EmployeesPage() {
                   (contract?.invite_phone && contract.invite_phone.trim()) ||
                   null;
                 return (
-                  <div key={m.id} className="rounded-lg border border-slate-200 p-3">
+                  <div key={m.id} className="rounded-lg border border-[#EAECF5] p-3">
                     <div className="flex items-start gap-2">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-600">
                         {displayName?.charAt(0) ?? '?'}
@@ -288,14 +288,14 @@ export default async function EmployeesPage() {
                 );
               })}
               {active.length === 0 && (
-                <p className="col-span-full rounded-md border border-dashed border-slate-300 px-4 py-8 text-center text-xs text-slate-500">
+                <p className="col-span-full rounded-md border border-dashed border-[#E3E5F0] px-4 py-8 text-center text-xs text-slate-500">
                   재직 중인 직원이 없습니다.
                 </p>
               )}
             </div>
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-5">
+          <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">오늘 출근 현황</h2>
             {totalActive === 0 ? (
               <p className="mt-3 text-xs text-slate-500">직원이 없습니다.</p>
@@ -373,7 +373,7 @@ function KpiCard({
   href?: string;
 }) {
   const inner = (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
+    <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs text-slate-500">{label}</p>

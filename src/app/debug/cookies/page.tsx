@@ -28,7 +28,7 @@ export default async function CookiesDebugPage() {
         브라우저가 이 요청과 함께 서버로 보낸 쿠키 목록입니다.
       </p>
 
-      <section className="mt-8 rounded-xl border border-slate-200 bg-white p-5">
+      <section className="mt-8 rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-lg font-bold text-slate-900">
           Supabase 인증 쿠키 ({authCookies.length}개)
         </h2>
@@ -50,7 +50,7 @@ export default async function CookiesDebugPage() {
         )}
       </section>
 
-      <section className="mt-6 rounded-xl border border-slate-200 bg-white p-5">
+      <section className="mt-6 rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-lg font-bold text-slate-900">
           기타 쿠키 ({otherCookies.length}개)
         </h2>
@@ -74,7 +74,7 @@ export default async function CookiesDebugPage() {
         </ol>
       </section>
 
-      <section className="mt-6 rounded-xl border border-slate-200 bg-white p-5">
+      <section className="mt-6 rounded-xl border border-[#EAECF5] bg-white p-5">
         <h2 className="text-sm font-bold text-slate-900">Chrome DevTools 확인 방법</h2>
         <ol className="mt-2 list-decimal pl-5 text-sm text-slate-700 space-y-1">
           <li>F12 → Application 탭</li>

@@ -52,7 +52,7 @@ export default async function AIChatPage() {
     <div className="flex h-full flex-col bg-slate-50">
       {/* 헤더 — 모바일 h-12 / PC py-3. PWA 노치 회피 padding 추가. */}
       <header
-        className="border-b border-slate-200 bg-white/90 px-4 backdrop-blur-md lg:px-8"
+        className="border-b border-[#EAECF5] bg-white/90 px-4 backdrop-blur-md lg:px-8"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 py-2.5 lg:py-3">

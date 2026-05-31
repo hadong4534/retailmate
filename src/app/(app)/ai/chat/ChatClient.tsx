@@ -163,7 +163,7 @@ export function ChatClient({
 
       {/* 추천 질문 chip + 입력 — safe-area 반영 */}
       <div
-        className="border-t border-slate-200 bg-white/95 backdrop-blur"
+        className="border-t border-[#EAECF5] bg-white/95 backdrop-blur"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         {/* 추천 칩 — 가로 스크롤, 1줄 truncate, 우측 페이드 힌트 */}
@@ -177,7 +177,7 @@ export function ChatClient({
                   onClick={() => send(s)}
                   disabled={streaming}
                   title={s}
-                  className="max-w-[180px] shrink-0 truncate rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
+                  className="max-w-[180px] shrink-0 truncate rounded-full border border-[#EAECF5] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
                 >
                   {s}
                 </button>
@@ -192,7 +192,7 @@ export function ChatClient({
         </div>
 
         <form onSubmit={handleSubmit} className="px-4 py-3 lg:px-8">
-          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm transition focus-within:border-indigo-400 focus-within:shadow-md">
+          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-[#E3E5F0] bg-white px-3 py-2 shadow-sm transition focus-within:border-indigo-400 focus-within:shadow-md">
             <SparkleAvatar size={24} />
             <input
               type="text"
@@ -266,7 +266,7 @@ function Bubble({
       <div className="flex max-w-[90%] items-start gap-2">
         <SparkleAvatar size={36} withGlow />
         <div className="flex flex-col">
-          <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm">
+          <div className="rounded-2xl border border-[#EAECF5] bg-white px-4 py-3 text-sm text-slate-900 shadow-sm">
             {message.content ? (
               <MarkdownBody text={message.content} />
             ) : (
@@ -321,12 +321,12 @@ function MarkdownBody({ text }: { text: string }) {
           ),
           thead: ({ children }) => <thead className="bg-slate-50">{children}</thead>,
           th: ({ children }) => (
-            <th className="whitespace-nowrap border border-slate-200 px-2 py-1 text-left font-semibold text-slate-700">
+            <th className="whitespace-nowrap border border-[#EAECF5] px-2 py-1 text-left font-semibold text-slate-700">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="whitespace-nowrap border border-slate-200 px-2 py-1 tabular-nums">{children}</td>
+            <td className="whitespace-nowrap border border-[#EAECF5] px-2 py-1 tabular-nums">{children}</td>
           ),
           a: ({ href, children }) => (
             <a
@@ -339,11 +339,11 @@ function MarkdownBody({ text }: { text: string }) {
             </a>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="my-2 border-l-2 border-slate-300 pl-3 text-slate-600">
+            <blockquote className="my-2 border-l-2 border-[#E3E5F0] pl-3 text-slate-600">
               {children}
             </blockquote>
           ),
-          hr: () => <hr className="my-3 border-slate-200" />,
+          hr: () => <hr className="my-3 border-[#EAECF5]" />,
         }}
       >
         {text}

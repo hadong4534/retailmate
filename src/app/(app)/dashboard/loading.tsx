@@ -34,7 +34,7 @@ export default function DashboardLoading() {
         {/* KPI 5개 */}
         <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-28 rounded-xl border border-slate-200 bg-white p-5">
+            <div key={i} className="h-28 rounded-xl border border-[#EAECF5] bg-white p-5">
               <div className="h-3 w-12 rounded bg-slate-200" />
               <div className="mt-3 h-5 w-20 rounded bg-slate-200" />
               <div className="mt-2 h-2 w-16 rounded bg-slate-200" />
@@ -44,14 +44,14 @@ export default function DashboardLoading() {
 
         {/* 운영 요약 + 차트 */}
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="h-48 rounded-xl border border-slate-200 bg-white p-6 lg:col-span-2" />
-          <div className="h-48 rounded-xl border border-slate-200 bg-white p-6" />
+          <div className="h-48 rounded-xl border border-[#EAECF5] bg-white p-6 lg:col-span-2" />
+          <div className="h-48 rounded-xl border border-[#EAECF5] bg-white p-6" />
         </div>
 
         {/* 빠른 작업 + 알림 */}
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="h-44 rounded-xl border border-slate-200 bg-white p-6" />
-          <div className="h-44 rounded-xl border border-slate-200 bg-white p-6" />
+          <div className="h-44 rounded-xl border border-[#EAECF5] bg-white p-6" />
+          <div className="h-44 rounded-xl border border-[#EAECF5] bg-white p-6" />
         </div>
 
         {/* 안내 */}

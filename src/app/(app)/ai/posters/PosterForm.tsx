@@ -65,7 +65,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-5"
+      className="rounded-2xl border border-[#EAECF5] bg-white p-5"
     >
       {!hasLogo && (
         <div className="mb-4 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900">
@@ -98,7 +98,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
                     'rounded-md border px-3 py-2.5 text-left transition ' +
                     (active
                       ? 'border-indigo-400 bg-indigo-50'
-                      : 'border-slate-200 bg-white hover:bg-slate-50')
+                      : 'border-[#EAECF5] bg-white hover:bg-slate-50')
                   }
                 >
                   <p className={'text-sm font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')}>
@@ -119,7 +119,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
             rows={4}
             maxLength={500}
             placeholder="예: 봄맞이 신메뉴 출시, 벚꽃 분위기로 따뜻하게"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
           <div className="mt-1 flex items-center justify-between">
             <p className="text-[10px] text-slate-400">매장 로고·소개·메인 컬러는 자동으로 반영됩니다.</p>
@@ -134,7 +134,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
               type="button"
               onClick={() => setPrompt(t)}
               disabled={pending}
-              className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
+              className="rounded-full border border-[#EAECF5] bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-50"
             >
               {t}
             </button>

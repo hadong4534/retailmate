@@ -51,7 +51,7 @@ export function PageSkeleton({ variant = 'default' }: Props) {
         )}
 
         {variant === 'list' && (
-          <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mt-5 rounded-2xl border border-[#EAECF5] bg-white p-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="flex items-center gap-3 border-b border-slate-100 py-3 last:border-0">
                 <SkBox className="h-9 w-9 rounded-full" />
@@ -66,7 +66,7 @@ export function PageSkeleton({ variant = 'default' }: Props) {
         )}
 
         {variant === 'form' && (
-          <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 lg:p-6">
+          <div className="mt-5 rounded-2xl border border-[#EAECF5] bg-white p-5 lg:p-6">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="mb-4 space-y-1.5">
                 <SkBox className="h-3.5 w-20 rounded" />

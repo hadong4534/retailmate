@@ -158,7 +158,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+    <div className="rounded-2xl border border-[#EAECF5] bg-white p-6 shadow-sm sm:p-8">
       <h1 className="text-2xl font-bold text-slate-900">회원가입</h1>
       <p className="mt-2 text-sm text-slate-500">
         무료로 시작 · 신용카드 등록 불필요
@@ -238,13 +238,13 @@ export default function SignupPage() {
               placeholder="010-0000-0000"
               maxLength={13}
               disabled={stage === 'verified'}
-              className={`h-11 flex-1 rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500`}
+              className={`h-11 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500`}
             />
             <button
               type="button"
               onClick={handleSendSms}
               disabled={!canSendSms}
-              className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+              className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-[#EAECF5] disabled:text-slate-400"
             >
               {stage === 'verified'
                 ? '인증완료'
@@ -276,7 +276,7 @@ export default function SignupPage() {
                 placeholder="123456"
                 maxLength={6}
                 disabled={stage === 'verified'}
-                className="h-11 flex-1 rounded-md border border-slate-300 px-3 text-base tracking-widest font-mono focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:bg-slate-50 disabled:text-slate-500"
+                className="h-11 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base tracking-widest font-mono focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500"
               />
               <button
                 type="button"
@@ -349,7 +349,7 @@ function formatPhone(input: string): string {
 }
 
 const inputCls =
-  'mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200';
+  'mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]';
 
 function Field({
   label, id, children,

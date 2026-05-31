@@ -100,7 +100,7 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
           aria-haspopup="menu"
           aria-expanded={open}
           disabled={pending}
-          className="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+          className="flex h-7 w-7 items-center justify-center rounded-md border border-[#EAECF5] bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50"
         >
           <MoreIcon className="h-4 w-4" />
         </button>
@@ -108,7 +108,7 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
         {open && (
           <div
             role="menu"
-            className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg"
+            className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-lg border border-[#EAECF5] bg-white shadow-lg"
           >
             <MenuItem
               Icon={Pencil}
@@ -211,7 +211,7 @@ function EditProfileModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white shadow-2xl">
+      <div className="w-full max-w-sm rounded-2xl border border-[#EAECF5] bg-white shadow-2xl">
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3">
           <h2 className="text-[15px] font-bold text-slate-900">직원 정보 편집</h2>
           <button
@@ -237,7 +237,7 @@ function EditProfileModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="홍길동"
-              className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
             />
           </div>
           <div>
@@ -252,7 +252,7 @@ function EditProfileModal({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="010-1234-5678"
-              className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
             />
             <p className="mt-1 text-[11px] text-slate-400">선택 입력 · 비워두면 연락처 없음으로 저장됩니다.</p>
           </div>
@@ -269,7 +269,7 @@ function EditProfileModal({
               type="button"
               onClick={onClose}
               disabled={pending}
-              className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              className="rounded-md border border-[#E3E5F0] bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
             >
               취소
             </button>

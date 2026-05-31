@@ -104,7 +104,7 @@ export default async function DrivePage({
         </div>
 
         {/* 필터 탭 */}
-        <div className="mb-4 inline-flex rounded-xl border border-slate-200 bg-white p-1">
+        <div className="mb-4 inline-flex rounded-xl border border-[#EAECF5] bg-white p-1">
           {FILTERS.map((f) => {
             const active = f.key === filter;
             return (
@@ -125,7 +125,7 @@ export default async function DrivePage({
         </div>
 
         {images.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <EmptyGallery className="text-slate-400" />
             <p className="mt-3 text-[15px] font-medium text-slate-700">
               아직 저장된 작업물이 없습니다
@@ -163,7 +163,7 @@ export default async function DrivePage({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+    <div className="rounded-xl border border-[#EAECF5] bg-white px-4 py-3">
       <p className="text-[11px] text-slate-500">{label}</p>
       <p className="mt-0.5 text-base font-bold text-slate-900">{value}</p>
     </div>

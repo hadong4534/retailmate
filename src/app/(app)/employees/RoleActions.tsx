@@ -46,7 +46,7 @@ export function RoleActions({ memberId, role }: Props) {
           type="button"
           onClick={handleDemote}
           disabled={pending}
-          className="rounded border border-slate-300 bg-white px-2 py-1 font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+          className="rounded border border-[#E3E5F0] bg-white px-2 py-1 font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
         >
           {pending ? '처리 중…' : '직원으로 강등'}
         </button>

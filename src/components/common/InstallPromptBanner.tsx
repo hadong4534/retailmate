@@ -119,7 +119,7 @@ export function InstallPromptBanner() {
       <div
         role="dialog"
         aria-label="앱처럼 설치"
-        className="fixed bottom-[calc(76px+env(safe-area-inset-bottom))] left-3 right-3 z-40 rounded-2xl border border-slate-200 bg-white/95 p-3.5 shadow-[0_12px_30px_-12px_rgba(15,23,42,0.25)] backdrop-blur-md lg:hidden"
+        className="fixed bottom-[calc(76px+env(safe-area-inset-bottom))] left-3 right-3 z-40 rounded-2xl border border-[#EAECF5] bg-white/95 p-3.5 shadow-[0_12px_30px_-12px_rgba(15,23,42,0.25)] backdrop-blur-md lg:hidden"
       >
         <div className="flex items-start gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white">
@@ -141,7 +141,7 @@ export function InstallPromptBanner() {
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-[#EAECF5] bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-700 hover:bg-slate-50"
               >
                 자세히 보기
               </button>
@@ -381,7 +381,7 @@ function InstallGuideModal({
 
           {/* 공통 — 설치 후 안내 */}
           {(platform === 'ios-safari' || isAndroid) && (
-            <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-[12px] leading-relaxed text-slate-700">
+            <div className="mt-5 rounded-xl border border-[#EAECF5] bg-slate-50 p-3 text-[12px] leading-relaxed text-slate-700">
               <p className="font-semibold text-slate-900">설치 후 좋은 점</p>
               <ul className="mt-1.5 list-inside list-disc space-y-0.5">
                 <li>주소창·탭 없이 풀스크린으로 열림</li>

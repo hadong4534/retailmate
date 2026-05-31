@@ -30,7 +30,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
           inputMode="numeric"
           value={wage === 0 ? '' : wage.toLocaleString('ko-KR')}
           onChange={(e) => setWage(parseMoney(e.target.value))}
-          className="h-7 w-24 rounded border border-slate-300 px-2 text-right text-xs tabular-nums focus:border-indigo-500 focus:outline-none"
+          className="h-7 w-24 rounded border border-[#E3E5F0] px-2 text-right text-xs tabular-nums focus:border-[#7177EE] focus:outline-none"
           autoFocus
           placeholder="0"
         />
@@ -46,7 +46,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
           type="button"
           onClick={() => { setEditing(false); setWage(initialWage ?? 0); }}
           disabled={pending}
-          className="rounded border border-slate-300 px-2 py-1 text-[10px] text-slate-600 hover:bg-slate-50"
+          className="rounded border border-[#E3E5F0] px-2 py-1 text-[10px] text-slate-600 hover:bg-slate-50"
         >
           취소
         </button>

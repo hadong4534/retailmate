@@ -9,7 +9,7 @@ export default function LandingPage() {
       <div className="flex flex-1 flex-col bg-white">
         {/* ── 상단 헤더 (높이 mobile 56px / PC 64px) — PWA 노치 회피 padding ─── */}
         <header
-          className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-md"
+          className="sticky top-0 z-30 border-b border-[#EAECF5] bg-white/85 backdrop-blur-md"
           style={{ paddingTop: 'env(safe-area-inset-top)' }}
         >
           <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:h-16 md:px-8">
@@ -78,7 +78,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex h-14 items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-[17px] font-semibold text-slate-700 transition active:scale-[0.98] hover:bg-slate-50"
+                className="inline-flex h-14 items-center justify-center rounded-2xl border border-[#EAECF5] bg-white px-6 text-[17px] font-semibold text-slate-700 transition active:scale-[0.98] hover:bg-slate-50"
               >
                 무료로 시작하기 (회원가입)
               </Link>
@@ -97,7 +97,7 @@ export default function LandingPage() {
             </div>
 
             {/* 미니 미리보기 카드 */}
-            <div className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_10px_40px_-20px_rgba(15,23,42,0.18)]">
+            <div className="mt-8 overflow-hidden rounded-3xl border border-[#EAECF5] bg-white p-5 shadow-[0_10px_40px_-20px_rgba(15,23,42,0.18)]">
               <div className="flex items-center justify-between">
                 <p className="text-[13px] font-bold text-slate-900">오늘의 요약</p>
                 <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-600">5월 11일</span>
@@ -148,7 +148,7 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-7 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                  className="inline-flex items-center justify-center rounded-lg border border-[#EAECF5] bg-white px-7 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-[#E3E5F0] hover:bg-slate-50"
                 >
                   무료로 시작하기 (회원가입)
                 </Link>
@@ -236,7 +236,7 @@ export default function LandingPage() {
         </section>
 
         {/* ── 푸터 ─ 가벼운 라이트 톤 ───────────────── */}
-        <footer className="border-t border-slate-200 bg-slate-50/60 px-4 py-8 text-slate-600 md:px-8">
+        <footer className="border-t border-[#EAECF5] bg-slate-50/60 px-4 py-8 text-slate-600 md:px-8">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <Logo size="md" />
@@ -264,7 +264,7 @@ export default function LandingPage() {
 
 function Chip({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[13px] font-medium text-slate-600 md:text-[11px]">
+    <span className="inline-flex items-center rounded-full border border-[#EAECF5] bg-white px-2.5 py-1 text-[13px] font-medium text-slate-600 md:text-[11px]">
       {label}
     </span>
   );
@@ -318,7 +318,7 @@ function MiniLine() {
 
 function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="flex items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-4">
+    <div className="flex items-center justify-center gap-3 rounded-xl border border-[#EAECF5] bg-white px-5 py-4">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
         {icon}
       </div>
@@ -351,7 +351,7 @@ function FeatureCard({
   }[accent];
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md md:p-6">
+    <article className="rounded-2xl border border-[#EAECF5] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md md:p-6">
       <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${tone.bg} ${tone.text} md:h-12 md:w-12`}>
         {icon}
       </div>
@@ -393,7 +393,7 @@ function DashboardPreview() {
         <span className="relative text-xs font-bold">AI</span>
       </span>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_20px_60px_-30px_rgba(15,23,42,0.25)]">
+      <div className="overflow-hidden rounded-2xl border border-[#EAECF5] bg-white shadow-[0_20px_60px_-30px_rgba(15,23,42,0.25)]">
         <div className="flex h-7 items-center gap-1.5 border-b border-slate-100 bg-slate-50 px-3">
           <span className="h-2.5 w-2.5 rounded-full bg-red-300" />
           <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />

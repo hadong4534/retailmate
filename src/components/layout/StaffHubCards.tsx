@@ -33,7 +33,7 @@ export function StaffHubCards({ activeHref }: { activeHref?: string }) {
               'flex items-center gap-3 rounded-xl border p-3 transition ' +
               (active
                 ? 'border-indigo-300 bg-indigo-50'
-                : 'border-slate-200 bg-white hover:bg-slate-50')
+                : 'border-[#EAECF5] bg-white hover:bg-slate-50')
             }
           >
             <span

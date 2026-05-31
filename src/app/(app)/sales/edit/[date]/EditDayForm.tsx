@@ -69,7 +69,7 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
         <p className="mb-3 text-xs text-slate-500">
           금액을 0원으로 두면 해당 채널은 저장되지 않습니다.
         </p>
@@ -95,7 +95,7 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
           rows={2}
           maxLength={200}
           placeholder="단체 손님, 비 오는 날 등"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          className="mt-1 w-full rounded-md border border-[#E3E5F0] px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
         />
       </div>
 
@@ -132,7 +132,7 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
       </div>
 
       {hadAnyData && (
-        <div className="border-t border-slate-200 pt-4 text-center">
+        <div className="border-t border-[#EAECF5] pt-4 text-center">
           {confirmDelete ? (
             <div className="flex flex-col items-center gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-800">
               <p className="font-medium">이 날의 모든 매출 기록을 삭제할까요?</p>
@@ -140,7 +140,7 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(false)}
-                  className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                  className="rounded-md border border-[#E3E5F0] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
                   disabled={deleting}
                 >
                   취소
