@@ -92,7 +92,22 @@ export function ContractWizard({
   } | null>(null);
 
   function update<K extends keyof ContractFormData>(key: K, value: ContractFormData[K]) {
-    setData((d) => ({ ...d, [key]: value }));
+    setData((d) => {
+      const next = { ...d, [key]: value } as ContractFormData;
+      if (key === 'contract_type') {
+        const t = value as 'fulltime' | 'parttime' | 'daily';
+        // 고용형태별 합리적 기본값 자동조정
+        next.wage_type = t === 'parttime' ? 'hourly' : 'monthly';
+        next.social_insurance = {
+          national_pension: t === 'fulltime',
+          health_insurance: t === 'fulltime',
+          employment_insurance: t === 'fulltime',
+          industrial_accident: true, // 산재는 전 근로자 의무
+        };
+        if (t === 'fulltime') next.work_end_date = null; // 정규직은 기간 없음
+      }
+      return next;
+    });
   }
 
   function toggleDay(d: WeekDay) {
@@ -111,6 +126,7 @@ export function ContractWizard({
       if (!data.work_start_date) return '근로 시작일을 선택해주세요.';
       if (!data.workplace_address.trim()) return '근무 장소를 입력해주세요.';
       if (!data.job_description.trim()) return '담당 업무를 입력해주세요.';
+      if (data.contract_type === 'daily' && !data.work_end_date) return '계약직(기간제)은 근로 종료일을 입력해주세요.';
     }
     if (s === 2) {
       if (data.work_days.length === 0) return '근무 요일을 1개 이상 선택해주세요.';
@@ -307,7 +323,7 @@ function Step1({
           {([
             ['fulltime', '정규직'],
             ['parttime', '단시간'],
-            ['daily', '일용직'],
+            ['daily', '계약직'],
           ] as const).map(([v, l]) => {
             const active = data.contract_type === v;
             return (
@@ -341,7 +357,10 @@ function Step1({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700">
-            📅 근로 종료일 <span className="text-xs text-slate-400">(정규직은 비워두기)</span>
+            📅 근로 종료일{' '}
+            {data.contract_type === 'daily'
+              ? <span className="text-xs font-semibold text-[#5961E6]">(계약직 필수)</span>
+              : <span className="text-xs text-slate-400">(정규직은 비워두기)</span>}
           </label>
           <input
             type="date"
@@ -501,6 +520,11 @@ function Step3({
         onChange={(n) => update('wage_amount', n)}
         size="lg"
       />
+      {data.wage_type === 'hourly' && data.wage_amount > 0 && data.wage_amount < 10030 && (
+        <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700">
+          2025년 최저시급(10,030원) 미만이에요. 금액을 확인해주세요.
+        </p>
+      )}
 
       <label className="flex items-center gap-2 text-sm text-slate-700">
         <input
@@ -615,7 +639,7 @@ function Step4({
   onSignatureChange: (s: string | null) => void;
 }) {
   const wageLabel = data.wage_type === 'hourly' ? '시급' : data.wage_type === 'monthly' ? '월급' : '일급';
-  const typeLabel = data.contract_type === 'fulltime' ? '정규직' : data.contract_type === 'parttime' ? '단시간' : '일용직';
+  const typeLabel = data.contract_type === 'fulltime' ? '정규직' : data.contract_type === 'parttime' ? '단시간' : '계약직';
   const insuranceList = useMemo(() => {
     const map = {
       national_pension: '국민연금',
