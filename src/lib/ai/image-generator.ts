@@ -54,6 +54,18 @@ export interface CreatedImageRow {
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 
+/** 형식·사이즈 → OpenRouter image_config.aspect_ratio 값. (실제 캔버스 비율 강제) */
+function aspectRatioFor(kind: ImageKind, size?: string): string {
+  if (kind === 'sns') {
+    if (size === '9:16') return '9:16';
+    if (size === '16:9') return '16:9';
+    return '4:5'; // 게시물
+  }
+  if (kind === 'card_news') return '1:1';
+  if (kind === 'poster') return '3:4'; // A4/A3/A2 세로 근사
+  return '1:1';
+}
+
 /** 형식·사이즈 → 비율/용도 가이드 문구. */
 function sizeGuidance(kind: ImageKind, size?: string): string {
   if (kind === 'poster') {
@@ -89,9 +101,16 @@ function buildPrompt(input: GenerateImageInput): string {
     parts.push(sizeGuidance(input.kind, input.size));
     parts.push(
       '중요: 이미지 안에 넣는 한글 텍스트는 위 [요청 사항]에 사용자가 직접 적은 내용만 정확하게 표기하세요. ' +
-      '매장 성격·슬로건 등 참고 정보는 사용자가 요청 사항에서 명시적으로 요구하지 않는 한 이미지에 글자로 넣지 마세요. ' +
-      '로고는 첨부된 이미지를 사용하세요.'
+      '매장 성격·슬로건 등 참고 정보는 사용자가 요청 사항에서 명시적으로 요구하지 않는 한 이미지에 글자로 넣지 마세요.'
     );
+    if (b.logoUrl) {
+      parts.push(
+        '로고 지침: 첨부된 이미지는 이 매장의 "공식 로고"입니다. 이 로고를 디자인 상단의 잘 보이는 위치에 ' +
+        '원본 형태 그대로(글자·모양·색을 임의로 바꾸지 말고) 자연스럽게 배치하세요. 새로운 로고나 브랜드 글자를 만들어 그리지 마세요.'
+      );
+    } else {
+      parts.push('로고가 없으므로 매장명을 활용한 심플한 텍스트 로고를 상단에 배치해도 됩니다.');
+    }
     return parts.join('\n');
   }
 
@@ -176,6 +195,10 @@ export async function runImageGeneration(
           model: row.model,
           messages: [{ role: 'user', content: userMessageContent }],
           modalities: ['image', 'text'],
+          image_config: {
+            aspect_ratio: aspectRatioFor(input.kind, input.size),
+            image_size: '2K',
+          },
         }),
         signal: ac.signal,
       });
