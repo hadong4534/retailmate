@@ -69,7 +69,7 @@ function LoginForm() {
     >
       <h1 className="text-center text-2xl font-bold text-slate-900">로그인</h1>
       <p className="mt-2 text-center text-sm text-slate-500">
-        매장 운영을 더 똑똑하게.
+        이메일 또는 카카오로 시작하세요.
       </p>
 
       <button
