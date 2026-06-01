@@ -1,5 +1,7 @@
 'use client';
 
+import { PushToggle } from '@/components/settings/PushToggle';
+
 import { useState, useTransition, useRef } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -548,6 +550,7 @@ function NotificationForm({ prefs, onSaved }: { prefs: NotificationPrefs; onSave
       </div>
 
       <div className="mt-5 space-y-3">
+        <PushToggle />
         <Toggle label="비용 미입력 알림" desc="비용 미입력 항목 알림" checked={expense} onChange={(v) => save(() => setExpense(v))} pending={pending} />
         <Toggle label="직원 출퇴근 알림" desc="직원 출퇴근 현황 알림" checked={attendance} onChange={(v) => save(() => setAttendance(v))} pending={pending} />
         <Toggle label="공지 알림" desc="공지사항 및 업데이트 알림" checked={notice} onChange={(v) => save(() => setNotice(v))} pending={pending} />

@@ -9,7 +9,7 @@
  * 이 SW가 매일 retailmate.io 트래픽을 가로채므로 변경 시 신중히.
  * 캐시 키 버전을 올리면 옛 캐시는 자동 삭제.
  */
-const CACHE_VERSION = 'rm-v8';
+const CACHE_VERSION = 'rm-v9';
 const STATIC_ASSETS = [
   '/site.webmanifest',
   '/apple-touch-icon.png',
@@ -101,4 +101,34 @@ self.addEventListener('fetch', (event) => {
       })(),
     );
   }
+});
+
+
+// ───────────────────────── 웹푸시 ─────────────────────────
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = { body: event.data ? event.data.text() : '' }; }
+  const title = data.title || '리테일메이트';
+  const options = {
+    body: data.body || '',
+    icon: '/android-chrome-192x192.png',
+    badge: '/favicon-48x48.png',
+    data: { url: data.url || '/dashboard' },
+    tag: data.tag || undefined,
+    renotify: !!data.tag,
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || '/dashboard';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((cls) => {
+      for (const c of cls) {
+        if ('focus' in c) { c.navigate(url); return c.focus(); }
+      }
+      if (self.clients.openWindow) return self.clients.openWindow(url);
+    }),
+  );
 });
