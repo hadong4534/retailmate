@@ -89,6 +89,7 @@ export async function updateNotificationPrefs(input: {
   attendance_alert: boolean;
   notice_alert: boolean;
   important_alert: boolean;
+  briefing_alert: boolean;
 }): Promise<Result> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

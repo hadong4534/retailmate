@@ -30,7 +30,7 @@ export default async function SettingsPage() {
       .maybeSingle(),
     supabase
       .from('user_notification_prefs')
-      .select('expense_alert, attendance_alert, notice_alert, important_alert')
+      .select('expense_alert, attendance_alert, notice_alert, important_alert, briefing_alert')
       .eq('user_id', user.id)
       .maybeSingle(),
   ]);
@@ -52,6 +52,7 @@ export default async function SettingsPage() {
   };
 
   const defaultPrefs = {
+    briefing_alert: true,
     expense_alert: true,
     attendance_alert: true,
     notice_alert: true,

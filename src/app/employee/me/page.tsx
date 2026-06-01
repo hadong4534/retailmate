@@ -81,6 +81,16 @@ export default async function EmployeeMePage() {
   ).flat();
   allNotices.sort((a, b) => b.published_at.localeCompare(a.published_at));
 
+  // 내 예정 근무 스케줄 (오늘 이후, 최대 8건)
+  const todayKstStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+  const { data: myShifts } = await supabase
+    .from('work_schedules')
+    .select('schedule_date, start_time, end_time')
+    .eq('user_id', user.id)
+    .gte('schedule_date', todayKstStr)
+    .order('schedule_date', { ascending: true })
+    .limit(8);
+
   const monthLabel = `${new Date().getMonth() + 1}월`;
 
   return (
@@ -259,6 +269,25 @@ export default async function EmployeeMePage() {
             </ul>
           )}
         </section>
+
+        {/* 내 근무 스케줄 */}
+        {myShifts && myShifts.length > 0 && (
+          <section className="mt-8">
+            <h2 className="mb-3 text-lg font-bold text-slate-900">내 근무 스케줄</h2>
+            <ul className="space-y-2">
+              {myShifts.map((sh, i) => {
+                const d = new Date(sh.schedule_date + 'T00:00:00');
+                const dow = ['일','월','화','수','목','금','토'][d.getDay()];
+                return (
+                  <li key={i} className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/70 px-4 py-3 backdrop-blur">
+                    <span className="text-[14px] font-semibold text-slate-800">{d.getMonth() + 1}월 {d.getDate()}일 <span className="text-slate-400">({dow})</span></span>
+                    <span className="rounded-full bg-[#EEF0FE] px-3 py-1 text-[13px] font-bold tabular-nums text-[#5961E6]">{String(sh.start_time).slice(0,5)} ~ {String(sh.end_time).slice(0,5)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
         {/* 공지 */}
         {allNotices.length > 0 && (

@@ -68,40 +68,44 @@ export function HomeView(p: HomeViewProps) {
           </span>
         </div>
 
-        {/* Row 1 — 이달 매출 히어로 + 목표 도넛 */}
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <section className="relative overflow-hidden rounded-[24px] border border-white/70 bg-gradient-to-br from-white to-[#F3F2FE] p-6 shadow-[0_10px_30px_-18px_rgba(99,102,241,0.35)] lg:col-span-2">
-            <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(129,140,248,0.25),transparent_70%)]" />
-            <p className="text-[14px] font-semibold text-slate-500">이달 매출</p>
-            <p className="mt-3 text-[34px] font-extrabold tabular-nums tracking-tight text-slate-900 lg:text-[40px]">
-              {hasMonthSales ? `₩${won(p.monthSales)}` : '입력 전'}
-            </p>
-            <div className="mt-3 flex items-center gap-2">
-              {monthSalesChange !== null ? (
-                <span className={'inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-bold ' +
-                  (monthSalesChange >= 0 ? 'bg-[#EEF0FE] text-[#5961E6]' : 'bg-red-50 text-red-600')}>
-                  {monthSalesChange >= 0 ? '+' : ''}{monthSalesChange}%
-                </span>
-              ) : (
-                <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[12px] font-semibold text-slate-500">비교 데이터 없음</span>
-              )}
-              <span className="text-[12.5px] text-slate-500">지난 달 대비</span>
-            </div>
-          </section>
+        {/* Row 1 — 이달 매출 히어로 (목표는 하단 슬림 바로 서브 표시) */}
+        <section className="relative overflow-hidden rounded-[24px] border border-white/70 bg-gradient-to-br from-white to-[#F3F2FE] p-6 shadow-[0_10px_30px_-18px_rgba(99,102,241,0.35)]">
+          <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(129,140,248,0.25),transparent_70%)]" />
+          <p className="text-[14px] font-semibold text-slate-500">이달 매출</p>
+          <p className="mt-3 text-[34px] font-extrabold tabular-nums tracking-tight text-slate-900 lg:text-[40px]">
+            {hasMonthSales ? `₩${won(p.monthSales)}` : '입력 전'}
+          </p>
+          <div className="mt-3 flex items-center gap-2">
+            {monthSalesChange !== null ? (
+              <span className={'inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-bold ' +
+                (monthSalesChange >= 0 ? 'bg-[#EEF0FE] text-[#5961E6]' : 'bg-red-50 text-red-600')}>
+                {monthSalesChange >= 0 ? '+' : ''}{monthSalesChange}%
+              </span>
+            ) : (
+              <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[12px] font-semibold text-slate-500">비교 데이터 없음</span>
+            )}
+            <span className="text-[12.5px] text-slate-500">지난 달 대비</span>
+          </div>
 
-          <section className="flex flex-col items-center rounded-[24px] border border-[#E9EAF4] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(99,102,241,0.3)]">
-            <p className="self-start text-[13px] font-semibold text-slate-500">이달 목표 달성</p>
-            <Donut pct={goalRate ?? 0} hasTarget={p.monthlyTarget > 0} />
-            <p className="mt-2 text-[11.5px] font-medium text-slate-400">
-              {p.monthlyTarget > 0 ? `₩${won(p.monthSales)} / ₩${won(p.monthlyTarget)}` : '목표 미설정'}
-            </p>
-            {p.monthlyTarget === 0 && (
-              <Link href="/settings" className="mt-1 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#6366F1]">
-                목표 설정 <ChevronRight className="h-3 w-3" />
+          {/* 이달 목표 — 서브(슬림 진행 바) */}
+          <div className="mt-5 border-t border-[#ECECF6] pt-3.5">
+            {p.monthlyTarget > 0 ? (
+              <>
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="font-medium text-slate-500">이달 목표</span>
+                  <span className="font-semibold text-slate-600"><span className="text-[#5961E6]">{goalRate}%</span> · ₩{won(p.monthSales)} / ₩{won(p.monthlyTarget)}</span>
+                </div>
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#EEF0F8]">
+                  <div className="h-full rounded-full bg-gradient-to-r from-[#A5AEF9] to-[#7177EE]" style={{ width: `${Math.min(100, Math.max(0, goalRate ?? 0))}%` }} />
+                </div>
+              </>
+            ) : (
+              <Link href="/settings" className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#6366F1]">
+                이달 목표 설정하기 <ChevronRight className="h-3 w-3" />
               </Link>
             )}
-          </section>
-        </div>
+          </div>
+        </section>
 
         {/* Row 2 — 일별 매출 추이 + AI 인사이트 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -171,30 +175,6 @@ export function HomeView(p: HomeViewProps) {
 }
 
 // ── 도넛 게이지 ──────────────────────────────────────────────────────────────
-function Donut({ pct, hasTarget }: { pct: number; hasTarget: boolean }) {
-  const r = 54;
-  const c = 2 * Math.PI * r;
-  const clamped = Math.min(100, Math.max(0, pct));
-  const dash = (clamped / 100) * c;
-  return (
-    <svg viewBox="0 0 130 130" className="my-2 h-[124px] w-[124px]">
-      <defs>
-        <linearGradient id="donutG" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#A5AEF9" />
-          <stop offset="1" stopColor="#7177EE" />
-        </linearGradient>
-      </defs>
-      <circle cx="65" cy="65" r={r} fill="none" stroke="#EEF0F8" strokeWidth="13" />
-      {hasTarget && (
-        <circle cx="65" cy="65" r={r} fill="none" stroke="url(#donutG)" strokeWidth="13"
-          strokeLinecap="round" strokeDasharray={`${dash} ${c}`} transform="rotate(-90 65 65)" />
-      )}
-      <text x="65" y="73" textAnchor="middle" fontSize="29" fontWeight="800" fill="#1E2333">
-        {hasTarget ? `${pct}%` : '–'}
-      </text>
-    </svg>
-  );
-}
 
 // ── 스탯 카드 ────────────────────────────────────────────────────────────────
 function Stat({ icon, label, value, delta, deltaUp, muted }: {

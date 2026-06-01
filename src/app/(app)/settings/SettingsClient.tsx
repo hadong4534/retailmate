@@ -65,6 +65,7 @@ interface NotificationPrefs {
   attendance_alert: boolean;
   notice_alert: boolean;
   important_alert: boolean;
+  briefing_alert: boolean;
 }
 
 type Tab = 'store' | 'account' | 'notifications' | 'payroll' | 'security';
@@ -528,6 +529,7 @@ function NotificationForm({ prefs, onSaved }: { prefs: NotificationPrefs; onSave
   const [attendance, setAttendance] = useState(prefs.attendance_alert);
   const [notice, setNotice] = useState(prefs.notice_alert);
   const [important, setImportant] = useState(prefs.important_alert);
+  const [briefing, setBriefing] = useState(prefs.briefing_alert ?? true);
   const [error, setError] = useState<string | null>(null);
 
   function save(updater: () => void) {
@@ -539,6 +541,7 @@ function NotificationForm({ prefs, onSaved }: { prefs: NotificationPrefs; onSave
         attendance_alert: attendance,
         notice_alert: notice,
         important_alert: important,
+        briefing_alert: briefing,
       });
       if ('error' in result) setError(result.error);
       else onSaved(new Date());
@@ -557,6 +560,7 @@ function NotificationForm({ prefs, onSaved }: { prefs: NotificationPrefs; onSave
 
       <div className="mt-5 space-y-3">
         <PushToggle />
+        <Toggle label="AI 아침 브리핑" desc="매일 아침 8시, 어제 매출·목표 페이스 요약" checked={briefing} onChange={(v) => save(() => setBriefing(v))} pending={pending} />
         <Toggle label="비용 미입력 알림" desc="비용 미입력 항목 알림" checked={expense} onChange={(v) => save(() => setExpense(v))} pending={pending} />
         <Toggle label="직원 출퇴근 알림" desc="직원 출퇴근 현황 알림" checked={attendance} onChange={(v) => save(() => setAttendance(v))} pending={pending} />
         <Toggle label="공지 알림" desc="공지사항 및 업데이트 알림" checked={notice} onChange={(v) => save(() => setNotice(v))} pending={pending} />

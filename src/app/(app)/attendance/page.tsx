@@ -1,10 +1,12 @@
-import { Clock, CheckCircle2, AlertTriangle, DoorOpen, Timer, Moon } from 'lucide-react';
+import Link from 'next/link';
+import { Clock, CheckCircle2, AlertTriangle, DoorOpen, Timer, Moon, CalendarDays, BarChart3 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getPageContext } from '@/lib/auth/page-context';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { ChannelDonut } from '@/components/charts/ChannelDonut';
 import { WeekBarChart } from '@/components/charts/WeekBarChart';
 import { GpsCheckWidget } from '@/components/attendance/GpsCheckWidget';
+import { ScheduleBoard } from './ScheduleBoard';
 import { PageHeader } from '@/components/app';
 import { formatHM } from '@/lib/employee/queries';
 import { todayInKST } from '@/lib/utils';
@@ -38,11 +40,46 @@ export const metadata = {
 
 const DAY_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
-export default async function AttendancePage() {
+export default async function AttendancePage({ searchParams }: { searchParams: Promise<{ view?: string; month?: string }> }) {
   const supabase = await createClient();
   const ctx = await getPageContext(supabase);
   if (!ctx) return null;
   const store = { id: ctx.adminStore.storeId };
+
+  const sp = await searchParams;
+  const isSchedule = sp.view === 'schedule';
+  if (isSchedule) {
+    const month = /^\d{4}-\d{2}$/.test(sp.month ?? '') ? sp.month! : todayInKST().slice(0, 7);
+    const mStart = `${month}-01`;
+    const mEnd = `${month}-${String(new Date(Number(month.slice(0,4)), Number(month.slice(5,7)), 0).getDate()).padStart(2,'0')}`;
+    const [membersR, contractsR, schedR] = await Promise.all([
+      supabase.from('store_members').select('user_id').eq('store_id', store.id).neq('role', 'owner').eq('is_active', true),
+      supabase.from('labor_contracts').select('employee_id, invite_name, created_at').eq('store_id', store.id).order('created_at', { ascending: false }),
+      supabase.from('work_schedules').select('user_id, schedule_date, start_time, end_time').eq('store_id', store.id).gte('schedule_date', mStart).lte('schedule_date', mEnd),
+    ]);
+    const memUserIds = Array.from(new Set((membersR.data ?? []).map((m) => m.user_id as string)));
+    const inviteName = new Map<string, string>();
+    (contractsR.data ?? []).forEach((c) => { if (c.employee_id && c.invite_name && !inviteName.has(c.employee_id)) inviteName.set(c.employee_id, c.invite_name); });
+    let nameMap = new Map<string, string>();
+    if (memUserIds.length > 0) {
+      const { data: profs } = await supabase.from('profiles').select('id, name').in('id', memUserIds);
+      (profs ?? []).forEach((p) => { if (p.name && p.name.trim()) nameMap.set(p.id, p.name.trim()); });
+    }
+    const employees = memUserIds.map((uid) => ({ userId: uid, name: nameMap.get(uid) ?? inviteName.get(uid) ?? '직원' }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+    const shifts = (schedR.data ?? []) as { user_id: string; schedule_date: string; start_time: string; end_time: string }[];
+
+    return (
+      <div className="px-4 py-6 lg:px-8 lg:py-8">
+        <div className="mx-auto max-w-5xl">
+          <StaffHubCards activeHref="/attendance" />
+          <PageHeader Icon={Clock} tone="amber" title="근태 현황" description="실제 출퇴근과 예정 근무 스케줄을 한 곳에서." className="mb-4" />
+          <AttendanceTabs view="schedule" />
+          <ScheduleBoard month={month} employees={employees} shifts={shifts} />
+        </div>
+      </div>
+    );
+  }
 
   const today = new Date();
   // KST 기준 — UTC 처리 시 자정~09시에 today가 어제로 어긋나 출근 기록이 누락되는 문제 방지.
@@ -170,6 +207,8 @@ export default async function AttendancePage() {
           description="직원 출퇴근과 근무 시간을 한눈에 확인하세요."
           className="mb-5"
         />
+
+        <AttendanceTabs view="perf" />
 
         {/* GPS 출퇴근 위젯 */}
         <div className="mb-6">
@@ -545,5 +584,20 @@ function Legend({ dot, label }: { dot: string; label: string }) {
       <span className={`inline-block h-2 w-2 rounded ${dot}`} />
       {label}
     </span>
+  );
+}
+
+/** 실적(출퇴근) / 스케줄 탭 전환 */
+function AttendanceTabs({ view }: { view: 'perf' | 'schedule' }) {
+  const base = 'flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition';
+  return (
+    <div className="mb-5 flex gap-1.5 rounded-2xl border border-[#EAECF5] bg-white p-1">
+      <Link href="/attendance" className={base + (view === 'perf' ? ' bg-[#EEF0FE] text-[#5961E6]' : ' text-slate-500 hover:bg-slate-50')}>
+        <BarChart3 className="h-4 w-4" /> 출퇴근 실적
+      </Link>
+      <Link href="/attendance?view=schedule" className={base + (view === 'schedule' ? ' bg-[#EEF0FE] text-[#5961E6]' : ' text-slate-500 hover:bg-slate-50')}>
+        <CalendarDays className="h-4 w-4" /> 근무 스케줄
+      </Link>
+    </div>
   );
 }
