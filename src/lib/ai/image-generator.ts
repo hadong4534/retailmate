@@ -103,7 +103,8 @@ function buildPrompt(input: GenerateImageInput): string {
  */
 export async function createImageRow(input: GenerateImageInput): Promise<CreatedImageRow> {
   const finalPrompt = buildPrompt(input);
-  const model = input.mode === 'photo' ? IMAGE_MODELS.photo : IMAGE_MODELS.primary;
+  // 모든 이미지 생성을 GPT 단일 모델로 통합 (한글 텍스트·품질 일관).
+  const model = IMAGE_MODELS.primary;
 
   const admin = createAdminClient();
   const { data: imageRow, error: insertErr } = await admin
