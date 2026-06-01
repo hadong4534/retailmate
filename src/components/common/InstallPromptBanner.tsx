@@ -28,10 +28,12 @@ type BeforeInstallPromptEvent = Event & {
 
 type Platform =
   | 'ios-safari'
-  | 'ios-other'       // iOS인데 Safari가 아닌 브라우저 (Chrome/Whale/카카오톡 인앱 등)
+  | 'ios-other'       // iOS인데 Safari가 아닌 일반 브라우저 (Chrome/Whale 등)
   | 'android-chrome'
   | 'android-samsung'
   | 'android-other'
+  | 'inapp-ios'       // 앱 속 인앱브라우저 (카카오톡/인스타/네이버 등) — iOS
+  | 'inapp-android'   // 앱 속 인앱브라우저 — Android
   | 'desktop';
 
 function detectPlatform(): Platform {
@@ -40,13 +42,16 @@ function detectPlatform(): Platform {
   const lower = ua.toLowerCase();
   const isIOS = /iphone|ipad|ipod/.test(lower);
   const isAndroid = /android/.test(lower);
+  // 앱 속 인앱브라우저(카카오톡·인스타·페북·네이버·라인·다음) — PWA 설치 불가 → 외부 브라우저 유도
+  const isInApp = /(kakaotalk|fbav|fban|instagram|line\/|naver|daumapps|kakaostory)/i.test(ua);
 
   if (isIOS) {
-    // iOS Safari 식별: 'Safari'가 있고 'CriOS', 'FxiOS', 'EdgiOS' 등 다른 브라우저 표식이 없어야 함
-    const isOtherBrowser = /(crios|fxios|edgios|opios|whale|kakaotalk|fban|fbav|instagram)/i.test(ua);
+    if (isInApp) return 'inapp-ios';
+    const isOtherBrowser = /(crios|fxios|edgios|opios|whale)/i.test(ua);
     return isOtherBrowser ? 'ios-other' : 'ios-safari';
   }
   if (isAndroid) {
+    if (isInApp) return 'inapp-android';
     if (/samsungbrowser/i.test(ua)) return 'android-samsung';
     if (/chrome/i.test(ua) && !/edg|opr/i.test(ua)) return 'android-chrome';
     return 'android-other';
@@ -81,7 +86,10 @@ export function InstallPromptBanner() {
     };
     window.addEventListener('beforeinstallprompt', handler);
 
-    const delay = setTimeout(() => setShow(true), 1500);
+    const delay = setTimeout(() => {
+      setShow(true);
+      if (p === 'inapp-ios' || p === 'inapp-android') setModalOpen(true);
+    }, 1500);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
@@ -107,6 +115,24 @@ export function InstallPromptBanner() {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).catch(() => null);
     }
+  }
+
+  function openExternal() {
+    const url = 'https://www.retailmate.io';
+    const ua = navigator.userAgent;
+    // 카카오톡: 외부 브라우저 강제 오픈 딥링크
+    if (/kakaotalk/i.test(ua)) {
+      window.location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(url);
+      return;
+    }
+    // 라인: 외부 브라우저 파라미터
+    if (/line\//i.test(ua)) {
+      window.location.href = url + (url.includes('?') ? '&' : '?') + 'openExternalBrowser=1';
+      return;
+    }
+    // 그 외 인앱: 주소 복사 안내
+    copyUrl();
+    alert('주소를 복사했어요. 우측 상단 메뉴에서 "다른 브라우저로 열기"를 누르거나, 복사한 주소를 브라우저에 붙여넣어 주세요.');
   }
 
   if (!show) return null;
@@ -138,6 +164,15 @@ export function InstallPromptBanner() {
                   지금 설치
                 </button>
               )}
+              {(platform === 'inapp-ios' || platform === 'inapp-android') && (
+                <button
+                  type="button"
+                  onClick={openExternal}
+                  className="rounded-lg bg-[#7177EE] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#5E64E6] active:scale-[0.98]"
+                >
+                  브라우저에서 열기
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}
@@ -164,6 +199,7 @@ export function InstallPromptBanner() {
           deferred={deferred}
           onInstall={installAndroid}
           onCopyUrl={copyUrl}
+          onOpenExternal={openExternal}
           onClose={() => setModalOpen(false)}
           onDismiss={dismiss}
         />
@@ -185,6 +221,10 @@ function headlineFor(p: Platform): string {
       return '삼성 인터넷에서도 홈 화면에 앱 아이콘으로 추가할 수 있어요.';
     case 'android-other':
       return '안드로이드는 Chrome으로 열면 가장 매끄럽게 설치돼요.';
+    case 'inapp-ios':
+      return '카카오톡 등 앱 안의 브라우저예요. Safari로 열어야 홈 화면에 추가할 수 있어요.';
+    case 'inapp-android':
+      return '카카오톡 등 앱 안의 브라우저예요. Chrome으로 열어야 설치할 수 있어요.';
     default:
       return '';
   }
@@ -196,6 +236,7 @@ function InstallGuideModal({
   deferred,
   onInstall,
   onCopyUrl,
+  onOpenExternal,
   onClose,
   onDismiss,
 }: {
@@ -203,6 +244,7 @@ function InstallGuideModal({
   deferred: BeforeInstallPromptEvent | null;
   onInstall: () => void;
   onCopyUrl: () => void;
+  onOpenExternal: () => void;
   onClose: () => void;
   onDismiss: () => void;
 }) {
@@ -236,6 +278,43 @@ function InstallGuideModal({
         </div>
 
         <div className="max-h-[70vh] overflow-y-auto px-5 py-4">
+          {/* 인앱브라우저(카카오톡 등) — 외부 브라우저로 유도 */}
+          {(platform === 'inapp-ios' || platform === 'inapp-android') && (
+            <>
+              <div className="mb-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[13px] text-amber-900">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2.2} />
+                <div>
+                  <p className="font-bold">앱 안의 브라우저에서는 설치가 안 돼요</p>
+                  <p className="mt-1 leading-relaxed">
+                    카카오톡·인스타·네이버 등 <strong>앱 속 브라우저</strong>에서는 홈 화면 추가가 막혀 있어요.
+                    아래 버튼으로 <strong>{platform === 'inapp-ios' ? 'Safari' : 'Chrome'}</strong>에서 다시 열어주세요.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={onOpenExternal}
+                    className="mt-2 rounded-md bg-amber-900 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-amber-950"
+                  >
+                    {platform === 'inapp-android' ? '다른 브라우저로 열기' : '주소 복사하기'}
+                  </button>
+                </div>
+              </div>
+              <SectionTitle label={platform === 'inapp-ios' ? 'Safari로 연 다음' : 'Chrome으로 연 다음'} />
+              {platform === 'inapp-ios' ? (
+                <>
+                  <Step n={1}>우측 상단/하단 <strong>메뉴</strong>에서 <strong>&quot;Safari로 열기&quot;</strong>를 누릅니다.</Step>
+                  <Step n={2}>Safari 하단 <strong>공유</strong> 버튼 → <strong>&quot;홈 화면에 추가&quot;</strong>.</Step>
+                  <Step n={3}>우측 상단 <strong>&quot;추가&quot;</strong> → 홈 화면에 앱 아이콘 생성.</Step>
+                </>
+              ) : (
+                <>
+                  <Step n={1}>우측 상단 <strong>⋮ 메뉴</strong> → <strong>&quot;다른 브라우저로 열기&quot;</strong>(Chrome).</Step>
+                  <Step n={2}>Chrome 우측 상단 <strong>⋮</strong> → <strong>&quot;앱 설치&quot; / &quot;홈 화면에 추가&quot;</strong>.</Step>
+                  <Step n={3}><strong>&quot;설치&quot;</strong> → 홈 화면·앱 서랍에 아이콘 생성.</Step>
+                </>
+              )}
+            </>
+          )}
+
           {/* iOS Safari 가 아닌 경우 — 강제 안내 */}
           {platform === 'ios-other' && (
             <div className="mb-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[13px] text-amber-900">

@@ -15,22 +15,23 @@ interface Props {
   iconOnly?: boolean;
   hideText?: boolean;
   className?: string;
-  /** 다크 배경(예: 사이드바)에서 흰색 텍스트로 */
   onDark?: boolean;
 }
 
+let gradSeq = 0;
+
 /**
- * 리테일메이트 브랜드 로고 아이콘.
- *
- * - viewBox 48x48 정사각으로 비율 깨짐 방지.
- * - currentColor 사용 → text 색상 클래스로 어디서든 재사용.
- * - 상승 막대그래프 3개 + 우상향 화살표 표현.
+ * 리테일메이트 브랜드 로고 아이콘 (Aurora 페리윙클 그라데이션).
+ * - white=true 면 단색 흰색(currentColor) — 다크 배경용.
  */
 export function LogoMark({
   size = 26,
+  white = false,
   className,
   ...rest
-}: { size?: number } & Omit<SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox'>) {
+}: { size?: number; white?: boolean } & Omit<SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox'>) {
+  const gid = `rmLogoGrad${white ? '' : ++gradSeq}`;
+  const paint = white ? 'currentColor' : `url(#${gid})`;
   return (
     <svg
       width={size}
@@ -43,26 +44,20 @@ export function LogoMark({
       className={className}
       {...rest}
     >
-      {/* 막대그래프 3개 — 점진적 상승 */}
-      <rect x="7" y="28" width="6" height="12" rx="2" fill="currentColor" />
-      <rect x="19" y="22" width="6" height="18" rx="2" fill="currentColor" />
-      <rect x="31" y="15" width="6" height="25" rx="2" fill="currentColor" />
-      {/* 우상향 라인 (막대 윗부분을 잇는 추세선) */}
-      <path
-        d="M9 24 L20 17 L28 19 L39 8"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* 화살표 머리 */}
-      <path
-        d="M31 8 H39 V16"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {!white && (
+        <defs>
+          <linearGradient id={gid} x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stopColor="#8E94F2" />
+            <stop offset="0.55" stopColor="#6366F1" />
+            <stop offset="1" stopColor="#7FB8EE" />
+          </linearGradient>
+        </defs>
+      )}
+      <rect x="7" y="28" width="6" height="12" rx="2" fill={paint} />
+      <rect x="19" y="22" width="6" height="18" rx="2" fill={paint} />
+      <rect x="31" y="15" width="6" height="25" rx="2" fill={paint} />
+      <path d="M9 24 L20 17 L28 19 L39 8" stroke={paint} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M31 8 H39 V16" stroke={paint} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -76,10 +71,9 @@ export function Logo({
 }: Props) {
   const s = sizeMap[size];
   const textClass = onDark ? 'text-white' : 'text-slate-900';
-  const markClass = onDark ? 'text-white' : 'text-indigo-600';
   return (
     <span className={cn('inline-flex items-center', s.box, className)}>
-      <LogoMark size={s.mark} className={markClass} />
+      <LogoMark size={s.mark} white={onDark} className={onDark ? 'text-white' : undefined} />
       {!iconOnly && !hideText && (
         <span className={cn('font-bold tracking-tight', textClass, s.text)}>
           리테일메이트
@@ -89,41 +83,18 @@ export function Logo({
   );
 }
 
-/**
- * Splash·랜딩 영웅 등 큰 화면용 로고 아이콘.
- * Tailwind size 클래스로 자유 조정.
- */
+/** 큰 화면용 로고 아이콘 — currentColor(주로 흰색/단색 배경 위). */
 export function RetailMateLogoIcon({
   className,
   ...rest
 }: SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="리테일메이트"
-      className={className}
-      {...rest}
-    >
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="리테일메이트" className={className} {...rest}>
       <rect x="7" y="28" width="6" height="12" rx="2" fill="currentColor" />
       <rect x="19" y="22" width="6" height="18" rx="2" fill="currentColor" />
       <rect x="31" y="15" width="6" height="25" rx="2" fill="currentColor" />
-      <path
-        d="M9 24 L20 17 L28 19 L39 8"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M31 8 H39 V16"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M9 24 L20 17 L28 19 L39 8" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M31 8 H39 V16" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

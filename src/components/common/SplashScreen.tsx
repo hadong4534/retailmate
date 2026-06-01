@@ -53,12 +53,13 @@ export function SplashScreen() {
             aria-hidden
             className="rm-glow absolute inset-0 -z-10 rounded-full bg-[#8E94F2]/35 blur-3xl motion-reduce:hidden"
           />
-          <div
-            className="rm-rise flex items-center justify-center rounded-[28px] bg-white/70 p-5 ring-1 ring-[#E1E0F8] backdrop-blur-md sm:p-6"
-            style={{ boxShadow: '0 20px 60px -20px rgba(99,102,241,0.35)' }}
-          >
+          <div className="rm-rise flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand-logo.png" alt="리테일메이트" className="h-[80px] w-[80px] object-contain sm:h-[100px] sm:w-[100px]" />
+            <img
+              src="/brand-logo.png"
+              alt="리테일메이트"
+              className="h-[112px] w-[112px] object-contain drop-shadow-[0_12px_34px_rgba(99,102,241,0.38)] sm:h-[140px] sm:w-[140px]"
+            />
           </div>
         </div>
 
