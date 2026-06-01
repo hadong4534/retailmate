@@ -140,20 +140,34 @@ export async function runImageGeneration(
       });
     }
 
-    const res = await fetch(ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-        'X-Title': 'RetailMate Image',
-      },
-      body: JSON.stringify({
-        model: row.model,
-        messages: [{ role: 'user', content: userMessageContent }],
-        modalities: ['image', 'text'],
-      }),
-    });
+    // 안전장치: 280초 내 미응답이면 abort → '생성 중' 무한 멈춤 방지(함수 timeout 전에 실패로 기록)
+    const ac = new AbortController();
+    const abortTimer = setTimeout(() => ac.abort(), 280_000);
+    let res: Response;
+    try {
+      res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+          'X-Title': 'RetailMate Image',
+        },
+        body: JSON.stringify({
+          model: row.model,
+          messages: [{ role: 'user', content: userMessageContent }],
+          modalities: ['image', 'text'],
+        }),
+        signal: ac.signal,
+      });
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') {
+        throw new Error('이미지 생성이 지연되어 중단됐습니다. 잠시 후 다시 시도해주세요.');
+      }
+      throw e;
+    } finally {
+      clearTimeout(abortTimer);
+    }
 
     if (!res.ok) {
       const errText = await res.text();
