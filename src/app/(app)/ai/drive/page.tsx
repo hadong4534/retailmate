@@ -22,7 +22,7 @@ interface ImageRow {
 const KIND_LABEL: Record<string, string> = {
   poster: '포스터',
   sns: 'SNS',
-  card_news: '카드뉴스',
+  card_news: '정사각형',
   free: '자유',
 };
 
@@ -30,7 +30,7 @@ const FILTERS: { key: string; label: string }[] = [
   { key: 'all', label: '전체' },
   { key: 'poster', label: '포스터' },
   { key: 'sns', label: 'SNS' },
-  { key: 'card_news', label: '카드뉴스' },
+  { key: 'card_news', label: '정사각형' },
   { key: 'free', label: '자유' },
 ];
 

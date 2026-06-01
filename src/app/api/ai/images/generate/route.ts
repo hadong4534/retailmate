@@ -17,6 +17,7 @@ interface GenerateRequest {
   prompt: string;
   kind: ImageKind;
   mode: ImageMode; // brand | free | photo
+  size?: string;   // 포스터: a4|a3|a2 / SNS: 9:16|16:9|4:5 / 정사각: 1:1
 }
 
 export async function POST(request: Request) {
@@ -68,6 +69,7 @@ export async function POST(request: Request) {
     userPrompt: prompt,
     kind: body.kind,
     mode: body.mode,
+    size: body.size,
     brand,
     storeId: adminStore.storeId,
     userId: user.id,

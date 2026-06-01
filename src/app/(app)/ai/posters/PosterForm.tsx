@@ -6,11 +6,33 @@ import { Button } from '@/components/ui/Button';
 import { SparkleAvatar } from '@/components/ai/SparkleAvatar';
 import { enqueue } from '@/lib/ai/image-queue';
 
-const KINDS = [
-  { value: 'poster', label: '포스터', desc: '세로형 (4:5)' },
-  { value: 'sns', label: 'SNS', desc: '정사각 (1:1)' },
-  { value: 'card_news', label: '카드뉴스', desc: '정사각 (1:1)' },
-] as const;
+type Kind = 'poster' | 'sns' | 'card_news';
+
+interface SizeOpt { value: string; label: string; desc: string }
+
+// 형식 탭 — 포스터 / SNS / 정사각형(1:1 통합)
+const KINDS: { value: Kind; label: string; desc: string }[] = [
+  { value: 'poster', label: '포스터', desc: '인쇄용 A4·A3·A2' },
+  { value: 'sns', label: 'SNS', desc: '스토리·가로·게시물' },
+  { value: 'card_news', label: '정사각형', desc: '1:1' },
+];
+
+// 형식별 사이즈/비율 옵션
+const SIZES: Record<Kind, SizeOpt[]> = {
+  poster: [
+    { value: 'a4', label: 'A4', desc: '210×297' },
+    { value: 'a3', label: 'A3', desc: '297×420' },
+    { value: 'a2', label: 'A2', desc: '420×594' },
+  ],
+  sns: [
+    { value: '9:16', label: '9:16', desc: '스토리·릴스' },
+    { value: '16:9', label: '16:9', desc: '가로형' },
+    { value: '4:5', label: '게시물', desc: '피드 4:5' },
+  ],
+  card_news: [
+    { value: '1:1', label: '1:1', desc: '정사각' },
+  ],
+};
 
 const TEMPLATES = [
   '봄맞이 신메뉴 출시 안내, 따뜻한 분위기',
@@ -26,7 +48,13 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [queued, setQueued] = useState(false);
   const [prompt, setPrompt] = useState('');
-  const [kind, setKind] = useState<'poster' | 'sns' | 'card_news'>('poster');
+  const [kind, setKind] = useState<Kind>('poster');
+  const [size, setSize] = useState<string>('a4');
+
+  function changeKind(k: Kind) {
+    setKind(k);
+    setSize(SIZES[k][0].value); // 형식 바꾸면 첫 사이즈로 리셋
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,24 +65,17 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
         const res = await fetch('/api/ai/images/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt,
-            kind,
-            mode: 'brand',
-          }),
+          body: JSON.stringify({ prompt, kind, size, mode: 'brand' }),
         });
         const json = (await res.json()) as { imageId?: string; error?: string };
         if (!res.ok || !json.imageId) {
           setError(json.error ?? '생성 요청 실패');
           return;
         }
-        // 큐에 등록 → 글로벌 워처가 폴링하여 완료 시 토스트
         enqueue({ id: json.imageId, kind, prompt: prompt.trim() });
         setPrompt('');
         setQueued(true);
-        // 갤러리 새로고침해서 pending row 표시
         router.refresh();
-        // 안내 토스트는 8초간만 보여주고 자동 사라짐
         setTimeout(() => setQueued(false), 6000);
       } catch (err) {
         setError((err as Error).message ?? '네트워크 오류');
@@ -62,11 +83,10 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
     });
   }
 
+  const sizeOpts = SIZES[kind];
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-2xl border border-[#EAECF5] bg-white p-5"
-    >
+    <form onSubmit={handleSubmit} className="rounded-2xl border border-[#EAECF5] bg-white p-5">
       {!hasLogo && (
         <div className="mb-4 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900">
           매장 로고가 등록되지 않았습니다. <a href="/ai/brand" className="underline">로고를 먼저 등록</a>하면 포스터에 자동 반영됩니다.
@@ -84,6 +104,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
       </div>
 
       <div className="mt-5 space-y-4">
+        {/* 형식 */}
         <div>
           <label className="block text-sm font-medium text-slate-700">형식</label>
           <div className="mt-2 grid grid-cols-3 gap-2">
@@ -93,17 +114,13 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
                 <button
                   key={k.value}
                   type="button"
-                  onClick={() => setKind(k.value)}
+                  onClick={() => changeKind(k.value)}
                   className={
                     'rounded-md border px-3 py-2.5 text-left transition ' +
-                    (active
-                      ? 'border-indigo-400 bg-indigo-50'
-                      : 'border-[#EAECF5] bg-white hover:bg-slate-50')
+                    (active ? 'border-indigo-400 bg-indigo-50' : 'border-[#EAECF5] bg-white hover:bg-slate-50')
                   }
                 >
-                  <p className={'text-sm font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')}>
-                    {k.label}
-                  </p>
+                  <p className={'text-sm font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')}>{k.label}</p>
                   <p className="text-[10px] text-slate-500">{k.desc}</p>
                 </button>
               );
@@ -111,6 +128,33 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
           </div>
         </div>
 
+        {/* 사이즈/비율 — 형식별 */}
+        <div>
+          <label className="block text-sm font-medium text-slate-700">
+            {kind === 'poster' ? '용지 크기' : kind === 'sns' ? '비율' : '비율'}
+          </label>
+          <div className={'mt-2 grid gap-2 ' + (sizeOpts.length === 1 ? 'grid-cols-1' : 'grid-cols-3')}>
+            {sizeOpts.map((s) => {
+              const active = size === s.value;
+              return (
+                <button
+                  key={s.value}
+                  type="button"
+                  onClick={() => setSize(s.value)}
+                  className={
+                    'rounded-md border px-3 py-2 text-center transition ' +
+                    (active ? 'border-indigo-400 bg-indigo-50' : 'border-[#EAECF5] bg-white hover:bg-slate-50')
+                  }
+                >
+                  <p className={'text-[13px] font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')}>{s.label}</p>
+                  <p className="text-[10px] text-slate-500">{s.desc}</p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 프롬프트 */}
         <div>
           <label className="block text-sm font-medium text-slate-700">프롬프트</label>
           <textarea
@@ -141,10 +185,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
           ))}
         </div>
 
-        {error && (
-          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-        )}
-
+        {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
         {queued && (
           <p className="rounded-md bg-indigo-50 px-3 py-2 text-sm text-indigo-700">
             생성을 시작했습니다. 다른 작업 중에도 완료되면 화면 상단에 알림이 표시됩니다.
@@ -154,10 +195,7 @@ export function PosterForm({ hasLogo }: { hasLogo: boolean }) {
         <Button type="submit" size="lg" className="w-full" disabled={pending || !prompt.trim()}>
           {pending ? '요청 중…' : '생성 시작'}
         </Button>
-
-        <p className="text-center text-[10px] text-slate-400">
-          보통 10~30초 소요됩니다.
-        </p>
+        <p className="text-center text-[10px] text-slate-400">보통 30초~2분 소요됩니다.</p>
       </div>
     </form>
   );

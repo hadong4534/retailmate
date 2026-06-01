@@ -38,6 +38,7 @@ export interface GenerateImageInput {
   userPrompt: string;
   mode: ImageMode;
   kind: ImageKind;
+  size?: string;
   brand?: BrandContext;
   pageNo?: number;
   setId?: string;
@@ -53,6 +54,21 @@ export interface CreatedImageRow {
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 
+/** 형식·사이즈 → 비율/용도 가이드 문구. */
+function sizeGuidance(kind: ImageKind, size?: string): string {
+  if (kind === 'poster') {
+    const paper = size ? size.toUpperCase() : 'A4';
+    return `인쇄용 ${paper} 세로 포스터. 비율 약 1:1.414(ISO A 규격), 인쇄 여백 고려한 안정적 구도.`;
+  }
+  if (kind === 'sns') {
+    if (size === '9:16') return 'SNS 세로 풀스크린 9:16(스토리·릴스). 중앙 집중 구도, 상하 여백 확보.';
+    if (size === '16:9') return 'SNS 가로 16:9(유튜브 썸네일·배너). 가로형 구도.';
+    return 'SNS 인스타 피드 게시물 4:5 세로. 모바일 가독성 높은 큰 텍스트.';
+  }
+  // card_news = 정사각형
+  return '정사각 1:1 비율. 큰 한글 제목 + 짧은 본문, 깔끔한 구도.';
+}
+
 function buildPrompt(input: GenerateImageInput): string {
   if (input.mode === 'brand' && input.brand) {
     const b = input.brand;
@@ -66,13 +82,7 @@ function buildPrompt(input: GenerateImageInput): string {
     parts.push(`요청 사항: ${input.userPrompt}`);
     parts.push('');
 
-    if (input.kind === 'poster') {
-      parts.push('포스터 형식으로 만들어주세요. 세로 비율 4:5 또는 3:4 권장.');
-    } else if (input.kind === 'sns') {
-      parts.push('SNS 정사각 1:1 비율로 만들어주세요. 가독성 높은 한글 텍스트.');
-    } else if (input.kind === 'card_news') {
-      parts.push(`카드뉴스 ${input.pageNo}/N 페이지. 1:1 정사각 비율, 큰 한글 제목 + 짧은 본문.`);
-    }
+    parts.push(sizeGuidance(input.kind, input.size));
     parts.push('한글 텍스트 정확하게 표기. 매장 슬로건이 있다면 자연스럽게 포함.');
     return parts.join('\n');
   }
