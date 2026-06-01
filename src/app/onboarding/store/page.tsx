@@ -164,7 +164,7 @@ export default function StoreOnboardingPage() {
             {/* 자동 변환된 좌표 미리보기 */}
             {lat != null && lng != null && (
               <p className="rounded-md bg-emerald-50 px-3 py-2 text-[11px] text-emerald-800">
-                ✓ 출퇴근 좌표 자동 등록: <span className="font-mono">{lat}, {lng}</span>
+                출퇴근 좌표 자동 등록: <span className="font-mono">{lat}, {lng}</span>
               </p>
             )}
 
