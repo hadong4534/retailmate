@@ -34,6 +34,7 @@ export interface ContractFormData {
   wage_amount: number;
   weekly_holiday_allowance: boolean;
   social_insurance: SocialInsurance;
+  payroll_mode?: 'four_major' | 'freelance_3_3' | 'daily' | 'none';
   pay_day: number;
   pay_method: string;
   annual_leave_policy: string;
@@ -121,6 +122,7 @@ export async function createContract(
       wage_amount: input.wage_amount,
       weekly_holiday_allowance: input.weekly_holiday_allowance,
       social_insurance: input.social_insurance,
+      payroll_mode: input.payroll_mode ?? null,
       pay_day: input.pay_day,
       pay_method: input.pay_method || '계좌이체',
       annual_leave_policy: input.annual_leave_policy || null,

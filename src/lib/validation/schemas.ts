@@ -46,6 +46,7 @@ export const contractFormSchema = z.object({
     employment_insurance: z.boolean(),
     industrial_accident: z.boolean(),
   }),
+  payroll_mode: z.enum(['four_major', 'freelance_3_3', 'daily', 'none']).optional(),
   pay_day: z
     .number()
     .int()

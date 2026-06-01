@@ -51,7 +51,7 @@ export async function submitEmployeeSignature(
 
   const { data: contract, error: fetchErr } = await admin
     .from('labor_contracts')
-    .select('id, store_id, status, sign_token_expires_at, invite_name, invite_phone, wage_type, wage_amount, contract_type, work_start_date, work_end_date')
+    .select('id, store_id, status, sign_token_expires_at, invite_name, invite_phone, wage_type, wage_amount, contract_type, payroll_mode, work_start_date, work_end_date')
     .eq('sign_token', input.token)
     .maybeSingle();
   if (fetchErr) return { error: fetchErr.message };
@@ -117,7 +117,10 @@ export async function submitEmployeeSignature(
   // 신규 직원만 급여 처리방식 기본값 세팅 (정규직→4대보험, 그 외→미적용).
   // 기존 직원이면 사장님이 설정한 처리방식을 보존하기 위해 건드리지 않는다.
   if (!existingMember) {
-    memberPayload.payroll_mode = contract.contract_type === 'fulltime' ? 'four_major' : 'none';
+    // 계약 작성 단계에서 사장님이 고른 처리방식 우선. 없으면 정규직→4대보험, 그 외→미적용.
+    memberPayload.payroll_mode =
+      (contract as { payroll_mode?: string }).payroll_mode
+      ?? (contract.contract_type === 'fulltime' ? 'four_major' : 'none');
   }
 
   const { error: memberErr } = await admin

@@ -51,10 +51,18 @@ const initial: ContractFormData = {
     employment_insurance: true,
     industrial_accident: true,
   },
+  payroll_mode: 'none',
   pay_day: 10,
   pay_method: '계좌이체',
   annual_leave_policy: '',
   additional_terms: '',
+};
+
+const PAYROLL_MODE_TEXT: Record<string, string> = {
+  four_major: '4대보험 가입',
+  freelance_3_3: '3.3% 사업소득(프리랜서)',
+  daily: '일용직',
+  none: '미적용(공제 없음)',
 };
 
 export function ContractWizard({
@@ -105,6 +113,8 @@ export function ContractWizard({
           industrial_accident: true, // 산재는 전 근로자 의무
         };
         if (t === 'fulltime') next.work_end_date = null; // 정규직은 기간 없음
+        // 처리방식 기본값: 정규직→4대보험, 일용직→일용직, 파트타임→미적용(사장이 3.3% 등으로 변경 가능)
+        next.payroll_mode = t === 'fulltime' ? 'four_major' : t === 'daily' ? 'daily' : 'none';
       }
       return next;
     });
@@ -537,28 +547,49 @@ function Step3({
       </label>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700">🛡 4대보험 가입</label>
+        <label className="block text-sm font-medium text-slate-700">급여 처리방식</label>
+        <p className="mt-1 text-[12px] text-slate-500">실수령액 계산·세금 신고 기준이 됩니다. 나중에 급여 탭에서 변경할 수 있어요.</p>
         <div className="mt-2 grid grid-cols-2 gap-2">
           {([
-            ['national_pension', '국민연금'],
-            ['health_insurance', '건강보험'],
-            ['employment_insurance', '고용보험'],
-            ['industrial_accident', '산재보험'],
-          ] as const).map(([k, l]) => (
-            <label
-              key={k}
-              className="flex items-center gap-2 rounded-md border border-[#EAECF5] bg-white px-3 py-2 text-sm"
-            >
-              <input
-                type="checkbox"
-                checked={data.social_insurance[k]}
-                onChange={() => toggleInsurance(k)}
-                className="h-4 w-4"
-              />
-              {l}
-            </label>
-          ))}
+            ['four_major', '4대보험', '국민연금·건강·고용 등 본인부담 차감'],
+            ['freelance_3_3', '3.3% 사업소득', '프리랜서 원천징수 3.3%'],
+            ['daily', '일용직', '일용 소득세(일 15만원 비과세)'],
+            ['none', '미적용', '공제 없음(세전=실지급)'],
+          ] as const).map(([v, label, desc]) => {
+            const active = data.payroll_mode === v;
+            return (
+              <button
+                key={v}
+                type="button"
+                onClick={() => update('payroll_mode', v)}
+                className={'rounded-lg border px-3 py-2.5 text-left transition ' +
+                  (active ? 'border-indigo-400 bg-indigo-50' : 'border-[#EAECF5] bg-white hover:bg-slate-50')}
+              >
+                <p className={'text-[13.5px] font-semibold ' + (active ? 'text-indigo-700' : 'text-slate-900')}>{label}</p>
+                <p className="mt-0.5 text-[11px] text-slate-500">{desc}</p>
+              </button>
+            );
+          })}
         </div>
+
+        {data.payroll_mode === 'four_major' && (
+          <div className="mt-3 rounded-lg border border-[#EAECF5] bg-slate-50 p-3">
+            <p className="text-[12px] font-medium text-slate-600">가입 항목</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {([
+                ['national_pension', '국민연금'],
+                ['health_insurance', '건강보험'],
+                ['employment_insurance', '고용보험'],
+                ['industrial_accident', '산재보험'],
+              ] as const).map(([k, l]) => (
+                <label key={k} className="flex items-center gap-2 rounded-md border border-[#EAECF5] bg-white px-3 py-2 text-sm">
+                  <input type="checkbox" checked={data.social_insurance[k]} onChange={() => toggleInsurance(k)} className="h-4 w-4" />
+                  {l}
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -682,7 +713,10 @@ function Step4({
           label="주휴수당"
           value={data.weekly_holiday_allowance ? '포함' : '미포함'}
         />
-        <Row label="4대보험" value={insuranceList.join(', ') || '미가입'} />
+        <Row label="급여 처리방식" value={PAYROLL_MODE_TEXT[data.payroll_mode ?? 'none']} />
+        {data.payroll_mode === 'four_major' && (
+          <Row label="4대보험" value={insuranceList.join(', ') || '미가입'} />
+        )}
         <Row
           label="임금 지급"
           value={`매월 ${data.pay_day}일 · ${data.pay_method}`}
