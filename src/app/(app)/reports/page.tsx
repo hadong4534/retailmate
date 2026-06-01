@@ -2,6 +2,7 @@ import { BarChart3 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getPageContext } from '@/lib/auth/page-context';
 import { MonthPicker } from '@/components/ui/MonthPicker';
+import { ExcelDownloadButton } from './ExcelDownloadButton';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
 import { EmptyChart } from '@/components/app/EmptyIllustration';
@@ -87,9 +88,7 @@ export default async function ReportsPage({
           right={
             <div className="flex flex-wrap items-center gap-2">
               <MonthPicker value={month} />
-              <a href={`/api/reports/excel?month=${month}`}>
-                <Button size="sm" variant="secondary">엑셀 다운로드</Button>
-              </a>
+              <ExcelDownloadButton month={month} />
             </div>
           }
           className="mb-5"

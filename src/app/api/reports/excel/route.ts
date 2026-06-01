@@ -4,34 +4,22 @@ import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { getMonthlyReport } from '@/lib/reports/data';
 import { currentYearMonth } from '@/lib/utils';
-import {
-  EXPENSE_CATEGORY_LABEL,
-  SALE_CHANNEL_LABEL,
-} from '@/lib/constants';
+import { EXPENSE_CATEGORY_LABEL, SALE_CHANNEL_LABEL } from '@/lib/constants';
 
 export const runtime = 'nodejs';
 
-const KRW = '"₩"#,##0;[Red]"-₩"#,##0';
-const HEADER_FILL = 'FF1E3A8A';
-const HEADER_FONT = 'FFFFFFFF';
+const KRW = '"₩"#,##0;[Red]-"₩"#,##0';
+const PCT = '0.0"%"';
+const HEADER_FILL = 'FF6366F1';
+const TITLE_FILL = 'FFEEF0FE';
 
-function styleHeader(row: ExcelJS.Row) {
+function styleHeaderRow(row: ExcelJS.Row) {
   row.eachCell((cell) => {
-    cell.font = { bold: true, color: { argb: HEADER_FONT } };
-    cell.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: HEADER_FILL },
-    };
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: HEADER_FILL } };
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
-    cell.border = {
-      top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
-      left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
-      bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
-      right: { style: 'thin', color: { argb: 'FFE2E8F0' } },
-    };
   });
-  row.height = 22;
+  row.height = 24;
 }
 
 export async function GET(request: Request) {
@@ -40,147 +28,125 @@ export async function GET(request: Request) {
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
-  }
+  if (!user) return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
 
   const adminStore = await getCurrentAdminStore(supabase, user.id);
-  if (!adminStore) {
-    return NextResponse.json({ error: '매장을 찾을 수 없습니다.' }, { status: 404 });
-  }
+  if (!adminStore) return NextResponse.json({ error: '매장을 찾을 수 없습니다.' }, { status: 404 });
   const store = { id: adminStore.storeId, name: adminStore.storeName };
 
   const report = await getMonthlyReport(supabase, store.id, store.name, month);
+  const pastDays = report.dailySeries.filter((d) => d.sales !== null);
+  const salesDays = pastDays.filter((d) => (d.sales ?? 0) > 0).length;
+  const avgDaily = salesDays > 0 ? Math.round(report.totalSales / salesDays) : 0;
 
-  const workbook = new ExcelJS.Workbook();
-  workbook.creator = '리테일메이트';
-  workbook.created = new Date();
+  const wb = new ExcelJS.Workbook();
+  wb.creator = '리테일메이트';
+  wb.created = new Date();
 
-  // ── Sheet 1. 손익 요약 ─────────────────────────────────────────────
-  const summary = workbook.addWorksheet('손익 요약');
-  summary.columns = [
-    { header: '항목', key: 'label', width: 22 },
-    { header: '금액', key: 'amount', width: 18, style: { numFmt: KRW } },
-    { header: '비중', key: 'ratio', width: 12 },
+  // ── Sheet 1. 요약 ─────────────────────────────────────────────
+  const sum = wb.addWorksheet('월간 요약', { views: [{ state: 'frozen', ySplit: 4 }] });
+  sum.columns = [
+    { key: 'a', width: 24 },
+    { key: 'b', width: 18 },
+    { key: 'c', width: 14 },
   ];
-  styleHeader(summary.getRow(1));
+  // 타이틀 블록
+  sum.mergeCells('A1:C1');
+  const t = sum.getCell('A1');
+  t.value = `${store.name} · ${month} 월간 리포트`;
+  t.font = { bold: true, size: 15, color: { argb: 'FF3A3F73' } };
+  t.alignment = { vertical: 'middle' };
+  sum.getRow(1).height = 30;
+  sum.mergeCells('A2:C2');
+  sum.getCell('A2').value = `생성: ${new Date().toLocaleString('ko-KR')} · 리테일메이트`;
+  sum.getCell('A2').font = { size: 9, color: { argb: 'FF94A3B8' } };
+  sum.addRow([]);
 
-  summary.addRow({ label: `${store.name} · ${month}`, amount: '', ratio: '' });
-  summary.getCell('A2').font = { bold: true, size: 12 };
-  summary.addRow({});
-
-  summary.addRow({ label: '매출 합계', amount: report.totalSales, ratio: '100%' });
-  report.salesByChannel.forEach((c) => {
-    if (c.amount > 0) {
-      summary.addRow({
-        label: `  ${c.label}`,
-        amount: c.amount,
-        ratio: `${c.ratio.toFixed(1)}%`,
-      });
+  // KPI 헤더
+  const kpiHead = sum.addRow(['핵심 지표', '값', '비고']);
+  styleHeaderRow(kpiHead);
+  const kpis: Array<[string, number | string, string]> = [
+    ['매출 합계', report.totalSales, '100%'],
+    ['비용 합계', report.totalExpenses, report.totalSales > 0 ? `매출의 ${(report.totalExpenses / report.totalSales * 100).toFixed(1)}%` : '-'],
+    ['영업이익', report.profit, `이익률 ${report.profitRate.toFixed(1)}%`],
+    ['영업일수(매출 발생일)', salesDays, '일'],
+    ['일평균 매출', avgDaily, '영업일 기준'],
+  ];
+  kpis.forEach(([label, val, note], i) => {
+    const r = sum.addRow([label, val, note]);
+    if (typeof val === 'number' && label !== '영업일수(매출 발생일)') r.getCell(2).numFmt = KRW;
+    if (label === '영업이익') {
+      r.font = { bold: true };
+      r.eachCell((c) => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFECFDF5' } }; });
+    } else if (i % 2 === 1) {
+      r.eachCell((c) => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TITLE_FILL } }; });
     }
   });
 
-  summary.addRow({});
-  summary.addRow({ label: '비용 합계', amount: -report.totalExpenses, ratio: '' });
-  report.expensesByCategory.forEach((c) => {
-    if (c.amount > 0) {
-      summary.addRow({
-        label: `  ${c.label}`,
-        amount: -c.amount,
-        ratio: `${c.ratio.toFixed(1)}%`,
-      });
-    }
+  sum.addRow([]);
+  const chHead = sum.addRow(['결제수단별 매출', '금액', '비중']);
+  styleHeaderRow(chHead);
+  report.salesByChannel.filter((c) => c.amount > 0).forEach((c) => {
+    const r = sum.addRow([c.label, c.amount, c.ratio / 100]);
+    r.getCell(2).numFmt = KRW; r.getCell(3).numFmt = PCT;
   });
 
-  summary.addRow({});
-  const profitRow = summary.addRow({
-    label: '영업이익',
-    amount: report.profit,
-    ratio: `${report.profitRate.toFixed(1)}%`,
-  });
-  profitRow.font = { bold: true };
-  profitRow.eachCell((cell) => {
-    cell.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFECFDF5' },
-    };
+  sum.addRow([]);
+  const catHead = sum.addRow(['카테고리별 비용', '금액', '비중']);
+  styleHeaderRow(catHead);
+  report.expensesByCategory.filter((c) => c.amount > 0).forEach((c) => {
+    const r = sum.addRow([c.label, c.amount, c.ratio / 100]);
+    r.getCell(2).numFmt = KRW; r.getCell(3).numFmt = PCT;
   });
 
-  // ── Sheet 2. 일별 매출 ─────────────────────────────────────────────
-  const salesSheet = workbook.addWorksheet('일별 매출');
+  // ── Sheet 2. 일자별 추이 ─────────────────────────────────────────────
+  const daily = wb.addWorksheet('일자별 추이', { views: [{ state: 'frozen', ySplit: 1 }] });
+  daily.columns = [
+    { header: '날짜', key: 'date', width: 14 },
+    { header: '매출', key: 'sales', width: 16, style: { numFmt: KRW } },
+    { header: '비용', key: 'expenses', width: 16, style: { numFmt: KRW } },
+    { header: '순이익', key: 'profit', width: 16, style: { numFmt: KRW } },
+  ];
+  styleHeaderRow(daily.getRow(1));
+  pastDays.forEach((d) => daily.addRow({ date: d.date, sales: d.sales ?? 0, expenses: d.expenses ?? 0, profit: d.profit ?? 0 }));
+  const dTotal = daily.addRow({ date: '합계', sales: report.totalSales, expenses: report.totalExpenses, profit: report.profit });
+  dTotal.font = { bold: true };
+  dTotal.eachCell((c) => { c.border = { top: { style: 'thin', color: { argb: 'FF94A3B8' } } }; });
+  daily.autoFilter = 'A1:D1';
+
+  // ── Sheet 3. 매출 내역 ─────────────────────────────────────────────
+  const salesSheet = wb.addWorksheet('매출 내역', { views: [{ state: 'frozen', ySplit: 1 }] });
   salesSheet.columns = [
     { header: '날짜', key: 'date', width: 14 },
-    { header: '채널', key: 'channel', width: 12 },
+    { header: '결제수단', key: 'channel', width: 12 },
     { header: '금액', key: 'amount', width: 16, style: { numFmt: KRW } },
-    { header: '메모', key: 'memo', width: 30 },
+    { header: '메모', key: 'memo', width: 34 },
   ];
-  styleHeader(salesSheet.getRow(1));
+  styleHeaderRow(salesSheet.getRow(1));
+  report.sales.forEach((s) => salesSheet.addRow({ date: s.sale_date, channel: SALE_CHANNEL_LABEL[s.channel], amount: Number(s.amount), memo: s.memo ?? '' }));
+  if (report.sales.length === 0) salesSheet.addRow({ date: '(매출 기록 없음)' });
+  salesSheet.autoFilter = 'A1:D1';
 
-  report.sales.forEach((s) => {
-    salesSheet.addRow({
-      date: s.sale_date,
-      channel: SALE_CHANNEL_LABEL[s.channel],
-      amount: Number(s.amount),
-      memo: s.memo ?? '',
-    });
-  });
-
-  if (report.sales.length === 0) {
-    salesSheet.addRow({ date: '(매출 기록 없음)' });
-  } else {
-    const totalRow = salesSheet.addRow({
-      date: '합계',
-      channel: '',
-      amount: report.totalSales,
-      memo: '',
-    });
-    totalRow.font = { bold: true };
-    totalRow.eachCell((cell) => {
-      cell.border = { top: { style: 'thin', color: { argb: 'FF94A3B8' } } };
-    });
-  }
-
-  // ── Sheet 3. 비용 명세 ─────────────────────────────────────────────
-  const expensesSheet = workbook.addWorksheet('비용 명세');
-  expensesSheet.columns = [
+  // ── Sheet 4. 비용 내역 ─────────────────────────────────────────────
+  const expSheet = wb.addWorksheet('비용 내역', { views: [{ state: 'frozen', ySplit: 1 }] });
+  expSheet.columns = [
     { header: '날짜', key: 'date', width: 14 },
     { header: '카테고리', key: 'category', width: 14 },
     { header: '금액', key: 'amount', width: 16, style: { numFmt: KRW } },
-    { header: '거래처', key: 'vendor', width: 20 },
-    { header: '메모', key: 'memo', width: 30 },
+    { header: '항목', key: 'item', width: 20 },
+    { header: '거래처', key: 'vendor', width: 18 },
+    { header: '메모', key: 'memo', width: 28 },
   ];
-  styleHeader(expensesSheet.getRow(1));
+  styleHeaderRow(expSheet.getRow(1));
+  report.expenses.forEach((e) => expSheet.addRow({
+    date: e.expense_date, category: EXPENSE_CATEGORY_LABEL[e.category], amount: Number(e.amount),
+    item: (e as { item_name?: string }).item_name ?? '', vendor: e.vendor ?? '', memo: e.memo ?? '',
+  }));
+  if (report.expenses.length === 0) expSheet.addRow({ date: '(비용 기록 없음)' });
+  expSheet.autoFilter = 'A1:F1';
 
-  report.expenses.forEach((e) => {
-    expensesSheet.addRow({
-      date: e.expense_date,
-      category: EXPENSE_CATEGORY_LABEL[e.category],
-      amount: Number(e.amount),
-      vendor: e.vendor ?? '',
-      memo: e.memo ?? '',
-    });
-  });
-
-  if (report.expenses.length === 0) {
-    expensesSheet.addRow({ date: '(비용 기록 없음)' });
-  } else {
-    const totalRow = expensesSheet.addRow({
-      date: '합계',
-      category: '',
-      amount: report.totalExpenses,
-      vendor: '',
-      memo: '',
-    });
-    totalRow.font = { bold: true };
-    totalRow.eachCell((cell) => {
-      cell.border = { top: { style: 'thin', color: { argb: 'FF94A3B8' } } };
-    });
-  }
-
-  const buffer = await workbook.xlsx.writeBuffer();
+  const buffer = await wb.xlsx.writeBuffer();
   const filename = encodeURIComponent(`리테일메이트_${store.name}_${month}.xlsx`);
-
   return new NextResponse(buffer as unknown as BodyInit, {
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

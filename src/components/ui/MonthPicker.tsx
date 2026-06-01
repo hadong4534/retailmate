@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 function shiftMonth(value: string, delta: number): string {
@@ -13,36 +14,32 @@ export function MonthPicker({ value }: { value: string }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  function go(month: string) {
+  function hrefFor(month: string) {
     const params = new URLSearchParams(searchParams.toString());
     params.set('month', month);
-    router.push(`${pathname}?${params.toString()}`);
+    return `${pathname}?${params.toString()}`;
   }
+
+  const arrowCls =
+    'flex h-10 w-9 items-center justify-center rounded-md border border-[#E3E5F0] bg-white text-slate-500 transition hover:bg-[#EEF0FE] hover:text-[#5961E6] active:scale-95';
 
   return (
     <div className="inline-flex items-center gap-1">
-      <button
-        type="button"
-        aria-label="이전 달"
-        onClick={() => go(shiftMonth(value, -1))}
-        className="flex h-10 w-9 items-center justify-center rounded-md border border-[#E3E5F0] bg-white text-slate-500 transition hover:bg-[#EEF0FE] hover:text-[#5961E6] active:scale-95"
-      >
+      <Link href={hrefFor(shiftMonth(value, -1))} prefetch={false} aria-label="이전 달" className={arrowCls}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-      </button>
+      </Link>
       <input
         type="month"
         value={value}
-        onChange={(e) => go(e.target.value)}
+        onChange={(e) => {
+          router.push(hrefFor(e.target.value));
+          router.refresh();
+        }}
         className="h-10 rounded-md border border-[#E3E5F0] bg-white px-3 text-sm text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
       />
-      <button
-        type="button"
-        aria-label="다음 달"
-        onClick={() => go(shiftMonth(value, 1))}
-        className="flex h-10 w-9 items-center justify-center rounded-md border border-[#E3E5F0] bg-white text-slate-500 transition hover:bg-[#EEF0FE] hover:text-[#5961E6] active:scale-95"
-      >
+      <Link href={hrefFor(shiftMonth(value, 1))} prefetch={false} aria-label="다음 달" className={arrowCls}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
-      </button>
+      </Link>
     </div>
   );
 }
