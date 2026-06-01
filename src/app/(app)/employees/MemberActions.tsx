@@ -105,34 +105,44 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
           <MoreIcon className="h-4 w-4" />
         </button>
 
-        {open && (
-          <div
-            role="menu"
-            className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-lg border border-[#EAECF5] bg-white shadow-lg"
-          >
-            <MenuItem
-              Icon={Pencil}
-              onClick={() => { setOpen(false); setEditOpen(true); }}
-            >
+      </div>
+
+      {/* 모바일/PC 공통: 화면 하단 고정 시트 — absolute 드롭다운이 마지막 행에서
+          화면 밖으로 나가 닿지 않던 문제 해결. 백드롭 탭으로 닫힘. */}
+      {open && (
+        <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            aria-label="닫기"
+            onClick={() => setOpen(false)}
+            className="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px]"
+          />
+          <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md rounded-t-2xl border-t border-[#EAECF5] bg-white p-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
+            <div className="mx-auto mb-1 h-1 w-10 rounded-full bg-slate-200 sm:hidden" />
+            <p className="px-3 py-2 text-[13px] font-bold text-slate-900">직원 관리</p>
+            <MenuItem Icon={Pencil} onClick={() => { setOpen(false); setEditOpen(true); }}>
               이름·연락처 편집
             </MenuItem>
             {isActive && role === 'employee' && (
-              <MenuItem Icon={ChevronUp} onClick={handlePromote}>
-                매니저로 승격
-              </MenuItem>
+              <MenuItem Icon={ChevronUp} onClick={handlePromote}>매니저로 승격</MenuItem>
             )}
             {isActive && role === 'manager' && (
-              <MenuItem Icon={ChevronDown} onClick={handleDemote}>
-                직원으로 강등
-              </MenuItem>
+              <MenuItem Icon={ChevronDown} onClick={handleDemote}>직원으로 강등</MenuItem>
             )}
-            <div className="border-t border-slate-100" />
+            <div className="my-1 border-t border-slate-100" />
             <MenuItem Icon={UserMinus} onClick={handleResign} tone="danger">
               퇴사 (직원 삭제)
             </MenuItem>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="mt-1 w-full rounded-xl bg-slate-50 px-3 py-2.5 text-[13px] font-semibold text-slate-500 hover:bg-slate-100"
+            >
+              닫기
+            </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {editOpen && (
         <EditProfileModal

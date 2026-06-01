@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getPageContext } from '@/lib/auth/page-context';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
-import { formatWon, todayInKST } from '@/lib/utils';
+import { formatWon, todayInKST, memberWageDisplay } from '@/lib/utils';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { MemberActions } from './MemberActions';
 import { WageEditor } from './WageEditor';
@@ -281,7 +281,7 @@ export default async function EmployeesPage() {
                       </div>
                     </div>
                     <div className="mt-2 space-y-0.5 text-[11px] text-slate-500">
-                      <p>시급 · {m.hourly_wage ? formatWon(m.hourly_wage) : '미설정'}</p>
+                      {(() => { const w = memberWageDisplay(m); return <p>{w.label} · {w.value}</p>; })()}
                       {displayPhone && <p>{displayPhone}</p>}
                     </div>
                   </div>
@@ -346,6 +346,8 @@ export default async function EmployeesPage() {
               user_id: m.user_id,
               role: m.role,
               hourly_wage: m.hourly_wage,
+              monthly_wage: m.monthly_wage,
+              daily_wage: m.daily_wage,
               // 재직 기간은 NDA 제외 가장 빠른 근로 시작일 우선. 없으면 store_members.hire_date.
               hire_date: laborStartByEmployee.get(m.user_id) ?? m.hire_date,
               resign_date: m.resign_date,

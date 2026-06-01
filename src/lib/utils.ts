@@ -25,6 +25,20 @@ export function formatNumber(n: number | null | undefined): string {
   return n.toLocaleString('ko-KR');
 }
 
+/**
+ * 직원 급여 표시 — 채워진 값(월급>일급>시급)에 맞는 라벨·금액 반환. 모두 없으면 '미설정'.
+ */
+export function memberWageDisplay(m: {
+  monthly_wage?: number | null;
+  daily_wage?: number | null;
+  hourly_wage?: number | null;
+}): { label: string; value: string; isSet: boolean } {
+  if (m.monthly_wage && m.monthly_wage > 0) return { label: '월급', value: formatWon(m.monthly_wage), isSet: true };
+  if (m.daily_wage && m.daily_wage > 0) return { label: '일급', value: formatWon(m.daily_wage), isSet: true };
+  if (m.hourly_wage && m.hourly_wage > 0) return { label: '시급', value: formatWon(m.hourly_wage), isSet: true };
+  return { label: '시급', value: '미설정', isSet: false };
+}
+
 export function parseMoney(input: string): number {
   const digits = input.replace(/[^0-9]/g, '');
   return digits === '' ? 0 : Number(digits);

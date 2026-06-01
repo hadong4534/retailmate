@@ -111,18 +111,20 @@ export async function getStorePayroll(
   // 3) 최신 서명/발송 계약서 (직원당 1개)
   const { data: contracts } = await supabase
     .from('labor_contracts')
-    .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, created_at')
+    .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, invite_name, invite_phone, created_at')
     .eq('store_id', storeId)
     .in('employee_id', userIds)
     .in('status', ['signed', 'sent'])
     .order('created_at', { ascending: false });
 
   const contractByUser = new Map<string, ContractDetail>();
+  const inviteByUser = new Map<string, { name: string | null; phone: string | null }>();
   (contracts ?? []).forEach((raw) => {
-    const c = raw as unknown as ContractDetail & { employee_id: string };
+    const c = raw as unknown as ContractDetail & { employee_id: string; invite_name: string | null; invite_phone: string | null };
     if (!contractByUser.has(c.employee_id) || (contractByUser.get(c.employee_id)!.status !== 'signed' && c.status === 'signed')) {
       contractByUser.set(c.employee_id, c);
     }
+    if (!inviteByUser.has(c.employee_id)) inviteByUser.set(c.employee_id, { name: c.invite_name, phone: c.invite_phone });
   });
 
   // 4) 월 출퇴근 기록
@@ -191,8 +193,10 @@ export async function getStorePayroll(
     return {
       memberId: m.id,
       userId: m.user_id,
-      name: profile?.name ?? '이름 미등록',
-      phone: profile?.phone ?? null,
+      name: (profile?.name && profile.name.trim())
+        || (inviteByUser.get(m.user_id)?.name?.trim() ?? null)
+        || '이름 미등록',
+      phone: profile?.phone ?? inviteByUser.get(m.user_id)?.phone ?? null,
       role: m.role,
       isActive: m.is_active && !m.resign_date,
       contract,

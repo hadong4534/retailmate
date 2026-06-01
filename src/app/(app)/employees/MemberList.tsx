@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Pencil, UserPlus, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { memberWageDisplay } from '@/lib/utils';
 import { WageEditor } from './WageEditor';
 import { MemberActions } from './MemberActions';
 
@@ -11,6 +12,8 @@ interface MemberView {
   user_id: string;
   role: 'owner' | 'manager' | 'employee';
   hourly_wage: number | null;
+  monthly_wage: number | null;
+  daily_wage: number | null;
   hire_date: string | null;
   resign_date: string | null;
   is_active: boolean;
@@ -147,10 +150,22 @@ function MobileCard({ member }: { member: MemberView }) {
       {/* 메타 정보 */}
       <div className="mt-2 grid grid-cols-2 gap-2 rounded-lg bg-slate-50 px-3 py-2">
         <div>
-          <p className="text-[10px] text-slate-500">시급</p>
-          <div className="mt-0.5">
-            <WageEditor memberId={member.id} initialWage={member.hourly_wage} />
-          </div>
+          {(() => {
+            const w = memberWageDisplay(member);
+            // 월급/일급(계약서 기반)은 읽기 전용 표시, 시급제·미설정만 수동 편집 가능.
+            if (member.monthly_wage || member.daily_wage) {
+              return (<>
+                <p className="text-[10px] text-slate-500">{w.label}</p>
+                <p className="mt-0.5 text-[13px] font-semibold text-slate-800">{w.value}</p>
+              </>);
+            }
+            return (<>
+              <p className="text-[10px] text-slate-500">시급</p>
+              <div className="mt-0.5">
+                <WageEditor memberId={member.id} initialWage={member.hourly_wage} />
+              </div>
+            </>);
+          })()}
         </div>
         <div>
           <p className="text-[10px] text-slate-500">재직 기간</p>
@@ -217,7 +232,9 @@ function PcRow({ member }: { member: MemberView }) {
         )}
       </td>
       <td className="whitespace-nowrap px-4 py-3">
-        <WageEditor memberId={member.id} initialWage={member.hourly_wage} />
+        {member.monthly_wage || member.daily_wage
+          ? (() => { const w = memberWageDisplay(member); return <span className="text-[13px] font-medium text-slate-700">{w.label} · {w.value}</span>; })()
+          : <WageEditor memberId={member.id} initialWage={member.hourly_wage} />}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-slate-700">
         {formatPeriod(member.hire_date, member.resign_date)}
