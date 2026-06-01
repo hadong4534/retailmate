@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
-import { SparkleAvatar } from '@/components/ai/SparkleAvatar';
+import { MessagesSquare, ImagePlus, FolderOpen, Palette, type LucideIcon } from 'lucide-react';
 
 export const metadata = {
   title: 'AI 도구 · 리테일메이트',
@@ -12,7 +12,7 @@ interface Tool {
   title: string;
   desc: string;
   badge: string;
-  accent: 'blue' | 'violet' | 'pink' | 'emerald';
+  Icon: LucideIcon;
 }
 
 const TOOLS: Tool[] = [
@@ -20,38 +20,31 @@ const TOOLS: Tool[] = [
     href: '/ai/chat',
     title: 'AI 챗봇',
     desc: '매출·비용·근태를 자연어로 물어보세요. 실시간 매장 분석.',
-    badge: '대화',
-    accent: 'blue',
+    badge: '실시간',
+    Icon: MessagesSquare,
   },
   {
     href: '/ai/posters',
     title: 'AI 포스터·SNS',
     desc: '매장 로고·소개를 반영한 마케팅 디자인을 자동 생성합니다.',
-    badge: '브랜드',
-    accent: 'violet',
+    badge: '디자인',
+    Icon: ImagePlus,
   },
   {
     href: '/ai/drive',
     title: 'AI 드라이브',
     desc: 'AI로 만든 모든 작업물을 한곳에 보관·다운로드·삭제할 수 있어요.',
-    badge: '저장',
-    accent: 'emerald',
+    badge: '보관',
+    Icon: FolderOpen,
   },
   {
     href: '/ai/brand',
     title: '매장 브랜드',
     desc: '로고와 매장 소개를 등록하면 디자인 생성에 자동 반영됩니다.',
     badge: '설정',
-    accent: 'pink',
+    Icon: Palette,
   },
 ];
-
-const ACCENT: Record<Tool['accent'], { ring: string; bg: string; text: string }> = {
-  blue:    { ring: 'group-hover:ring-indigo-300',    bg: 'bg-indigo-50',    text: 'text-indigo-700' },
-  violet:  { ring: 'group-hover:ring-violet-300',  bg: 'bg-violet-50',  text: 'text-violet-700' },
-  pink:    { ring: 'group-hover:ring-pink-300',    bg: 'bg-pink-50',    text: 'text-pink-700' },
-  emerald: { ring: 'group-hover:ring-emerald-300', bg: 'bg-emerald-50', text: 'text-emerald-700' },
-};
 
 export default async function AIHubPage() {
   const supabase = await createClient();
@@ -110,27 +103,26 @@ export default async function AIHubPage() {
         {/* 도구 카드 4개 */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {TOOLS.map((t) => {
-            const c = ACCENT[t.accent];
+            const Icon = t.Icon;
             return (
               <Link
                 key={t.href}
                 href={t.href}
-                className={
-                  'group relative overflow-hidden rounded-2xl border border-[#EAECF5] bg-white p-6 ring-1 ring-transparent transition hover:shadow-md ' +
-                  c.ring
-                }
+                className="group relative overflow-hidden rounded-2xl border border-[#EAECF5] bg-white p-6 ring-1 ring-transparent transition hover:shadow-md hover:ring-[#C9CCF7]"
               >
                 <div className="absolute right-4 top-4">
-                  <span className={`rounded-full ${c.bg} ${c.text} px-2 py-0.5 text-[10px] font-semibold`}>
+                  <span className="rounded-full bg-[#EEF0FE] px-2 py-0.5 text-[10px] font-semibold text-[#5961E6]">
                     {t.badge}
                   </span>
                 </div>
-                <SparkleAvatar size={36} className={c.text} />
-                <h2 className="mt-4 text-lg font-bold text-slate-900 group-hover:text-indigo-700">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF0FE] text-[#6366F1]">
+                  <Icon className="h-6 w-6" strokeWidth={2} />
+                </span>
+                <h2 className="mt-4 text-lg font-bold text-slate-900 group-hover:text-[#5961E6]">
                   {t.title}
                 </h2>
                 <p className="mt-1.5 text-sm text-slate-500">{t.desc}</p>
-                <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-indigo-600">
+                <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[#6366F1]">
                   열기
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12 H19 M12 5 L19 12 L12 19" />
