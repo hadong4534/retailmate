@@ -238,13 +238,13 @@ export default function SignupPage() {
               placeholder="010-0000-0000"
               maxLength={13}
               disabled={stage === 'verified'}
-              className={`h-11 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500`}
+              className={`h-11 min-w-0 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500`}
             />
             <button
               type="button"
               onClick={handleSendSms}
               disabled={!canSendSms}
-              className="h-11 shrink-0 rounded-md border border-indigo-600 px-3 text-sm font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-[#EAECF5] disabled:text-slate-400"
+              className="h-11 shrink-0 whitespace-nowrap rounded-md border border-indigo-600 px-2.5 text-[13px] font-semibold text-indigo-600 disabled:cursor-not-allowed disabled:border-[#EAECF5] disabled:text-slate-400"
             >
               {stage === 'verified'
                 ? '인증완료'
@@ -276,13 +276,13 @@ export default function SignupPage() {
                 placeholder="123456"
                 maxLength={6}
                 disabled={stage === 'verified'}
-                className="h-11 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base tracking-widest font-mono focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500"
+                className="h-11 min-w-0 flex-1 rounded-md border border-[#E3E5F0] px-3 text-base tracking-widest font-mono focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB] disabled:bg-slate-50 disabled:text-slate-500"
               />
               <button
                 type="button"
                 onClick={handleVerifyCode}
                 disabled={!canVerify}
-                className="h-11 shrink-0 rounded-md bg-[#7177EE] px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                className="h-11 shrink-0 whitespace-nowrap rounded-md bg-[#7177EE] px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
               >
                 {(stage as Stage) === 'verified' ? '확인됨' : verifyLoading ? '확인 중...' : '확인'}
               </button>
