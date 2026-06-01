@@ -77,7 +77,7 @@ export default async function StoresOverviewPage() {
         <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Sum label="이달 매출 합계" value={`₩${formatWon(total.sales)}`} tone="primary" />
           <Sum label="이달 비용 합계" value={`₩${formatWon(total.exp)}`} />
-          <Sum label="이달 순이익 합계" value={`₩${formatWon(total.profit)}`} tone={total.sales - total.exp >= 0 ? 'positive' : 'negative'} />
+          <Sum label="이달 순이익 합계" value={`₩${formatWon(total.sales - total.exp)}`} tone={total.sales - total.exp >= 0 ? 'positive' : 'negative'} />
           <Sum label="근무 중 / 직원" value={`${total.working} / ${total.members}명`} />
         </div>
 
