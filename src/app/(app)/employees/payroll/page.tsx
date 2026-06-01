@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Wallet, Users, Clock, AlertTriangle, FileText } from 'lucide-react';
+import { Wallet, Users, AlertTriangle, FileText } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { MonthPicker } from '@/components/ui/MonthPicker';
@@ -58,19 +58,12 @@ export default async function PayrollPage({
         />
 
         {/* 요약 KPI 4종 */}
-        <div className="rm-stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="rm-stagger grid grid-cols-2 gap-3 lg:grid-cols-3">
           <KpiCard
             Icon={Users}
             label="재직 직원"
             value={`${payroll.totals.employees}명`}
             sub={`정규직 ${payroll.totals.fulltime} · 파트타임 ${payroll.totals.parttime}`}
-            tone="slate"
-          />
-          <KpiCard
-            Icon={Clock}
-            label="총 근무시간"
-            value={formatHM(payroll.totals.workMinutes)}
-            sub={`${month.replace('-', '년 ')}월 기준`}
             tone="slate"
           />
           <KpiCard
