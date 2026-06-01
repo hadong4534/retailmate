@@ -69,7 +69,10 @@ export async function updateSession(request: NextRequest) {
     //    이게 빠져 있으면 회원가입 SMS(/api/auth/phone/send) 호출 시 미들웨어가 307로
     //    /login으로 redirect → 라우트 실행 자체 안 됨 → 인증번호가 발송된 적이 없음.
     //    각 라우트가 자체적으로 svc-role 검증을 하므로 미들웨어에서 풀어도 안전.
-    pathname.startsWith('/api/auth/');
+    pathname.startsWith('/api/auth/') ||
+    // Supabase OAuth/매직링크 콜백 — 비로그인 상태에서 code→session 교환이 일어나는 곳.
+    // 이게 빠져 있으면 콜백이 307로 /login으로 튕겨 OAuth·이메일확인 가입이 끊긴다.
+    pathname.startsWith('/auth/callback');
 
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();

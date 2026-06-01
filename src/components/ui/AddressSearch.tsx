@@ -255,8 +255,8 @@ export function AddressSearch({
         required={required}
         className="mt-2 h-11 w-full rounded-md border border-[#E3E5F0] bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400"
       />
-      {geocoding && <p className="mt-1 text-[11px] text-indigo-600">📍 좌표 확인 중…</p>}
-      {error && <p className="mt-1 text-[11px] text-red-600">⚠ {error}</p>}
+      {geocoding && <p className="mt-1 text-[11px] text-indigo-600">좌표 확인 중…</p>}
+      {error && <p className="mt-1 text-[11px] text-red-600">{error}</p>}
 
       {/* 인라인 모달 — 모바일/PC 모두에서 안정 */}
       {open && (

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { PhoneInput, formatKoreanPhone } from '@/components/ui/PhoneInput';
@@ -663,7 +664,7 @@ function DoneStep({
   return (
     <div className="space-y-5">
       <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-6 py-12 text-center">
-        <p className="text-5xl">🎉</p>
+        <CheckCircle2 className="mx-auto h-14 w-14 text-emerald-500" strokeWidth={1.8} />
         <h1 className="mt-3 text-xl font-bold text-emerald-900">
           서명이 완료되었습니다
         </h1>
@@ -677,7 +678,7 @@ function DoneStep({
           href={`/contracts/${contractId}/view`}
           className="block rounded-md bg-[#7177EE] px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#5E64E6]"
         >
-          📄 내 계약서 보기 / 인쇄
+          내 계약서 보기 / 인쇄
         </a>
       )}
 

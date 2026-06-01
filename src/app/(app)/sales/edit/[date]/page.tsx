@@ -61,7 +61,7 @@ export default async function EditDayPage({
       <div className="mx-auto max-w-2xl">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">💰 매출 수정</h1>
+            <h1 className="text-2xl font-bold text-slate-900">매출 수정</h1>
             <p className="mt-1 text-sm text-slate-500">
               {formatKoDate(date)} · 결제수단별 금액을 자유롭게 수정하세요.
             </p>

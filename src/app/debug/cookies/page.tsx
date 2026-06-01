@@ -34,7 +34,7 @@ export default async function CookiesDebugPage() {
         </h2>
         {authCookies.length === 0 ? (
           <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-            ❌ Supabase 인증 쿠키가 없습니다. 로그인이 안 되어 있거나, 쿠키가 만료/삭제되었습니다.
+            Supabase 인증 쿠키가 없습니다. 로그인이 안 되어 있거나, 쿠키가 만료/삭제되었습니다.
           </p>
         ) : (
           <ul className="mt-3 space-y-2">
@@ -80,7 +80,7 @@ export default async function CookiesDebugPage() {
           <li>F12 → Application 탭</li>
           <li>좌측 Storage → Cookies → https://retailmate.io 클릭</li>
           <li>sb-...-auth-token 행 클릭</li>
-          <li>"Expires / Max-Age" 컬럼 확인 — &quot;Session&quot;이면 ❌, 날짜가 나오면 ✓</li>
+          <li>"Expires / Max-Age" 컬럼 확인 — &quot;Session&quot;이면 만료, 날짜가 나오면 유지</li>
         </ol>
       </section>
     </div>

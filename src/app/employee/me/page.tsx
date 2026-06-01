@@ -84,13 +84,22 @@ export default async function EmployeeMePage() {
   const monthLabel = `${new Date().getMonth() + 1}월`;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div
+      className="relative min-h-screen overflow-hidden pb-20"
+      style={{
+        background:
+          'radial-gradient(55% 32% at 12% 0%, rgba(129,140,248,0.14), transparent 60%),' +
+          'radial-gradient(45% 30% at 100% 4%, rgba(127,184,238,0.12), transparent 60%),' +
+          'linear-gradient(180deg,#F8F7FE 0%,#F4F6FB 100%)',
+      }}
+    >
       {unread.length > 0 && <NoticePopup notices={unread} />}
 
       <header
-        className="border-b border-[#EAECF5] bg-white"
+        className="relative border-b border-white/50 bg-white/70 backdrop-blur-md"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
+        <span aria-hidden className="pointer-events-none absolute -left-6 top-0 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(142,148,242,0.20),transparent_70%)] blur-2xl" />
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
           <Link href="/" aria-label="리테일메이트 홈"><Logo size="md" /></Link>
           <LogoutButton />
@@ -312,8 +321,12 @@ function KpiCard({
     tone === 'blue' ? 'text-indigo-600'
     : tone === 'emerald' ? 'text-emerald-600'
     : 'text-slate-900';
+  const cardBg =
+    tone === 'blue' ? 'from-white to-[#F1F2FE]'
+    : tone === 'emerald' ? 'from-white to-[#EFFAF5]'
+    : 'from-white to-[#F7F8FB]';
   return (
-    <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
+    <div className={`rounded-xl border border-[#EAECF5] bg-gradient-to-br ${cardBg} p-5`}>
       <p className="text-sm text-slate-500">{label}</p>
       <p className={`mt-2 text-2xl font-bold ${colorClass}`}>{value}</p>
       <p className="mt-1 text-xs text-slate-400">{sub}</p>

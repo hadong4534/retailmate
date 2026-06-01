@@ -457,7 +457,7 @@ export default async function ContractsPage() {
         </section>
 
         <p className="mt-6 rounded-md bg-amber-50 px-4 py-3 text-xs text-amber-900">
-          ⚠ 표준 양식 기반의 자동 작성본입니다. 실제 운영 전 노무사 검토를 권장합니다.
+          표준 양식 기반의 자동 작성본입니다. 실제 운영 전 노무사 검토를 권장합니다.
         </p>
       </div>
     </div>

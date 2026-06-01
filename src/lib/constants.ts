@@ -18,15 +18,6 @@ export const SALE_CHANNEL_LABEL: Record<SaleChannel, string> = {
   other: '기타',
 };
 
-export const SALE_CHANNEL_ICON: Record<SaleChannel, string> = {
-  card: '💳',
-  cash: '💵',
-  cash_receipt: '🧾',
-  transfer: '🏦',
-  delivery: '🛵',
-  other: '📦',
-};
-
 // 입력 순서 = 표시 순서 (사장님이 자주 쓰는 순)
 export const SALE_CHANNELS: SaleChannel[] = [
   'card',
@@ -55,17 +46,6 @@ export const EXPENSE_CATEGORY_LABEL: Record<ExpenseCategory, string> = {
   marketing: '마케팅비',
   tax: '세금',
   etc: '기타',
-};
-
-export const EXPENSE_CATEGORY_ICON: Record<ExpenseCategory, string> = {
-  material: '🥬',
-  labor: '👥',
-  rent: '🏠',
-  utility: '⚡',
-  communication: '📞',
-  marketing: '📢',
-  tax: '🧾',
-  etc: '📦',
 };
 
 // lucide-react 아이콘 매핑 — 시각적으로 일관된 UI를 위해 신규 화면은 이쪽 사용 권장.

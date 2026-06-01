@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import {
   SALE_CHANNELS,
-  SALE_CHANNEL_ICON,
+  SALE_CHANNEL_LUCIDE,
   SALE_CHANNEL_LABEL,
   SALE_CHANNEL_COLOR,
   type SaleChannel,
@@ -363,11 +363,12 @@ function ChannelView({
             {SALE_CHANNELS.map((c) => {
               const amount = totals[c];
               const pct = grandTotal > 0 ? (amount / grandTotal) * 100 : 0;
+              const ChannelIcon = SALE_CHANNEL_LUCIDE[c];
               return (
                 <div key={c}>
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5">
-                      <span>{SALE_CHANNEL_ICON[c]}</span>
+                      <ChannelIcon className="h-3.5 w-3.5 text-slate-400" strokeWidth={2.2} />
                       <span className="font-medium text-slate-700">{SALE_CHANNEL_LABEL[c]}</span>
                     </div>
                     <div className="flex items-baseline gap-2">

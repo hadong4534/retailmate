@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
+import { Megaphone } from 'lucide-react';
 import { markNoticeRead } from '@/app/(app)/notices/actions';
 
 interface NoticePayload {
@@ -41,7 +42,7 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
       <div className="w-full max-w-md rounded-2xl border border-[#EAECF5] bg-white shadow-xl">
         <div className="border-b border-[#EAECF5] px-6 py-4">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-indigo-600">📢 매장 공지</p>
+            <p className="flex items-center gap-1 text-xs font-semibold text-indigo-600"><Megaphone className="h-3.5 w-3.5" strokeWidth={2.4} /> 매장 공지</p>
             <span className="text-xs text-slate-400">
               {idx} / {notices.length}
             </span>

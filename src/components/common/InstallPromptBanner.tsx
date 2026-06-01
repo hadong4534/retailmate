@@ -214,7 +214,7 @@ function headlineFor(p: Platform): string {
     case 'ios-safari':
       return '아이폰 홈 화면에 추가하면 앱 아이콘처럼 빠르게 열 수 있어요.';
     case 'ios-other':
-      return '⚠ 아이폰은 Safari에서 설치해야 합니다. Safari로 다시 열어주세요.';
+      return '아이폰은 Safari에서 설치해야 합니다. Safari로 다시 열어주세요.';
     case 'android-chrome':
       return '한 번 누르면 갤럭시 홈 화면에 앱처럼 설치됩니다.';
     case 'android-samsung':

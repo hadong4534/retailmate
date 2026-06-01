@@ -102,7 +102,7 @@ export function NoticeForm() {
           onChange={(e) => setIsPinned(e.target.checked)}
           className="h-4 w-4"
         />
-        📌 상단 고정 (목록에서 우선 표시)
+        상단 고정 <span className="text-xs text-slate-400">(목록에서 우선 표시)</span>
       </label>
 
       {error && (

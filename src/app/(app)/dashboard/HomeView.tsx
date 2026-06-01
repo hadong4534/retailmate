@@ -57,7 +57,8 @@ export function HomeView(p: HomeViewProps) {
     <div className="px-4 py-5 lg:px-8 lg:py-7">
       <div className="mx-auto max-w-6xl">
         {/* 헤더 */}
-        <div className="mb-5 flex items-end justify-between">
+        <div className="relative mb-5 flex items-end justify-between">
+          <span aria-hidden className="pointer-events-none absolute -left-7 -top-9 -z-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(129,140,248,0.22),transparent_70%)] blur-2xl" />
           <div>
             <h1 className="text-[22px] font-extrabold tracking-tight text-slate-900 lg:text-[26px]">홈</h1>
             <p className="mt-1 text-[13px] text-slate-500">오늘도 좋은 하루 되세요.</p>
@@ -200,9 +201,9 @@ function Stat({ icon, label, value, delta, deltaUp, muted }: {
   icon: React.ReactNode; label: string; value: string; delta?: string; deltaUp?: boolean; muted?: boolean;
 }) {
   return (
-    <div className="rounded-[18px] border border-[#E9EAF4] bg-white p-4">
+    <div className="rounded-[18px] border border-[#E9EAF4] bg-gradient-to-br from-white to-[#F6F6FE] p-4">
       <div className="flex items-center gap-2 text-[12.5px] font-medium text-slate-500">
-        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F3F2FE] text-[#6366F1]">{icon}</span>
+        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-[#EEF0FE] to-[#E7E3FB] text-[#6366F1]">{icon}</span>
         {label}
       </div>
       <p className={'mt-2.5 text-[20px] font-extrabold tabular-nums ' + (muted ? 'text-slate-400' : 'text-slate-900')}>{value}</p>

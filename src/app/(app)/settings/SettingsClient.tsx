@@ -275,17 +275,17 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
 
         {/* 출퇴근 좌표 + 반경 */}
         <div className="md:col-span-2 rounded-lg border border-indigo-100 bg-indigo-50/40 p-4">
-          <p className="text-sm font-medium text-slate-800">📍 출퇴근 좌표</p>
+          <p className="text-sm font-medium text-slate-800">출퇴근 좌표</p>
           <p className="mt-0.5 text-xs text-slate-500">
             위 주소를 기준으로 자동 등록됩니다. 직원 출퇴근 인증에 사용돼요.
           </p>
           {lat != null && lng != null ? (
             <p className="mt-2 font-mono text-[11px] text-emerald-700">
-              ✓ 등록됨: {lat}, {lng}
+              등록됨: {lat}, {lng}
             </p>
           ) : (
             <p className="mt-2 text-[11px] text-amber-700">
-              ⚠ 좌표 미설정 — 주소 검색을 다시 시도해주세요. 검색 후에도 좌표가 잡히지 않으면 더 구체적인 주소(도로명+번지)를 입력해보세요.
+              좌표 미설정 — 주소 검색을 다시 시도해주세요. 검색 후에도 좌표가 잡히지 않으면 더 구체적인 주소(도로명+번지)를 입력해보세요.
             </p>
           )}
           <div className="mt-3">
@@ -340,9 +340,9 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
         </div>
       </div>
 
-      {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">⚠ {error}</p>}
+      {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
       {success && (
-        <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs text-emerald-700">✓ 저장되었습니다.</p>
+        <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs text-emerald-700">저장되었습니다.</p>
       )}
 
       <div className="mt-5 flex justify-end gap-2">
@@ -505,9 +505,9 @@ function AccountForm({ profile, onSaved }: { profile: ProfileData; onSaved: (d: 
         />
       </div>
 
-      {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">⚠ {error}</p>}
+      {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
       {success && (
-        <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs text-emerald-700">✓ 저장되었습니다.</p>
+        <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs text-emerald-700">저장되었습니다.</p>
       )}
 
       <div className="mt-5 flex justify-end">
@@ -779,10 +779,10 @@ function SecurityForm({ onSaved }: { onSaved: (d: Date) => void }) {
           />
         </div>
 
-        {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">⚠ {error}</p>}
+        {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
         {success && (
           <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-            ✓ 비밀번호가 변경되었습니다.
+            비밀번호가 변경되었습니다.
           </p>
         )}
 

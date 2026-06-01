@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Sparkles, AlertTriangle } from 'lucide-react';
 import { getQueue, dequeue, subscribeQueue, clearStale, type QueueItem } from '@/lib/ai/image-queue';
 
 interface Toast {
@@ -145,7 +146,7 @@ function ToastCard({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
           (isDone ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600')
         }
       >
-        {isDone ? '✨' : '⚠'}
+        {isDone ? <Sparkles className="h-4 w-4" strokeWidth={2.4} /> : <AlertTriangle className="h-4 w-4" strokeWidth={2.4} />}
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-slate-900">

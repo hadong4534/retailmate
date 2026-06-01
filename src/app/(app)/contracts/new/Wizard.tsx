@@ -391,7 +391,7 @@ function Step1({
       />
 
       <div>
-        <label className="block text-sm font-medium text-slate-700">💼 담당 업무</label>
+        <label className="block text-sm font-medium text-slate-700">담당 업무</label>
         <textarea
           value={data.job_description}
           onChange={(e) => update('job_description', e.target.value)}
@@ -631,7 +631,7 @@ function Step3({
 
       <div>
         <label className="block text-sm font-medium text-slate-700">
-          🏖 연차 정책 <span className="text-xs text-slate-400">(선택)</span>
+          연차 정책 <span className="text-xs text-slate-400">(선택)</span>
         </label>
         <textarea
           value={data.annual_leave_policy}

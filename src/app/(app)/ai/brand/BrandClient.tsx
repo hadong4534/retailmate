@@ -85,7 +85,7 @@ export function BrandClient({ initial }: Props) {
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
       {/* 로고 영역 */}
       <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
-        <h2 className="text-sm font-bold text-slate-900">🏷 매장 로고</h2>
+        <h2 className="text-sm font-bold text-slate-900">매장 로고</h2>
 
         <div className="mt-3">
           {initial.logoUrl ? (
