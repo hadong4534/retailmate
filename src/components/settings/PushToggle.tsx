@@ -9,7 +9,8 @@ function urlBase64ToUint8Array(base64: string): Uint8Array {
   const padding = '='.repeat((4 - (base64.length % 4)) % 4);
   const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
   const raw = atob(b64);
-  const arr = new Uint8Array(raw.length);
+  const buf = new ArrayBuffer(raw.length);
+  const arr = new Uint8Array(buf);
   for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
   return arr;
 }
@@ -40,7 +41,7 @@ export function PushToggle() {
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(PUBLIC_KEY as string),
+        applicationServerKey: urlBase64ToUint8Array(PUBLIC_KEY as string) as unknown as BufferSource,
       });
       const res = await fetch('/api/push/subscribe', {
         method: 'POST',
