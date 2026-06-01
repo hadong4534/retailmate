@@ -108,6 +108,15 @@ export function StoreSwitcher({
               })}
             </ul>
             <div className="border-t border-[#EAECF5] p-1">
+              {options.length > 1 && (
+                <Link
+                  href="/stores"
+                  onClick={() => setOpen(false)}
+                  className="block cursor-pointer rounded px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                >
+                  전체 매장 보기
+                </Link>
+              )}
               <Link
                 href="/stores/new"
                 onClick={() => setOpen(false)}

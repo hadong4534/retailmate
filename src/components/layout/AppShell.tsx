@@ -96,7 +96,7 @@ const EXACT_MATCH_ONLY = new Set(['/dashboard', '/employees']);
 /** 모바일 헤더에서 뒤로가기 버튼을 숨길 "최상위" 경로 — 그 외 하위 페이지는 뒤로가기 노출. */
 const ROOT_PATHS = new Set([
   '/dashboard', '/sales', '/expenses', '/reports',
-  '/employees', '/attendance', '/contracts', '/notices', '/settings', '/ai',
+  '/employees', '/attendance', '/contracts', '/notices', '/settings', '/ai', '/stores',
 ]);
 
 function shouldShowBack(pathname: string): boolean {
