@@ -74,7 +74,7 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'store', label: '매장 정보' },
   { key: 'account', label: '계정 관리' },
   { key: 'notifications', label: '알림 설정' },
-  { key: 'payroll', label: '급여/세금 설정' },
+  { key: 'payroll', label: '급여 설정' },
   { key: 'security', label: '보안' },
 ];
 
@@ -615,24 +615,18 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const [mode, setMode] = useState<'hourly' | 'monthly'>(
-    (store.wage_calc_mode as 'hourly' | 'monthly') ?? 'hourly',
-  );
   const [weekly, setWeekly] = useState(store.weekly_holiday_default ?? true);
   const [payDay, setPayDay] = useState(store.pay_day_default ?? 25);
-  const [taxMode, setTaxMode] = useState<'simple' | 'general'>(
-    (store.tax_filing_mode as 'simple' | 'general') ?? 'simple',
-  );
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     startTransition(async () => {
       const result = await updateWageSettings({
-        wage_calc_mode: mode,
+        wage_calc_mode: (store.wage_calc_mode as 'hourly' | 'monthly') ?? 'hourly',
         weekly_holiday_default: weekly,
         pay_day_default: payDay,
-        tax_filing_mode: taxMode,
+        tax_filing_mode: (store.tax_filing_mode as 'simple' | 'general') ?? 'simple',
       });
       if ('error' in result) setError(result.error);
       else onSaved(new Date());
@@ -644,23 +638,12 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
       <div className="flex items-center gap-2">
         
         <div>
-          <h2 className="text-base font-bold text-slate-900">급여/세금 설정</h2>
-          <p className="text-xs text-slate-500">급여 계산 및 세금 관련 설정을 관리하세요.</p>
+          <h2 className="text-base font-bold text-slate-900">급여 설정</h2>
+          <p className="text-xs text-slate-500">매장 공통 기본값만 설정해요. 직원별 급여·세금 처리는 근로계약서에 따라 자동 적용됩니다.</p>
         </div>
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium text-slate-700">시급 계산 기준</label>
-          <select
-            value={mode}
-            onChange={(e) => setMode(e.target.value as 'hourly' | 'monthly')}
-            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
-          >
-            <option value="hourly">기본 시급</option>
-            <option value="monthly">월급제</option>
-          </select>
-        </div>
         <div>
           <label className="block text-sm font-medium text-slate-700">주휴수당 반영</label>
           <select
@@ -684,21 +667,10 @@ function PayrollForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) 
             ))}
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700">세금 신고 방식</label>
-          <select
-            value={taxMode}
-            onChange={(e) => setTaxMode(e.target.value as 'simple' | 'general')}
-            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
-          >
-            <option value="simple">간편장부 기준</option>
-            <option value="general">복식부기 기준</option>
-          </select>
-        </div>
       </div>
 
       <p className="mt-3 rounded-md bg-indigo-50 px-3 py-2 text-xs text-indigo-900">
-        ⓘ 급여 및 세금 정보는 근태 및 급여 계산, 세무 리포트에 반영됩니다.
+        ⓘ 직원별 급여 계산(시급·월급·일급)과 4대보험·원천징수는 근로계약서·처리방식 설정에 따라 자동으로 됩니다. 여기선 주휴수당·급여일 기본값만 정합니다.
       </p>
 
       {error && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
