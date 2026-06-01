@@ -105,22 +105,22 @@ export async function getStorePayroll(
     };
   }
 
-  // 2) 직원별 프로필 (이름·연락처)
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('id, name, phone')
-    .in('id', userIds);
+  // 2~4) 프로필·계약서·출퇴근을 병렬로 조회 (서로 의존 없음 → 워터폴 제거로 응답 단축)
+  const [profilesRes, contractsRes, attsRes] = await Promise.all([
+    supabase.from('profiles').select('id, name, phone').in('id', userIds),
+    supabase.from('labor_contracts')
+      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, invite_name, invite_phone, created_at')
+      .eq('store_id', storeId).in('employee_id', userIds).in('status', ['signed', 'sent'])
+      .order('created_at', { ascending: false }),
+    supabase.from('attendances').select('user_id, check_in_at, work_minutes')
+      .eq('store_id', storeId).in('user_id', userIds)
+      .gte('check_in_at', start).lt('check_in_at', end),
+  ]);
+
+  const profiles = profilesRes.data;
+  const contracts = contractsRes.data;
   const profileMap = new Map<string, { name: string | null; phone: string | null }>();
   (profiles ?? []).forEach((p) => profileMap.set(p.id, { name: p.name, phone: p.phone }));
-
-  // 3) 최신 서명/발송 계약서 (직원당 1개)
-  const { data: contracts } = await supabase
-    .from('labor_contracts')
-    .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, invite_name, invite_phone, created_at')
-    .eq('store_id', storeId)
-    .in('employee_id', userIds)
-    .in('status', ['signed', 'sent'])
-    .order('created_at', { ascending: false });
 
   const contractByUser = new Map<string, ContractDetail>();
   const inviteByUser = new Map<string, { name: string | null; phone: string | null }>();
@@ -132,14 +132,8 @@ export async function getStorePayroll(
     if (!inviteByUser.has(c.employee_id)) inviteByUser.set(c.employee_id, { name: c.invite_name, phone: c.invite_phone });
   });
 
-  // 4) 월 출퇴근 기록
-  const { data: atts } = await supabase
-    .from('attendances')
-    .select('user_id, check_in_at, work_minutes')
-    .eq('store_id', storeId)
-    .in('user_id', userIds)
-    .gte('check_in_at', start)
-    .lt('check_in_at', end);
+  // 4) 월 출퇴근 기록 (위 Promise.all에서 함께 조회)
+  const atts = attsRes.data;
 
   const workByUser = new Map<string, { minutes: number; days: Set<string>; weekMinutes: Map<string, number> }>();
   (atts ?? []).forEach((a) => {
