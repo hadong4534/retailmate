@@ -9,7 +9,7 @@
  * 이 SW가 매일 retailmate.io 트래픽을 가로채므로 변경 시 신중히.
  * 캐시 키 버전을 올리면 옛 캐시는 자동 삭제.
  */
-const CACHE_VERSION = 'rm-v6';
+const CACHE_VERSION = 'rm-v7';
 const STATIC_ASSETS = [
   '/site.webmanifest',
   '/apple-touch-icon.png',
