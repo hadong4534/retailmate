@@ -6,12 +6,17 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AlertTriangle, Users } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { setRememberFlag } from '@/lib/auth/session-flag';
+import { SplashScreen } from '@/components/common/SplashScreen';
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="text-center text-slate-500">불러오는 중...</div>}>
-      <LoginForm />
-    </Suspense>
+    <>
+      {/* 앱 진입 인트로 — 비로그인 실행 시 대시보드→로그인으로 오는 길에 1.2초 노출 후 사라짐 */}
+      <SplashScreen />
+      <Suspense fallback={<div className="text-center text-slate-500">불러오는 중...</div>}>
+        <LoginForm />
+      </Suspense>
+    </>
   );
 }
 

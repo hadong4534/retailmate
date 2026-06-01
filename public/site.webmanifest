@@ -4,8 +4,8 @@
   "description": "자영업자 올인원 플랫폼 - 매출·비용·직원·근로계약서를 한 곳에서",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#0F172A",
-  "theme_color": "#2563EB",
+  "background_color": "#F5F4FC",
+  "theme_color": "#6366F1",
   "orientation": "portrait",
   "lang": "ko-KR",
   "icons": [
