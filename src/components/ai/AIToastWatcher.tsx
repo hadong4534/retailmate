@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Sparkles, AlertTriangle } from 'lucide-react';
 import { getQueue, dequeue, subscribeQueue, clearStale, type QueueItem } from '@/lib/ai/image-queue';
@@ -37,6 +38,7 @@ const POLL_INTERVAL_MS = 3000;
  * (app)/layout.tsx에 1회 마운트. 어느 페이지에서 시작하든 완료 알림이 화면 상단 가운데에 노출.
  */
 export function AIToastWatcher() {
+  const router = useRouter();
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -66,6 +68,7 @@ export function AIToastWatcher() {
         if (res.ok) {
           const json = (await res.json()) as { items?: StatusItem[] };
           const items = json.items ?? [];
+          let completed = false;
           for (const item of items) {
             if (item.status === 'done' || item.status === 'failed') {
               const queueItem = cur.find((q) => q.id === item.id);
@@ -79,9 +82,13 @@ export function AIToastWatcher() {
                   shownAt: Date.now(),
                 });
                 dequeue(item.id);
+                completed = true;
               }
             }
           }
+          // 완료/실패 발생 시 현재 페이지(드라이브·포스터 등)를 새로고침해
+          // '생성 중' 자리표시가 즉시 완성 이미지로 교체되도록 한다.
+          if (completed) router.refresh();
         }
       } catch {
         // network error - 다음 poll에 재시도
