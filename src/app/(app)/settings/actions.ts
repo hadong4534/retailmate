@@ -250,3 +250,19 @@ export async function changePassword(input: {
 
   return { ok: true };
 }
+
+/**
+ * 회원 탈퇴 — 본인 계정 + 데이터 완전 삭제.
+ * DB의 delete_my_account() 함수(원자적, owner-가드 포함)를 호출한 뒤 로그아웃.
+ */
+export async function deleteMyAccount(): Promise<Result> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: '로그인이 필요합니다.' };
+
+  const { error } = await supabase.rpc('delete_my_account');
+  if (error) return { error: error.message };
+
+  await supabase.auth.signOut().catch(() => undefined);
+  return { ok: true };
+}

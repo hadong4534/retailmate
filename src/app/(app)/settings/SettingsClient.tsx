@@ -16,6 +16,7 @@ import {
   uploadAvatar,
   removeAvatar,
   changePassword,
+  deleteMyAccount,
 } from './actions';
 
 /** 사업자등록번호: 입력하는 동안 숫자만 추려 000-00-00000 마스크 적용. */
@@ -123,7 +124,12 @@ export function SettingsClient({
           <NotificationForm prefs={prefs} onSaved={(d) => setSavedAt(d)} />
         )}
         {tab === 'payroll' && <PayrollForm store={store} onSaved={(d) => setSavedAt(d)} />}
-        {tab === 'security' && <SecurityForm onSaved={(d) => setSavedAt(d)} />}
+        {tab === 'security' && (
+          <div className="space-y-4">
+            <SecurityForm onSaved={(d) => setSavedAt(d)} />
+            <DeleteAccountSection />
+          </div>
+        )}
       </div>
 
       <aside className="space-y-3">
@@ -796,5 +802,83 @@ function ConnectStatus({ label, status }: { label: string; status: string }) {
       <span className="font-medium text-slate-700">{label}</span>
       <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">{status}</span>
     </li>
+  );
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 회원 탈퇴 (개인정보·계정 완전 삭제)
+// ─────────────────────────────────────────────────────────────────────────────
+function DeleteAccountSection() {
+  const [open, setOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+
+  function handleDelete() {
+    if (confirmText.trim() !== '탈퇴') {
+      setError('확인을 위해 "탈퇴"를 정확히 입력해주세요.');
+      return;
+    }
+    setError(null);
+    startTransition(async () => {
+      const result = await deleteMyAccount();
+      if ('error' in result) {
+        setError(result.error);
+        return;
+      }
+      window.location.href = '/login';
+    });
+  }
+
+  return (
+    <div className="rounded-xl border border-red-200 bg-red-50/50 p-6">
+      <h2 className="text-base font-bold text-red-900">회원 탈퇴</h2>
+      <p className="mt-1 text-xs text-red-700/90 leading-relaxed">
+        탈퇴하면 계정과 매장·매출·비용·근태·계약 등 <strong>모든 데이터가 즉시 영구 삭제</strong>되며 되돌릴 수 없습니다.
+        소속 직원이 있는 매장은 먼저 직원을 정리한 뒤 탈퇴할 수 있어요.
+      </p>
+
+      {!open ? (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="mt-4 rounded-lg border border-red-300 bg-white px-3.5 py-2 text-sm font-semibold text-red-700 hover:bg-red-50"
+        >
+          회원 탈퇴 진행
+        </button>
+      ) : (
+        <div className="mt-4 space-y-3">
+          <label className="block text-xs font-medium text-red-900">
+            계속하려면 아래에 <strong>탈퇴</strong> 를 입력하세요.
+          </label>
+          <input
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            placeholder="탈퇴"
+            className="h-11 w-full max-w-xs rounded-lg border border-red-300 px-3 text-base text-slate-900 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200"
+          />
+          {error && <p className="text-xs font-medium text-red-700">{error}</p>}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => { setOpen(false); setConfirmText(''); setError(null); }}
+              disabled={pending}
+              className="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 disabled:opacity-50"
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={pending}
+              className="rounded-lg bg-red-600 px-3.5 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              {pending ? '삭제 중…' : '영구 삭제'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
