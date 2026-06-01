@@ -78,6 +78,7 @@ export default function LandingPage() {
                   muted
                   loop
                   playsInline
+                  preload="auto"
                   poster="/home-hero.jpg"
                   className="aspect-video h-full w-full object-cover"
                 >
