@@ -61,7 +61,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
       className="group inline-flex items-center gap-1 text-xs text-slate-700 hover:text-indigo-600"
     >
       <span className="font-mono tabular-nums">{initialWage ? formatWon(initialWage) : '미설정'}</span>
-      <span className="text-slate-300 group-hover:text-indigo-500">✎</span>
+      <span className="text-[10px] font-medium text-slate-400 group-hover:text-indigo-500">수정</span>
     </button>
   );
 }

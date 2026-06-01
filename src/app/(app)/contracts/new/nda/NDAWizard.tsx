@@ -207,6 +207,7 @@ export function NDAWizard() {
                 type="number"
                 min={1}
                 max={10}
+                inputMode="numeric"
                 value={data.retention_years}
                 onChange={(e) => update('retention_years', Math.max(1, Math.min(10, parseInt(e.target.value) || 1)))}
                 className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"

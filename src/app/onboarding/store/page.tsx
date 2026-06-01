@@ -8,6 +8,13 @@ import { Input } from '@/components/ui/Input';
 import { Logo } from '@/components/ui/Logo';
 import { AddressSearch } from '@/components/ui/AddressSearch';
 
+function formatBizNo(input: string): string {
+  const d = input.replace(/\D/g, '').slice(0, 10);
+  if (d.length < 4) return d;
+  if (d.length < 6) return `${d.slice(0, 3)}-${d.slice(3)}`;
+  return `${d.slice(0, 3)}-${d.slice(3, 5)}-${d.slice(5)}`;
+}
+
 const INDUSTRIES = [
   { value: 'restaurant', label: '외식업 (음식점·카페)' },
   { value: 'retail', label: '소매업 (편의점·매장)' },
@@ -121,7 +128,7 @@ export default function StoreOnboardingPage() {
               name="business_no"
               label="사업자등록번호 (선택)"
               value={businessNo}
-              onChange={(e) => setBusinessNo(e.target.value)}
+              onChange={(e) => setBusinessNo(formatBizNo(e.target.value))}
               placeholder="123-45-67890"
             />
 

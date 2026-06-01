@@ -7,10 +7,12 @@ import { MoneyInput } from '@/components/ui/MoneyInput';
 import { formatWon } from '@/lib/utils';
 import {
   SALE_CHANNELS,
-  SALE_CHANNEL_ICON,
+  SALE_CHANNEL_LUCIDE,
   SALE_CHANNEL_LABEL,
   type SaleChannel,
 } from '@/lib/constants';
+
+const QUICK = [10000, 50000, 100000];
 import { updateDailySales, deleteDailySales } from '../../actions';
 
 interface Props {
@@ -33,7 +35,10 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
   const total = SALE_CHANNELS.reduce((acc, c) => acc + (amounts[c] || 0), 0);
 
   function setChannel(c: SaleChannel, n: number) {
-    setAmounts((a) => ({ ...a, [c]: n }));
+    setAmounts((a) => ({ ...a, [c]: Math.max(0, n) }));
+  }
+  function bump(c: SaleChannel, delta: number) {
+    setAmounts((a) => ({ ...a, [c]: Math.max(0, (a[c] || 0) + delta) }));
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -73,17 +78,35 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
         <p className="mb-3 text-xs text-slate-500">
           금액을 0원으로 두면 해당 채널은 저장되지 않습니다.
         </p>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {SALE_CHANNELS.map((c) => (
-            <MoneyInput
-              key={c}
-              label={`${SALE_CHANNEL_LABEL[c]} 매출`}
-              icon={SALE_CHANNEL_ICON[c]}
-              value={amounts[c]}
-              onChange={(n) => setChannel(c, n)}
-              size="md"
-            />
-          ))}
+        <div className="space-y-3">
+          {SALE_CHANNELS.map((c) => {
+            const ChannelIcon = SALE_CHANNEL_LUCIDE[c];
+            return (
+            <div key={c} className="rounded-2xl border border-[#EEF0F6] bg-[#FBFBFE] p-3">
+              <div className="flex items-center gap-2">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#EEF0FE] text-[#6366F1]" aria-hidden>
+                  <ChannelIcon className="h-4 w-4" />
+                </span>
+                <span className="flex-1 text-[13.5px] font-semibold text-slate-700">{SALE_CHANNEL_LABEL[c]}</span>
+                <div className="w-[44%] sm:w-[200px]">
+                  <MoneyInput label="" value={amounts[c]} onChange={(n) => setChannel(c, n)} size="md" />
+                </div>
+              </div>
+              <div className="mt-2 flex flex-wrap items-center gap-1.5 pl-9">
+                {QUICK.map((q) => (
+                  <button key={q} type="button" onClick={() => bump(c, q)}
+                    className="rounded-lg bg-[#F1F1FB] px-2.5 py-1 text-[11.5px] font-bold text-[#6366F1] transition active:scale-95 hover:bg-[#EAEBFB]">
+                    +{q / 10000}만
+                  </button>
+                ))}
+                {amounts[c] > 0 && (
+                  <button type="button" onClick={() => setChannel(c, 0)}
+                    className="rounded-lg bg-slate-100 px-2.5 py-1 text-[11.5px] font-semibold text-slate-500 active:scale-95">지우기</button>
+                )}
+              </div>
+            </div>
+            );
+          })}
         </div>
       </div>
 
@@ -107,7 +130,7 @@ export function EditDayForm({ saleDate, initialAmounts, initialMemo, hadAnyData 
       </div>
 
       {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">⚠ {error}</p>
+        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
 
       <div className="flex flex-col gap-2 pt-2 sm:flex-row">

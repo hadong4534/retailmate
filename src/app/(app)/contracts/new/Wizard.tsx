@@ -347,7 +347,7 @@ function Step1({
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-slate-700">📅 근로 시작일</label>
+          <label className="block text-sm font-medium text-slate-700">근로 시작일</label>
           <input
             type="date"
             value={data.work_start_date}
@@ -357,7 +357,7 @@ function Step1({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700">
-            📅 근로 종료일{' '}
+            근로 종료일{' '}
             {data.contract_type === 'daily'
               ? <span className="text-xs font-semibold text-[#5961E6]">(계약직 필수)</span>
               : <span className="text-xs text-slate-400">(정규직은 비워두기)</span>}
@@ -409,7 +409,7 @@ function Step2({
       <h2 className="text-lg font-bold text-slate-900">Step 2 · 근무 시간</h2>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700">📅 근무 요일</label>
+        <label className="block text-sm font-medium text-slate-700">근무 요일</label>
         <div className="mt-2 flex flex-wrap gap-2">
           {DAYS.map((d) => {
             const active = data.work_days.includes(d.key);
@@ -434,7 +434,7 @@ function Step2({
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div>
-          <label className="block text-sm font-medium text-slate-700">⏰ 시작 시간</label>
+          <label className="block text-sm font-medium text-slate-700">시작 시간</label>
           <input
             type="time"
             value={data.work_start_time}
@@ -443,7 +443,7 @@ function Step2({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700">⏰ 종료 시간</label>
+          <label className="block text-sm font-medium text-slate-700">종료 시간</label>
           <input
             type="time"
             value={data.work_end_time}
@@ -452,7 +452,7 @@ function Step2({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700">☕ 휴게 시간 (분)</label>
+          <label className="block text-sm font-medium text-slate-700">휴게 시간 (분)</label>
           <input
             type="number"
             min={0}
@@ -487,7 +487,7 @@ function Step3({
       <h2 className="text-lg font-bold text-slate-900">Step 3 · 임금</h2>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700">💰 임금 형태</label>
+        <label className="block text-sm font-medium text-slate-700">임금 형태</label>
         <div className="mt-2 grid grid-cols-3 gap-2">
           {([
             ['hourly', '시급'],
@@ -702,7 +702,7 @@ function Step4({
       </div>
 
       <p className="rounded-md bg-amber-50 px-4 py-3 text-xs text-amber-900">
-        ⚠ 표준 양식 기반의 자동 작성본입니다. 실제 운영 전 노무사 검토를 권장합니다.
+        표준 양식 기반의 자동 작성본입니다. 실제 운영 전 노무사 검토를 권장합니다.
         발급된 링크는 시간 제한 없이 유효하며, 직원이 가입 + 서명을 완료하면 자동으로 직원으로 등록됩니다.
       </p>
     </div>
