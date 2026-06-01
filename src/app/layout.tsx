@@ -4,7 +4,7 @@ import { InstallPromptBanner } from '@/components/common/InstallPromptBanner';
 import { ServiceWorkerRegister } from '@/components/common/ServiceWorkerRegister';
 
 const SITE_URL = 'https://retailmate.io';
-const OG_IMAGE = `${SITE_URL}/og/retailmate-og.png?v=3`;
+const OG_IMAGE = `${SITE_URL}/og/retailmate-og.png?v=4`;
 
 const TITLE = '리테일메이트 | 자영업자 올인원 플랫폼';
 const DESCRIPTION =
