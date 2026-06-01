@@ -224,6 +224,10 @@ export async function resignMember(memberId: string): Promise<RoleResult> {
   }
 
   const admin = createAdminClient();
+  // 예정 근무 스케줄 정리 — 삭제 후 재등록 시 옛 스케줄이 되살아나지 않도록.
+  // (출퇴근 기록·계약서는 히스토리로 보존)
+  await admin.from('work_schedules')
+    .delete().eq('store_id', auth.store.storeId).eq('user_id', auth.target.user_id);
   const { error } = await admin
     .from('store_members')
     .delete()
