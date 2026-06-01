@@ -82,9 +82,9 @@ export default async function PayrollPage({
           />
           <KpiCard
             Icon={Wallet}
-            label="실수령액 합계"
+            label="세후 지급액 합계"
             value={formatWon(payroll.totals.netPay)}
-            sub="세전 − 본인부담"
+            sub="세전 − 공제"
             tone="emerald"
           />
         </div>
@@ -155,7 +155,7 @@ export default async function PayrollPage({
                     <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">세전</th>
                     <th className="whitespace-nowrap px-4 py-2.5 text-left font-medium">처리방식</th>
                     <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">공제</th>
-                    <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">실수령</th>
+                    <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">실지급</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -248,7 +248,7 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
         </div>
         <div className="flex shrink-0 flex-col items-end gap-0.5">
           <p className="rm-tnum text-[15px] font-bold text-emerald-600">{formatWon(row.netPay)}</p>
-          <p className="rm-tnum text-[10px] text-slate-400">실수령</p>
+          <p className="rm-tnum text-[10px] text-slate-400">실지급</p>
         </div>
       </div>
 
