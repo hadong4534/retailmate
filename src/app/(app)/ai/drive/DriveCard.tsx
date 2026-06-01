@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
 
@@ -37,6 +37,25 @@ export function DriveCard({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  // '생성 중' 카드는 스스로 상태를 폴링해 완료되면 즉시 갱신 (수동 새로고침 불필요)
+  useEffect(() => {
+    if (status !== 'pending') return;
+    let active = true;
+    const t = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/ai/images/status?ids=${id}`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const json = (await res.json()) as { items?: { id: string; status: string }[] };
+        const it = json.items?.find((x) => x.id === id);
+        if (active && it && (it.status === 'done' || it.status === 'failed')) {
+          clearInterval(t);
+          router.refresh();
+        }
+      } catch { /* 다음 주기 재시도 */ }
+    }, 3000);
+    return () => { active = false; clearInterval(t); };
+  }, [status, id, router]);
 
   function handleDelete() {
     setConfirmOpen(false);

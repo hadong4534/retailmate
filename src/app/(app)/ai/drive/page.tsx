@@ -5,6 +5,8 @@ import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { EmptyGallery } from '@/components/app/EmptyIllustration';
 import { DriveCard } from './DriveCard';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'AI 드라이브 · 리테일메이트',
 };

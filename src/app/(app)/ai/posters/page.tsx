@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { PosterForm } from './PosterForm';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'AI 포스터·SNS · 리테일메이트',
 };
