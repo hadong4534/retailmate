@@ -9,10 +9,12 @@
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
-  calculateNetPay,
+  calculatePayroll,
   ZERO_BREAKDOWN,
+  PAYROLL_MODE_LABEL,
   type InsuranceBreakdown,
   type SocialInsuranceFlags,
+  type PayrollMode,
 } from './insurance';
 
 interface ContractDetail {
@@ -38,6 +40,9 @@ export interface MemberPayrollRow {
   grossPay: number;
   insurance: InsuranceBreakdown;
   netPay: number;
+  payrollMode: PayrollMode;
+  payrollModeLabel: string;   // '4대보험' 등
+  deductionLabel: string;     // '4대보험 본인부담' / '원천징수 3.3%' ...
 }
 
 export interface StorePayrollSummary {
@@ -83,7 +88,7 @@ export async function getStorePayroll(
   // 1) 매장 멤버 (사장 제외) — 퇴사자도 표시하되 비활성 플래그로 구분
   const { data: members } = await supabase
     .from('store_members')
-    .select('id, user_id, role, is_active, hire_date, resign_date')
+    .select('id, user_id, role, is_active, hire_date, resign_date, payroll_mode')
     .eq('store_id', storeId)
     .neq('role', 'owner')
     .order('is_active', { ascending: false })
@@ -156,16 +161,17 @@ export async function getStorePayroll(
     const workMinutes = work?.minutes ?? 0;
     const workDays = work?.days.size ?? 0;
 
+    const mode = ((m as { payroll_mode?: string }).payroll_mode ?? 'none') as PayrollMode;
     let grossPay = 0;
     let insurance: InsuranceBreakdown = ZERO_BREAKDOWN;
     let netPay = 0;
+    let deductionLabel = '공제 없음';
 
     if (contract) {
       const hours = workMinutes / 60;
       if (contract.wage_type === 'hourly') {
         const base = Math.round(hours * contract.wage_amount);
-        // 주휴수당: 계약서에 '지급'이고 시급제일 때, 주 15시간 이상 근무한 주마다
-        // (주 근로시간/40)×8×시급 만큼 추가 (8시간분 상한). 4대보험 산정 기준에도 포함됨.
+        // 주휴수당: 계약서 '지급'+시급제일 때 주 15시간 이상 근무한 주마다 (주시간/40)×8×시급 (상한 8h).
         let weeklyHoliday = 0;
         if (contract.weekly_holiday_allowance && work) {
           for (const wkMin of work.weekMinutes.values()) {
@@ -178,16 +184,20 @@ export async function getStorePayroll(
         }
         grossPay = base + weeklyHoliday;
       } else if (contract.wage_type === 'monthly') {
-        // 월급제는 근무 여부와 무관하게 wage_amount.
-        // 단 퇴사자의 그 다음 달은 0으로 (resign_date 이후 월).
         const isResigned = m.resign_date && m.resign_date < `${month}-01`;
         grossPay = isResigned ? 0 : contract.wage_amount;
       } else if (contract.wage_type === 'daily') {
         grossPay = workDays * contract.wage_amount;
       }
-      const calc = calculateNetPay(grossPay, contract.contract_type, contract.social_insurance);
-      insurance = calc.insurance;
-      netPay = calc.net;
+      // 처리방식(payroll_mode)에 따라 공제 계산 — 계약형태와 무관.
+      const pr = calculatePayroll(grossPay, mode, {
+        dailyWage: contract.wage_type === 'daily' ? contract.wage_amount : undefined,
+        workDays,
+        flags: contract.social_insurance,
+      });
+      insurance = { ...ZERO_BREAKDOWN, total: pr.deductionTotal };
+      netPay = pr.net;
+      deductionLabel = pr.deductionLabel;
     }
 
     return {
@@ -205,6 +215,9 @@ export async function getStorePayroll(
       grossPay,
       insurance,
       netPay,
+      payrollMode: mode,
+      payrollModeLabel: PAYROLL_MODE_LABEL[mode],
+      deductionLabel,
     };
   });
 

@@ -80,6 +80,7 @@ export interface StoreMember {
   is_active: boolean;
   gps_consent_at: string | null;
   privacy_consent_at: string | null;
+  payroll_mode: 'four_major' | 'freelance_3_3' | 'daily' | 'none';
   created_at: string;
 }
 

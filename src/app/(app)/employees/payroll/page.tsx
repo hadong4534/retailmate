@@ -7,6 +7,7 @@ import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { PageHeader } from '@/components/app';
 import { formatWon, currentYearMonth } from '@/lib/utils';
 import { getStorePayroll, formatHM, type MemberPayrollRow } from '@/lib/payroll/store-payroll';
+import { PayrollModeSelect } from './PayrollModeSelect';
 
 export const metadata = {
   title: '급여 계산 · 리테일메이트',
@@ -76,7 +77,7 @@ export default async function PayrollPage({
             Icon={Wallet}
             label="총 급여(세전)"
             value={formatWon(payroll.totals.grossPay)}
-            sub={`4대보험 본인부담 ${formatWon(payroll.totals.insurance)}`}
+            sub={`공제 합계 ${formatWon(payroll.totals.insurance)}`}
             tone="blue"
           />
           <KpiCard
@@ -94,8 +95,8 @@ export default async function PayrollPage({
           <div>
             <p className="font-semibold">참고용 추정 금액입니다</p>
             <p className="mt-0.5 text-amber-800">
-              4대보험 본인부담은 2026년 고시 요율 기준 정규직만 적용됩니다. 소득세·지방세는 별도이며,
-              실제 지급액은 노무사·세무사 검토 후 확정하세요.
+              공제(4대보험·3.3% 사업소득·일용 소득세)는 직원별 '처리방식' 설정과 2026년 고시 요율 기준 추정입니다.
+              실제 신고·지급액은 노무사·세무사 검토 후 확정하세요.
             </p>
           </div>
         </div>
@@ -152,7 +153,8 @@ export default async function PayrollPage({
                     <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">근무</th>
                     <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">단가</th>
                     <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">세전</th>
-                    <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">본인부담</th>
+                    <th className="whitespace-nowrap px-4 py-2.5 text-left font-medium">처리방식</th>
+                    <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">공제</th>
                     <th className="whitespace-nowrap px-4 py-2.5 text-right font-medium">실수령</th>
                   </tr>
                 </thead>
@@ -165,6 +167,7 @@ export default async function PayrollPage({
                     <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-indigo-600">
                       {formatWon(payroll.totals.grossPay)}
                     </td>
+                    <td />
                     <td className="whitespace-nowrap px-4 py-3 text-right font-mono tabular-nums text-red-500">
                       − {formatWon(payroll.totals.insurance)}
                     </td>
@@ -260,13 +263,18 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
             <p className="mt-0.5 rm-tnum text-[12px] font-semibold text-indigo-600">{formatWon(row.grossPay)}</p>
           </div>
           <div>
-            <p className="text-[10px] text-slate-500">본인부담</p>
+            <p className="text-[10px] text-slate-500">{row.deductionLabel === '공제 없음' ? '공제' : row.deductionLabel}</p>
             <p className="mt-0.5 rm-tnum text-[12px] font-semibold text-red-500">
               {row.insurance.total > 0 ? `− ${formatWon(row.insurance.total)}` : '-'}
             </p>
           </div>
         </div>
       )}
+
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <span className="text-[11px] text-slate-500">급여 처리방식</span>
+        <PayrollModeSelect memberId={row.memberId} value={row.payrollMode} compact />
+      </div>
     </li>
   );
 }
@@ -317,8 +325,14 @@ function PcPayrollRow({ row }: { row: MemberPayrollRow }) {
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-semibold tabular-nums text-indigo-600">
         {row.contract ? formatWon(row.grossPay) : '-'}
       </td>
+      <td className="whitespace-nowrap px-4 py-3 text-left">
+        <PayrollModeSelect memberId={row.memberId} value={row.payrollMode} compact />
+      </td>
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono tabular-nums text-red-500">
         {row.insurance.total > 0 ? `− ${formatWon(row.insurance.total)}` : '-'}
+        {row.insurance.total > 0 && (
+          <span className="block text-[9px] font-sans text-slate-400">{row.deductionLabel}</span>
+        )}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold tabular-nums text-emerald-600">
         {row.contract ? formatWon(row.netPay) : '-'}

@@ -114,6 +114,12 @@ export async function submitEmployeeSignature(
     memberPayload[wageColumn] = contract.wage_amount;
   }
 
+  // 신규 직원만 급여 처리방식 기본값 세팅 (정규직→4대보험, 그 외→미적용).
+  // 기존 직원이면 사장님이 설정한 처리방식을 보존하기 위해 건드리지 않는다.
+  if (!existingMember) {
+    memberPayload.payroll_mode = contract.contract_type === 'fulltime' ? 'four_major' : 'none';
+  }
+
   const { error: memberErr } = await admin
     .from('store_members')
     .upsert(memberPayload, { onConflict: 'store_id,user_id' });

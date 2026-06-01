@@ -67,6 +67,37 @@ export async function updateMemberWage(
 }
 
 /** 매니저 임명 — 사장(owner) 전용. */
+export async function updatePayrollMode(
+  memberId: string,
+  mode: 'four_major' | 'freelance_3_3' | 'daily' | 'none',
+): Promise<RoleResult> {
+  const valid = ['four_major', 'freelance_3_3', 'daily', 'none'];
+  if (!valid.includes(mode)) return { error: '처리방식 값이 올바르지 않습니다.' };
+
+  const auth = await authorize(memberId);
+  if ('error' in auth) return auth;
+
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from('store_members')
+    .update({ payroll_mode: mode })
+    .eq('id', memberId);
+  if (error) return { error: error.message };
+
+  const labels: Record<string, string> = {
+    four_major: '4대보험', freelance_3_3: '3.3% 사업소득', daily: '일용직', none: '미적용',
+  };
+  void logAudit({
+    storeId: auth.store.storeId, actorId: auth.actorId, actorRole: auth.callerRole,
+    action: 'member.payroll_mode_update', targetType: 'store_member', targetId: memberId,
+    summary: `급여 처리방식을 '${labels[mode]}'(으)로 변경`, metadata: { mode },
+  });
+
+  revalidatePath('/employees');
+  revalidatePath('/employees/payroll');
+  return { ok: true };
+}
+
 export async function promoteToManager(memberId: string): Promise<RoleResult> {
   const auth = await authorize(memberId);
   if ('error' in auth) return auth;
