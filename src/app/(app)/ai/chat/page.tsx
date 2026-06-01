@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { todayInKST } from '@/lib/utils';
+import Link from 'next/link';
 import { SparkleAvatar } from '@/components/ai/SparkleAvatar';
 import { ChatClient } from './ChatClient';
 
@@ -57,6 +58,13 @@ export default async function AIChatPage() {
       >
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 py-2.5 lg:py-3">
           <div className="flex min-w-0 items-center gap-2.5 lg:gap-3">
+            <Link
+              href="/ai"
+              aria-label="AI 도구로 돌아가기"
+              className="-ml-1 hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 lg:flex"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+            </Link>
             <SparkleAvatar size={32} withGlow className="lg:hidden" />
             <SparkleAvatar size={36} withGlow className="hidden lg:inline-flex" />
             <div className="min-w-0">

@@ -73,17 +73,25 @@ function buildPrompt(input: GenerateImageInput): string {
   if (input.mode === 'brand' && input.brand) {
     const b = input.brand;
     const parts: string[] = [];
-    parts.push(`[매장 브랜드물 — ${b.storeName}]`);
+    parts.push(`매장 "${b.storeName}"의 마케팅 디자인을 만듭니다.`);
     if (b.industry) parts.push(`업종: ${b.industry}`);
-    if (b.brandSlogan) parts.push(`슬로건: "${b.brandSlogan}"`);
-    if (b.brandDescription) parts.push(`매장 소개: ${b.brandDescription}`);
-    parts.push(`메인 컬러: ${b.brandColor}`);
     parts.push('');
-    parts.push(`요청 사항: ${input.userPrompt}`);
+    // 브랜드 속성은 분위기·색감·톤 참고용일 뿐, 이미지에 글자로 그대로 넣지 않는다.
+    const refs: string[] = [];
+    if (b.brandSlogan) refs.push(`- 슬로건(분위기 참고): ${b.brandSlogan}`);
+    if (b.brandDescription) refs.push(`- 매장 성격: ${b.brandDescription}`);
+    refs.push(`- 메인 컬러: ${b.brandColor}`);
+    parts.push('[브랜드 참고 정보 — 디자인의 분위기·색감·톤·소재를 잡는 데에만 사용하세요. 이 참고 정보의 문장을 이미지 안에 글자로 적지 마세요.]');
+    parts.push(refs.join('\n'));
     parts.push('');
-
+    parts.push(`[요청 사항]\n${input.userPrompt}`);
+    parts.push('');
     parts.push(sizeGuidance(input.kind, input.size));
-    parts.push('한글 텍스트 정확하게 표기. 매장 슬로건이 있다면 자연스럽게 포함.');
+    parts.push(
+      '중요: 이미지 안에 넣는 한글 텍스트는 위 [요청 사항]에 사용자가 직접 적은 내용만 정확하게 표기하세요. ' +
+      '매장 성격·슬로건 등 참고 정보는 사용자가 요청 사항에서 명시적으로 요구하지 않는 한 이미지에 글자로 넣지 마세요. ' +
+      '로고는 첨부된 이미지를 사용하세요.'
+    );
     return parts.join('\n');
   }
 
