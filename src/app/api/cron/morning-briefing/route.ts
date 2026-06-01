@@ -78,6 +78,9 @@ export async function GET(request: Request) {
       try {
         const r = await complete({
           model: MODELS.haiku,
+          task: 'analyze',
+          userId: uid,
+          storeId: store.id,
           temperature: 0.5,
           maxTokens: 220,
           timeoutMs: 18000,

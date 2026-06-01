@@ -60,7 +60,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
     const memUserIds = Array.from(new Set((membersR.data ?? []).map((m) => m.user_id as string)));
     const inviteName = new Map<string, string>();
     (contractsR.data ?? []).forEach((c) => { if (c.employee_id && c.invite_name && !inviteName.has(c.employee_id)) inviteName.set(c.employee_id, c.invite_name); });
-    let nameMap = new Map<string, string>();
+    const nameMap = new Map<string, string>();
     if (memUserIds.length > 0) {
       const { data: profs } = await supabase.from('profiles').select('id, name').in('id', memUserIds);
       (profs ?? []).forEach((p) => { if (p.name && p.name.trim()) nameMap.set(p.id, p.name.trim()); });
