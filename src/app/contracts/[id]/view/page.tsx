@@ -129,7 +129,7 @@ export default async function ContractViewPage({
 
       <p className="mx-auto flex max-w-4xl items-center justify-center gap-1.5 px-4 pb-6 text-center text-xs text-slate-400 print:hidden">
         <Lightbulb className="h-3.5 w-3.5" strokeWidth={2.2} />
-        [인쇄 / PDF 저장] 버튼을 눌러 PDF로 저장하세요. 자동 PDF 생성·다운로드는 다음 업데이트에서 추가됩니다.
+        상단 [PDF 저장] · [이미지 저장] · [인쇄] 버튼으로 계약서를 보관하세요.
       </p>
     </div>
   );

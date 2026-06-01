@@ -682,7 +682,7 @@ function DoneStep({
       )}
 
       <div className="rounded-md bg-indigo-50 px-4 py-3 text-xs text-indigo-900">
-        [인쇄 / PDF 저장] 버튼으로 PDF로 저장해 보관하세요. 자동 PDF 다운로드는 다음 업데이트에서 추가됩니다.
+        보기 화면에서 PDF 또는 이미지로 저장해 보관할 수 있어요.
       </div>
     </div>
   );
