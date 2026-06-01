@@ -105,7 +105,14 @@ export default function LandingPage() {
           <div className="mx-auto flex max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <Logo size="md" />
             <p className="text-[12.5px] text-slate-500">POS 없이, 수기 입력으로 완벽하게. 매장의 모든 것을 AI가 정리합니다.</p>
-            <p className="text-[11px] text-slate-400">© 2026 리테일메이트</p>
+            <div className="flex flex-col items-start gap-2 md:items-end">
+              <div className="flex items-center gap-3 text-[12px] font-medium text-slate-500">
+                <Link href="/privacy" className="hover:text-[#6366F1]">개인정보처리방침</Link>
+                <span className="text-slate-300">·</span>
+                <Link href="/terms" className="hover:text-[#6366F1]">이용약관</Link>
+              </div>
+              <p className="text-[11px] text-slate-400">© 2026 리테일메이트</p>
+            </div>
           </div>
         </footer>
       </div>

@@ -63,6 +63,8 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
     pathname.startsWith('/debug/') ||
+    pathname.startsWith('/privacy') ||
+    pathname.startsWith('/terms') ||
     (pathname.startsWith('/contracts/') && pathname.endsWith('/sign')) ||
     pathname.startsWith('/api/public') ||
     // ⚠ 인증 관련 API는 정의상 비로그인 상태에서 호출됨.

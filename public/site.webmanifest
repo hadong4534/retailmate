@@ -27,5 +27,41 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "/?source=pwa",
+  "scope": "/",
+  "dir": "ltr",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "categories": [
+    "business",
+    "productivity",
+    "finance"
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "홈 — 매출·지출·순이익 요약"
+    },
+    {
+      "src": "/screenshots/sales.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "매출 입력 — 숫자만 입력"
+    },
+    {
+      "src": "/screenshots/ai.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "AI 도구 — 포스터·챗봇"
+    }
+  ],
+  "shortcuts": []
 }
