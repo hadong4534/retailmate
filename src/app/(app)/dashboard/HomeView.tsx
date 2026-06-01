@@ -68,6 +68,15 @@ export function HomeView(p: HomeViewProps) {
           </span>
         </div>
 
+        {/* 모바일 원탭 입력 CTA */}
+        <Link href="/sales/new" className="mb-4 flex items-center justify-between rounded-2xl bg-gradient-to-r from-[#6366F1] to-[#8E94F2] px-5 py-4 text-white shadow-[0_10px_24px_-12px_rgba(99,102,241,0.7)] transition active:scale-[0.99] lg:hidden">
+          <span className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20"><Wallet className="h-5 w-5" /></span>
+            <span className="text-[15px] font-extrabold">오늘 매출 입력</span>
+          </span>
+          <ChevronRight className="h-5 w-5 opacity-90" />
+        </Link>
+
         {/* Row 1 — 이달 매출 히어로 (목표는 하단 슬림 바로 서브 표시) */}
         <section className="relative overflow-hidden rounded-[24px] border border-white/70 bg-gradient-to-br from-white to-[#F3F2FE] p-6 shadow-[0_10px_30px_-18px_rgba(99,102,241,0.35)]">
           <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(129,140,248,0.25),transparent_70%)]" />

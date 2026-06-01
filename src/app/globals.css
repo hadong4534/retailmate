@@ -491,3 +491,12 @@ body {
 @keyframes rm-ai-float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-5px) } }
 .rm-ai-float { animation: rm-ai-float 3.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce){ .rm-ai-float{ animation:none } }
+
+/* ── 모바일 입력 포커스 줌 방지 — iOS는 글꼴<16px 입력 포커스 시 화면 확대 ── */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+  select, textarea { font-size: 16px; }
+}
+
+@keyframes rm-toast-in { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.rm-toast-in{ animation: rm-toast-in .22s ease-out; }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, X, Clock, Trash2 } from 'lucide-react';
 import { saveShift, clearShift } from './schedule-actions';
+import { toast } from '@/components/ui/Toaster';
 
 export interface SchedEmployee { userId: string; name: string }
 export interface Shift { user_id: string; schedule_date: string; start_time: string; end_time: string }
@@ -136,7 +137,7 @@ function DaySheet({ date, employees, shifts, onClose, onChanged }: {
     startTransition(async () => {
       const r = await saveShift({ memberUserId: uid, date, start, end });
       if ('error' in r) { setErr(r.error); return; }
-      onChanged();
+      toast('근무 일정이 저장됐어요'); onChanged();
     });
   }
   function remove(uid: string) {
@@ -144,7 +145,7 @@ function DaySheet({ date, employees, shifts, onClose, onChanged }: {
     startTransition(async () => {
       const r = await clearShift({ memberUserId: uid, date });
       if ('error' in r) { setErr(r.error); return; }
-      onChanged();
+      toast('일정을 지웠어요'); onChanged();
     });
   }
 

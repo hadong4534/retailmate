@@ -43,7 +43,7 @@ export async function createExpense(input: {
   revalidatePath('/expenses');
   revalidatePath('/dashboard');
   revalidatePath('/reports');
-  redirect('/expenses');
+  redirect('/expenses?saved=expense');
 }
 
 export async function deleteExpense(id: string) {

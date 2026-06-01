@@ -42,7 +42,7 @@ export async function createSales(input: {
   revalidatePath('/sales');
   revalidatePath('/dashboard');
   revalidatePath('/reports');
-  redirect('/sales');
+  redirect('/sales?saved=sale');
 }
 
 /**
