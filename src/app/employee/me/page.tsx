@@ -17,7 +17,7 @@ export const metadata = {
 
 const TYPE_LABEL: Record<string, string> = {
   fulltime: '정규직',
-  parttime: '단시간',
+  parttime: '파트타임',
   daily: '일용직',
 };
 
@@ -241,7 +241,7 @@ export default async function EmployeeMePage() {
 
                     {s.contract && s.contract.contract_type !== 'fulltime' && (
                       <p className="mt-2 text-[10px] text-slate-400">
-                        {s.contract.contract_type === 'parttime' ? '단시간(시급)' : '일용직'} — 4대보험 본인부담 미적용
+                        {s.contract.contract_type === 'parttime' ? '파트타임(시급)' : '일용직'} — 4대보험 본인부담 미적용
                       </p>
                     )}
                   </div>

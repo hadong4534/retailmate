@@ -322,7 +322,7 @@ function Step1({
         <div className="mt-2 grid grid-cols-3 gap-2">
           {([
             ['fulltime', '정규직'],
-            ['parttime', '단시간'],
+            ['parttime', '파트타임'],
             ['daily', '계약직'],
           ] as const).map(([v, l]) => {
             const active = data.contract_type === v;
@@ -639,7 +639,7 @@ function Step4({
   onSignatureChange: (s: string | null) => void;
 }) {
   const wageLabel = data.wage_type === 'hourly' ? '시급' : data.wage_type === 'monthly' ? '월급' : '일급';
-  const typeLabel = data.contract_type === 'fulltime' ? '정규직' : data.contract_type === 'parttime' ? '단시간' : '계약직';
+  const typeLabel = data.contract_type === 'fulltime' ? '정규직' : data.contract_type === 'parttime' ? '파트타임' : '계약직';
   const insuranceList = useMemo(() => {
     const map = {
       national_pension: '국민연금',
@@ -831,7 +831,7 @@ function TypeBanner({ type }: { type: 'fulltime' | 'parttime' | 'daily' }) {
     },
     parttime: {
       tone: 'bg-emerald-50 border-emerald-200 text-emerald-900',
-      title: '단시간(파트타임)',
+      title: '파트타임(단시간)',
       desc: '1주 근로시간이 통상근로자보다 짧음. 임금은 비례 산정. 4대보험은 15시간/1개월 이상 시 적용.',
     },
     daily: {

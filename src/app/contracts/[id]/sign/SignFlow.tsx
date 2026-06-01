@@ -17,7 +17,7 @@ const DAY_KO: Record<string, string> = {
 
 const TYPE_KO: Record<string, string> = {
   fulltime: '정규직',
-  parttime: '단시간',
+  parttime: '파트타임',
   daily: '일용직',
 };
 

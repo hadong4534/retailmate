@@ -39,7 +39,7 @@ const TOOLS: Tool[] = [
   },
   {
     href: '/ai/brand',
-    title: '매장 브랜드',
+    title: '매장 정보',
     desc: '로고와 매장 소개를 등록하면 디자인 생성에 자동 반영됩니다.',
     badge: '설정',
     Icon: Palette,
@@ -93,7 +93,7 @@ export default async function AIHubPage() {
         {/* 빠른 통계 */}
         <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat label="저장된 작업물" value={`${totalImages ?? 0}개`} />
-          <Stat label="브랜드 등록" value={hasBrand ? '완료' : '미완료'} tone={hasBrand ? 'positive' : 'warning'} />
+          <Stat label="매장 정보" value={hasBrand ? '완료' : '미완료'} tone={hasBrand ? 'positive' : 'warning'} />
           <Stat
             label="최근 생성"
             value={lastImageAt ? formatRelative(lastImageAt) : '없음'}

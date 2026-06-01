@@ -14,7 +14,7 @@ export const metadata = {
 
 const TYPE_LABEL: Record<string, string> = {
   fulltime: '정규직',
-  parttime: '단시간',
+  parttime: '파트타임',
   daily: '일용직',
 };
 
@@ -62,7 +62,7 @@ export default async function PayrollPage({
             Icon={Users}
             label="재직 직원"
             value={`${payroll.totals.employees}명`}
-            sub={`정규직 ${payroll.totals.fulltime} · 단시간 ${payroll.totals.parttime}`}
+            sub={`정규직 ${payroll.totals.fulltime} · 파트타임 ${payroll.totals.parttime}`}
             tone="slate"
           />
           <KpiCard

@@ -4,7 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { BrandClient } from './BrandClient';
 
 export const metadata = {
-  title: '매장 브랜드 · 리테일메이트',
+  title: '매장 정보 · 리테일메이트',
 };
 
 export default async function BrandSettingsPage() {
@@ -36,7 +36,7 @@ export default async function BrandSettingsPage() {
     <div className="px-4 py-6 lg:px-8 lg:py-8">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-slate-900">매장 브랜드</h1>
+          <h1 className="text-2xl font-bold text-slate-900">매장 정보</h1>
           <p className="mt-1 text-sm text-slate-500">
             로고·슬로건·소개를 등록하면 AI 포스터·SNS·카드뉴스가 매장 톤에 맞춰 자동 생성됩니다.
           </p>

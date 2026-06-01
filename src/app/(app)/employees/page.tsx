@@ -276,7 +276,7 @@ export default async function EmployeesPage() {
                           </span>
                         </div>
                         <p className="text-[10px] text-slate-500">
-                          {contract ? (contract.contract_type === 'fulltime' ? '정규직' : contract.contract_type === 'parttime' ? '단시간' : '일용직') : ROLE_LABEL[m.role]}
+                          {contract ? (contract.contract_type === 'fulltime' ? '정규직' : contract.contract_type === 'parttime' ? '파트타임' : '일용직') : ROLE_LABEL[m.role]}
                         </p>
                       </div>
                     </div>

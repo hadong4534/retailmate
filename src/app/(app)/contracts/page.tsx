@@ -47,7 +47,7 @@ interface TemplateRow {
 
 const TYPE_LABEL: Record<ContractRow['contract_type'], string> = {
   fulltime: '정규직',
-  parttime: '단시간',
+  parttime: '파트타임',
   daily: '계약직',
   nda: '비밀유지',
 };
