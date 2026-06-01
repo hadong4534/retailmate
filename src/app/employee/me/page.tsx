@@ -8,6 +8,7 @@ import { GpsCheckWidget } from '@/components/attendance/GpsCheckWidget';
 import { getUserStoreContexts } from '@/lib/auth/store-context';
 import { getUnreadNotices, getStoreNotices } from '@/lib/notices/queries';
 import { getEmployeeOverview, formatHM } from '@/lib/employee/queries';
+import { AvatarUploader } from './AvatarUploader';
 import { formatWon } from '@/lib/utils';
 
 export const metadata = {
@@ -38,9 +39,14 @@ export default async function EmployeeMePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('name, email, phone')
+    .select('name, email, phone, avatar_path')
     .eq('id', user.id)
     .maybeSingle();
+
+  let avatarUrl: string | null = null;
+  if (profile?.avatar_path) {
+    avatarUrl = supabase.storage.from('avatars').getPublicUrl(profile.avatar_path).data.publicUrl;
+  }
 
   const overview = await getEmployeeOverview(supabase, user.id);
 
@@ -93,18 +99,24 @@ export default async function EmployeeMePage() {
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         {/* 본인 정보 */}
-        <div className="flex items-baseline gap-2">
-          <h1 className="text-2xl font-bold text-slate-900">
-            {profile?.name ?? user.email} 님
-          </h1>
-          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
-            직원
-          </span>
+        <div className="flex items-center gap-4">
+          <AvatarUploader initialUrl={avatarUrl} name={profile?.name ?? user.email ?? '직원'} />
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-2">
+              <h1 className="text-2xl font-bold text-slate-900">
+                {profile?.name ?? user.email} 님
+              </h1>
+              <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
+                직원
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-slate-500">
+              {profile?.phone && <span>{profile.phone}</span>}
+              {profile?.email && <span className="ml-3">{profile.email}</span>}
+            </p>
+            <p className="mt-1 text-xs text-slate-400">프로필 사진을 등록하면 근무 현황에 표시돼요.</p>
+          </div>
         </div>
-        <p className="mt-1 text-sm text-slate-500">
-          {profile?.phone && <span>{profile.phone}</span>}
-          {profile?.email && <span className="ml-3">{profile.email}</span>}
-        </p>
 
         {/* 이번 달 요약 */}
         {overview.storeSummaries.length > 0 && (

@@ -179,6 +179,7 @@ export async function uploadAvatar(input: { dataUrl: string }): Promise<Result &
   revalidatePath('/settings');
   revalidatePath('/dashboard');
   revalidatePath('/ai/chat');
+  revalidatePath('/employee/me');
   return { ok: true, path };
 }
 
@@ -211,6 +212,7 @@ export async function removeAvatar(): Promise<Result> {
 
   revalidatePath('/settings');
   revalidatePath('/dashboard');
+  revalidatePath('/employee/me');
   return { ok: true };
 }
 
