@@ -3,7 +3,7 @@ import { ExpenseNewForm } from './ExpenseNewForm';
 import { todayInKST } from '@/lib/utils';
 
 export const metadata = {
-  title: '비용 입력 · 리테일메이트',
+  title: '지출 입력 · 리테일메이트',
 };
 
 export default async function NewExpensePage({
@@ -25,7 +25,7 @@ export default async function NewExpensePage({
           >
             ←
           </Link>
-          <h1 className="text-2xl font-bold text-slate-900">비용 입력</h1>
+          <h1 className="text-2xl font-bold text-slate-900">지출 입력</h1>
         </div>
 
         <ExpenseNewForm defaultDate={defaultDate} />

@@ -9,7 +9,7 @@ import {
 /**
  * 챗봇 시스템 프롬프트에 주입할 매장 컨텍스트 빌더.
  *
- * 핵심 데이터(매출/비용/직원/계약서)를 요약해 시스템 프롬프트에 추가.
+ * 핵심 데이터(매출/지출/직원/계약서)를 요약해 시스템 프롬프트에 추가.
  * 직원 이름·휴대폰은 마스킹 (개인정보 외부 전송 최소화).
  */
 
@@ -200,7 +200,7 @@ export function buildSystemPrompt(ctx: StoreChatContext): string {
 
 [이번 달 손익 요약]
 - 매출 합계: ${ctx.monthSales.toLocaleString('ko-KR')}원
-- 비용 합계: ${ctx.monthExpenses.toLocaleString('ko-KR')}원
+- 지출 합계: ${ctx.monthExpenses.toLocaleString('ko-KR')}원
 - 잠정 영업이익: ${ctx.monthProfit.toLocaleString('ko-KR')}원 (이익률 ${profitRate}%)
 - 가장 큰 지출 카테고리: ${ctx.topExpenseCategory?.name ?? '데이터 없음'} ${ctx.topExpenseCategory?.amount.toLocaleString() ?? 0}원
 

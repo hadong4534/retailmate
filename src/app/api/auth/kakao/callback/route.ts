@@ -30,7 +30,7 @@ function decodeJwtNonce(idToken: string): string | null {
  * 카카오 placeholder 이메일로 기존 supabase user를 찾는다.
  * admin.listUsers는 디폴트 perPage=50이고 페이지네이션이 필요해
  * 그냥 한 번 호출하면 51번째 사용자 이후엔 항상 못 찾고 중복 신규 가입이 발생한다.
- * 여기서는 큰 perPage로 모든 페이지를 순회한다 — 매장당 카카오 가입자가 많지 않으므로 비용 미미.
+ * 여기서는 큰 perPage로 모든 페이지를 순회한다 — 매장당 카카오 가입자가 많지 않으므로 지출 미미.
  */
 async function findKakaoUserByEmail(
   svc: SupabaseClient,

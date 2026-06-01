@@ -5,7 +5,7 @@ import type { ContractTemplateData } from './template';
 /**
  * 한글 PDF 생성기 — pdf-lib + NotoSansKR (jsDelivr CDN fetch + 메모리 캐시).
  *
- * 주의: 매 PDF 생성마다 폰트 fetch가 일어나면 비용·지연이 발생하므로 module-level 캐시.
+ * 주의: 매 PDF 생성마다 폰트 fetch가 일어나면 지출·지연이 발생하므로 module-level 캐시.
  * Next.js dev/prod에서 module은 process 단위로 유지되어 첫 호출 후 메모리 상주.
  */
 
@@ -610,7 +610,7 @@ async function generateNDAPDF(data: ContractTemplateData): Promise<Uint8Array> {
 
   const scopeLines = [
     '본 서약에서 "비밀정보"라 함은 사업주가 비공개로 관리하는 다음 정보 일체를 의미한다.',
-    '① 매출·비용·고객정보 등 매장 운영 데이터',
+    '① 매출·지출·고객정보 등 매장 운영 데이터',
     '② 메뉴 레시피, 거래처 정보, 가격·할인 정책',
     '③ 직원 인사·급여·근태 정보',
     '④ 매장이 비공개로 관리하는 기술·영업·재무·마케팅 정보',
@@ -645,7 +645,7 @@ async function generateNDAPDF(data: ContractTemplateData): Promise<Uint8Array> {
     ctx,
     '제6조 (무단이탈 시 책임)',
     [
-      '근로자가 정당한 인수인계 절차 없이 무단 이탈하여 매장 운영에 구체적 손해(영업 차질, 거래처 신뢰 손상, 대체 인력 채용 비용 등)가 발생한 경우, 사업주는 다음 절차를 진행할 수 있다.',
+      '근로자가 정당한 인수인계 절차 없이 무단 이탈하여 매장 운영에 구체적 손해(영업 차질, 거래처 신뢰 손상, 대체 인력 채용 지출 등)가 발생한 경우, 사업주는 다음 절차를 진행할 수 있다.',
       '① 내용증명을 통한 사전 통지 및 손해 산정 청구',
       '② 민법 제390조에 따른 채무불이행 손해배상 청구 소송',
       '③ 업무 방해 행위가 동반된 경우 형법 제314조 업무방해죄로 형사고소 절차 검토',

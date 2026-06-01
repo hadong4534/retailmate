@@ -561,7 +561,7 @@ function NotificationForm({ prefs, onSaved }: { prefs: NotificationPrefs; onSave
       <div className="mt-5 space-y-3">
         <PushToggle />
         <Toggle label="AI 아침 브리핑" desc="매일 아침 8시, 어제 매출·목표 페이스 요약" checked={briefing} onChange={(v) => save(() => setBriefing(v))} pending={pending} />
-        <Toggle label="비용 미입력 알림" desc="비용 미입력 항목 알림" checked={expense} onChange={(v) => save(() => setExpense(v))} pending={pending} />
+        <Toggle label="지출 미입력 알림" desc="지출 미입력 항목 알림" checked={expense} onChange={(v) => save(() => setExpense(v))} pending={pending} />
         <Toggle label="직원 출퇴근 알림" desc="직원 출퇴근 현황 알림" checked={attendance} onChange={(v) => save(() => setAttendance(v))} pending={pending} />
         <Toggle label="공지 알림" desc="공지사항 및 업데이트 알림" checked={notice} onChange={(v) => save(() => setNotice(v))} pending={pending} />
         <Toggle label="중요 알림" desc="긴급 보안·계정 관련" checked={important} onChange={(v) => save(() => setImportant(v))} pending={pending} />
@@ -839,7 +839,7 @@ function DeleteAccountSection() {
     <div className="rounded-xl border border-red-200 bg-red-50/50 p-6">
       <h2 className="text-base font-bold text-red-900">회원 탈퇴</h2>
       <p className="mt-1 text-xs text-red-700/90 leading-relaxed">
-        탈퇴하면 계정과 매장·매출·비용·근태·계약 등 <strong>모든 데이터가 즉시 영구 삭제</strong>되며 되돌릴 수 없습니다.
+        탈퇴하면 계정과 매장·매출·지출·근태·계약 등 <strong>모든 데이터가 즉시 영구 삭제</strong>되며 되돌릴 수 없습니다.
         소속 직원이 있는 매장은 먼저 직원을 정리한 뒤 탈퇴할 수 있어요.
       </p>
 

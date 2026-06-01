@@ -67,7 +67,7 @@ export async function GET(request: Request) {
   styleHeaderRow(kpiHead);
   const kpis: Array<[string, number | string, string]> = [
     ['매출 합계', report.totalSales, '100%'],
-    ['비용 합계', report.totalExpenses, report.totalSales > 0 ? `매출의 ${(report.totalExpenses / report.totalSales * 100).toFixed(1)}%` : '-'],
+    ['지출 합계', report.totalExpenses, report.totalSales > 0 ? `매출의 ${(report.totalExpenses / report.totalSales * 100).toFixed(1)}%` : '-'],
     ['영업이익', report.profit, `이익률 ${report.profitRate.toFixed(1)}%`],
     ['영업일수(매출 발생일)', salesDays, '일'],
     ['일평균 매출', avgDaily, '영업일 기준'],
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
   });
 
   sum.addRow([]);
-  const catHead = sum.addRow(['카테고리별 비용', '금액', '비중']);
+  const catHead = sum.addRow(['카테고리별 지출', '금액', '비중']);
   styleHeaderRow(catHead);
   report.expensesByCategory.filter((c) => c.amount > 0).forEach((c) => {
     const r = sum.addRow([c.label, c.amount, c.ratio / 100]);
@@ -104,7 +104,7 @@ export async function GET(request: Request) {
   daily.columns = [
     { header: '날짜', key: 'date', width: 14 },
     { header: '매출', key: 'sales', width: 16, style: { numFmt: KRW } },
-    { header: '비용', key: 'expenses', width: 16, style: { numFmt: KRW } },
+    { header: '지출', key: 'expenses', width: 16, style: { numFmt: KRW } },
     { header: '순이익', key: 'profit', width: 16, style: { numFmt: KRW } },
   ];
   styleHeaderRow(daily.getRow(1));
@@ -127,8 +127,8 @@ export async function GET(request: Request) {
   if (report.sales.length === 0) salesSheet.addRow({ date: '(매출 기록 없음)' });
   salesSheet.autoFilter = 'A1:D1';
 
-  // ── Sheet 4. 비용 내역 ─────────────────────────────────────────────
-  const expSheet = wb.addWorksheet('비용 내역', { views: [{ state: 'frozen', ySplit: 1 }] });
+  // ── Sheet 4. 지출 내역 ─────────────────────────────────────────────
+  const expSheet = wb.addWorksheet('지출 내역', { views: [{ state: 'frozen', ySplit: 1 }] });
   expSheet.columns = [
     { header: '날짜', key: 'date', width: 14 },
     { header: '카테고리', key: 'category', width: 14 },
@@ -142,7 +142,7 @@ export async function GET(request: Request) {
     date: e.expense_date, category: EXPENSE_CATEGORY_LABEL[e.category], amount: Number(e.amount),
     item: (e as { item_name?: string }).item_name ?? '', vendor: e.vendor ?? '', memo: e.memo ?? '',
   }));
-  if (report.expenses.length === 0) expSheet.addRow({ date: '(비용 기록 없음)' });
+  if (report.expenses.length === 0) expSheet.addRow({ date: '(지출 기록 없음)' });
   expSheet.autoFilter = 'A1:F1';
 
   const buffer = await wb.xlsx.writeBuffer();

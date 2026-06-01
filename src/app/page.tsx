@@ -48,7 +48,7 @@ export default function LandingPage() {
               <span className="bg-gradient-to-r from-[#6366F1] to-[#7FB8EE] bg-clip-text text-transparent">AI</span>가 합니다.
             </h1>
             <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-500 md:text-[16px]">
-              포스기도, 복잡한 연동도 필요 없어요. 수기 입력만으로 매출·비용·직원·근태·계약이 자동 정리되고,
+              포스기도, 복잡한 연동도 필요 없어요. 수기 입력만으로 매출·지출·직원·근태·계약이 자동 정리되고,
               AI가 매장 흐름을 읽어 다음 할 일까지 알려드립니다.
             </p>
 
@@ -93,7 +93,7 @@ export default function LandingPage() {
         {/* 기능 스트립 (단순 4) */}
         <section className="mx-auto w-full max-w-6xl px-6 pb-14">
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-            <Feature Icon={BarChart3} title="매출·비용" desc="수기 입력만으로 손익 자동 계산" />
+            <Feature Icon={BarChart3} title="매출·지출" desc="수기 입력만으로 손익 자동 계산" />
             <Feature Icon={FileText} title="근로계약·전자서명" desc="표준 양식 + 모바일 서명 + PDF" />
             <Feature Icon={MapPin} title="GPS 출퇴근" desc="매장 반경 인증 · 근태 자동 집계" />
             <Feature Icon={Sparkles} title="AI 인사이트·챗봇" desc="흐름 분석 + 다음 할 일 제안" />

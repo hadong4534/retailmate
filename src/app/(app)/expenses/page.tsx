@@ -32,7 +32,7 @@ interface ExpenseRow {
 }
 
 export const metadata = {
-  title: '비용 · 리테일메이트',
+  title: '지출 · 리테일메이트',
 };
 
 const TOP_CATEGORIES: ExpenseCategory[] = ['material', 'labor', 'rent', 'utility'];
@@ -149,13 +149,13 @@ export default async function ExpensesPage({
         <PageHeader
           Icon={Tags}
           tone="red"
-          title="비용"
-          description="매장 비용 내역을 확인하고 관리하세요."
+          title="지출"
+          description="매장 지출 내역을 확인하고 관리하세요."
           right={
             <div className="flex flex-wrap items-center gap-2">
               <MonthPicker value={month} />
               <Link href="/expenses/new">
-                <Button size="sm">+ 비용 입력</Button>
+                <Button size="sm">+ 지출 입력</Button>
               </Link>
             </div>
           }
@@ -187,7 +187,7 @@ export default async function ExpensesPage({
               <div className="rounded-lg bg-slate-50 px-3 py-2.5">
                 <div className="flex items-center gap-1 text-xs text-slate-500">
                   <Package className="h-3.5 w-3.5" strokeWidth={2.2} />
-                  <span>기타비용</span>
+                  <span>기타지출</span>
                 </div>
                 <p className="mt-1 text-sm font-semibold text-slate-900 tabular-nums">
                   {formatWon(
@@ -204,7 +204,7 @@ export default async function ExpensesPage({
               Icon={PieChart}
               iconBg="bg-indigo-100"
               iconColor="text-indigo-600"
-              label="비용률"
+              label="지출률"
               value={`${expenseRatio.toFixed(1)}%`}
               sub={monthSales > 0 ? `매출 대비` : '매출 입력 필요'}
             />
@@ -237,17 +237,17 @@ export default async function ExpensesPage({
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
               <Receipt className="h-6 w-6" strokeWidth={1.8} />
             </div>
-            <p className="mt-3 text-[15px] font-medium text-slate-900">이번 달 비용 기록이 없습니다</p>
-            <p className="mt-1 text-[12px] text-slate-500">매출 대비 정확한 영업이익을 보려면 비용도 함께 입력해주세요.</p>
+            <p className="mt-3 text-[15px] font-medium text-slate-900">이번 달 지출 기록이 없습니다</p>
+            <p className="mt-1 text-[12px] text-slate-500">매출 대비 정확한 영업이익을 보려면 지출도 함께 입력해주세요.</p>
             <Link href="/expenses/new" className="mt-4 inline-block">
-              <Button size="sm">+ 비용 입력</Button>
+              <Button size="sm">+ 지출 입력</Button>
             </Link>
           </div>
         ) : (
           <>
             <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
               <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
-                <h2 className="text-sm font-semibold text-slate-900">비용 카테고리 비중</h2>
+                <h2 className="text-sm font-semibold text-slate-900">지출 카테고리 비중</h2>
                 <div className="mt-3">
                   <ChannelDonut
                     data={donutData}
@@ -258,20 +258,20 @@ export default async function ExpensesPage({
               </div>
 
               <div className="rounded-xl border border-[#EAECF5] bg-white p-5">
-                <h2 className="text-sm font-semibold text-slate-900">주간 비용 추이</h2>
+                <h2 className="text-sm font-semibold text-slate-900">주간 지출 추이</h2>
                 <p className="mt-0.5 text-xs text-slate-400">{month} 5주차</p>
                 <div className="mt-3">
-                  <WeekBarChart data={weekBuckets} valueLabel="비용" height={240} />
+                  <WeekBarChart data={weekBuckets} valueLabel="지출" height={240} />
                 </div>
               </div>
 
               <PageInsight title={insight.title} body={insight.body} tip={insight.tip} />
             </div>
 
-            {/* 최근 비용 내역 — 모바일 카드 / PC 테이블 */}
+            {/* 최근 지출 내역 — 모바일 카드 / PC 테이블 */}
             <section className="mt-6 rounded-2xl border border-[#EAECF5] bg-white">
               <h2 className="border-b border-[#EAECF5] px-5 py-3 text-sm font-semibold text-slate-900">
-                최근 비용 내역
+                최근 지출 내역
               </h2>
 
               {/* 모바일 카드 리스트 (lg 미만) — 날짜/항목/카테고리/금액/삭제만 노출 */}

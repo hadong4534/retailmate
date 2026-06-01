@@ -78,7 +78,7 @@ export const saleChannelSchema = z.enum([
   'cash', 'card', 'delivery', 'other', 'cash_receipt', 'transfer',
 ]);
 
-// ── 비용 ─────────────────────────────────────────────────────────────────────
+// ── 지출 ─────────────────────────────────────────────────────────────────────
 export const expenseCategorySchema = z.enum([
   'material', 'labor', 'rent', 'utility', 'communication', 'marketing', 'tax', 'etc',
 ]);

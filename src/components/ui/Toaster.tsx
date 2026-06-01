@@ -13,7 +13,7 @@ export function toast(message: string) {
 
 const SAVED_LABEL: Record<string, string> = {
   sale: '매출이 저장됐어요',
-  expense: '비용이 저장됐어요',
+  expense: '지출이 저장됐어요',
   '1': '저장됐어요',
 };
 

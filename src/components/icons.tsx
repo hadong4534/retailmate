@@ -37,7 +37,7 @@ export function SalesIcon(props: IconProps) {
   );
 }
 
-/** 비용 — 가격표 ₩ */
+/** 지출 — 가격표 ₩ */
 export function ExpensesIcon(props: IconProps) {
   return (
     <svg {...baseProps} {...props}>

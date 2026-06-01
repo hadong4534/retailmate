@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       ],
       temperature: 0.7,
       // 사용자 요청: 한도 완전 해제. max_tokens 미지정 → 모델 default(Claude Sonnet 4.6 = 64K)까지 응답 가능.
-      // 비용 통제는 ai_usage_logs 사후 모니터링으로만 관리.
+      // 지출 통제는 ai_usage_logs 사후 모니터링으로만 관리.
       stream: true,
     }),
   });

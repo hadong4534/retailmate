@@ -156,7 +156,7 @@ export function HomeView(p: HomeViewProps) {
           <Stat icon={<Users className="h-4 w-4" />} label="근무 중"
             value={`${p.workingCount}명`} muted={!hasAttendance}
             delta={p.totalEmployees > 0 ? `직원 ${p.totalEmployees}명` : '직원 미등록'} />
-          <Stat icon={<Clock className="h-4 w-4" />} label="월 비용"
+          <Stat icon={<Clock className="h-4 w-4" />} label="월 지출"
             value={hasMonthExpenses ? `₩${won(p.monthExpenses)}` : '입력 전'} muted={!hasMonthExpenses}
             delta={monthCostRatio !== null ? `매출의 ${monthCostRatio}%` : undefined} />
         </div>
@@ -173,7 +173,7 @@ export function HomeView(p: HomeViewProps) {
             <h2 className="mb-3 text-[13px] font-semibold text-slate-900">빠른 입력</h2>
             <div className="grid grid-cols-3 gap-2.5">
               <QuickButton href="/sales/new" icon={<Wallet className="h-[18px] w-[18px]" />} label={hasMonthSales ? '매출 추가' : '매출 입력'} />
-              <QuickButton href="/expenses/new" icon={<Receipt className="h-[18px] w-[18px]" />} label={hasMonthExpenses ? '비용 추가' : '비용 입력'} />
+              <QuickButton href="/expenses/new" icon={<Receipt className="h-[18px] w-[18px]" />} label={hasMonthExpenses ? '지출 추가' : '지출 입력'} />
               <QuickButton href="/attendance" icon={<Users className="h-[18px] w-[18px]" />} label={hasAttendance ? '근무 현황' : '출근 확인'} />
             </div>
           </section>
@@ -222,8 +222,8 @@ function ClosingCard({ hasBaseSales, hasBaseExpenses, baseProfit, baseProfitRate
     title = '어제 마감 완료'; line = `순이익 ₩${won(baseProfit)} · 이익률 ${baseProfitRate ?? 0}%`;
     ctaLabel = '어제 리포트'; ctaHref = '/reports';
   } else if (hasBaseSales && !hasBaseExpenses) {
-    title = '어제 마감 진행 중'; line = '비용 입력 후 순이익 계산';
-    ctaLabel = '비용 입력'; ctaHref = '/expenses/new';
+    title = '어제 마감 진행 중'; line = '지출 입력 후 순이익 계산';
+    ctaLabel = '지출 입력'; ctaHref = '/expenses/new';
   } else {
     title = '어제 마감 미완료'; line = !hasBaseSales ? '매출 미입력' : '매출 입력 후 순이익 계산';
     ctaLabel = '마감 입력'; ctaHref = '/sales/new';
@@ -258,20 +258,20 @@ function pickAIInsight(s: {
   const hasAny = s.monthSales > 0 || s.monthExpenses > 0;
 
   if (!hasAny && s.totalEmployees === 0)
-    return { text: '매출·비용·근무 데이터를 입력하면 매장 손익과 목표 달성률이 자동으로 정리돼요.', ctaLabel: '첫 데이터 입력', ctaHref: '/sales/new' };
+    return { text: '매출·지출·근무 데이터를 입력하면 매장 손익과 목표 달성률이 자동으로 정리돼요.', ctaLabel: '첫 데이터 입력', ctaHref: '/sales/new' };
   if (s.monthSales === 0)
     return { text: '아직 이번 달 매출이 없어요. 입력하면 목표 달성률·순이익 분석이 시작됩니다.', ctaLabel: '매출 입력', ctaHref: '/sales/new' };
   if (s.monthCostRatio === null || s.monthCostRatio < 10)
-    return { text: '매출은 확인됐지만 비용 입력이 부족해 순이익 정확도가 낮아요. 원재료비·인건비·임대료부터 입력해보세요.', ctaLabel: '비용 입력', ctaHref: '/expenses/new' };
+    return { text: '매출은 확인됐지만 지출 입력이 부족해 순이익 정확도가 낮아요. 원재료비·인건비·임대료부터 입력해보세요.', ctaLabel: '지출 입력', ctaHref: '/expenses/new' };
 
   if (s.baseChange !== null && s.baseChange <= -25)
     return { text: `어제 매출이 직전일 대비 ${Math.abs(s.baseChange)}% 급감했어요. 요일·날씨·이벤트 등 외부 요인을 점검해보세요.`, ctaLabel: '매출 추이', ctaHref: '/sales' };
   if (s.monthSalesChange !== null && s.monthSalesChange <= -20)
     return { text: `이번 달 매출이 지난달보다 ${Math.abs(s.monthSalesChange)}% 낮아요. 채널 비중과 마케팅을 점검할 시점입니다.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };
   if (s.monthCostRatio !== null && s.monthCostRatio >= 80)
-    return { text: `비용률이 매출의 ${s.monthCostRatio}%로 매우 높아요. 영업이익이 거의 남지 않는 수준이라 원재료비·인건비 점검이 필요해요.`, ctaLabel: '비용 분석', ctaHref: '/expenses' };
+    return { text: `지출률이 매출의 ${s.monthCostRatio}%로 매우 높아요. 영업이익이 거의 남지 않는 수준이라 원재료비·인건비 점검이 필요해요.`, ctaLabel: '지출 분석', ctaHref: '/expenses' };
   if (s.monthCostRatio !== null && s.monthCostRatio >= 60)
-    return { text: `비용 비중이 ${s.monthCostRatio}%로 다소 높아요. 카테고리별로 줄일 항목이 있는지 확인해보세요.`, ctaLabel: '비용 분석', ctaHref: '/expenses' };
+    return { text: `지출 비중이 ${s.monthCostRatio}%로 다소 높아요. 카테고리별로 줄일 항목이 있는지 확인해보세요.`, ctaLabel: '지출 분석', ctaHref: '/expenses' };
 
   if (s.goalRate !== null && s.goalRate - s.expectedPace <= -15)
     return { text: `목표 진행률 ${s.goalRate}%로 정상 추세(${s.expectedPace}%)보다 더뎌요. 남은 기간 매출 전략을 점검해보세요.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };

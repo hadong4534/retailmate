@@ -635,7 +635,7 @@ function renderNDAHTML(data: ContractTemplateData): string {
 <div class="clause-body">
   본 서약에서 "비밀정보"라 함은 사업주가 비공개로 관리하는 다음 정보 일체를 의미한다.
   <ol>
-    <li>매출·비용·고객정보 등 매장 운영 데이터</li>
+    <li>매출·지출·고객정보 등 매장 운영 데이터</li>
     <li>메뉴 레시피, 거래처 정보, 가격·할인 정책</li>
     <li>직원 인사·급여·근태 정보</li>
     <li>매장이 비공개로 관리하는 기술·영업·재무·마케팅 정보</li>
@@ -669,7 +669,7 @@ function renderNDAHTML(data: ContractTemplateData): string {
 <div class="clause-title">제6조 (무단이탈 시 책임)</div>
 <div class="clause-body">
   근로자가 정당한 인수인계 절차 없이 무단 이탈하여 매장 운영에 구체적 손해
-  (영업 차질, 거래처 신뢰 손상, 대체 인력 채용 비용 등)가 발생한 경우,
+  (영업 차질, 거래처 신뢰 손상, 대체 인력 채용 지출 등)가 발생한 경우,
   사업주는 다음 절차를 진행할 수 있다.
   <ol>
     <li><strong>내용증명을 통한 사전 통지</strong> 및 손해 산정 청구</li>

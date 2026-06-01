@@ -67,7 +67,7 @@ export function DailyTrendChart({ data }: { data: DailyDatum[] }) {
             formatter={(value, name) => {
               const labels: Record<string, string> = {
                 sales: '매출',
-                expenses: '비용',
+                expenses: '지출',
                 profit: '이익',
               };
               const lbl = labels[String(name)] ?? String(name);
@@ -82,7 +82,7 @@ export function DailyTrendChart({ data }: { data: DailyDatum[] }) {
             formatter={(value) => {
               const labels: Record<string, string> = {
                 sales: '매출',
-                expenses: '비용',
+                expenses: '지출',
                 profit: '이익',
               };
               return labels[value] ?? value;
@@ -108,7 +108,7 @@ export function CategoryPieChart({ data }: { data: CategoryDatum[] }) {
   if (filtered.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center text-sm text-slate-400">
-        비용 기록이 없습니다.
+        지출 기록이 없습니다.
       </div>
     );
   }

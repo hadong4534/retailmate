@@ -19,7 +19,7 @@ const TOOLS: Tool[] = [
   {
     href: '/ai/chat',
     title: 'AI 챗봇',
-    desc: '매출·비용·근태를 자연어로 물어보세요. 실시간 매장 분석.',
+    desc: '매출·지출·근태를 자연어로 물어보세요. 실시간 매장 분석.',
     badge: '실시간',
     Icon: MessagesSquare,
   },

@@ -7,7 +7,7 @@ export function DeleteExpenseButton({ id }: { id: string }) {
   const [pending, startTransition] = useTransition();
 
   function handleClick() {
-    if (!confirm('이 비용 기록을 삭제하시겠습니까?')) return;
+    if (!confirm('이 지출 기록을 삭제하시겠습니까?')) return;
     startTransition(async () => {
       const result = await deleteExpense(id);
       if (result?.error) alert(result.error);

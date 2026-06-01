@@ -28,7 +28,7 @@ export function WeekBarChart({
   color = '#7177EE',
   highlightColor = '#1d4ed8',
   height = 240,
-  valueLabel = '비용',
+  valueLabel = '지출',
 }: {
   data: Datum[];
   color?: string;

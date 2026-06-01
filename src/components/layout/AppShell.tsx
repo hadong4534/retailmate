@@ -48,7 +48,7 @@ const NAV_GROUPS: NavGroup[] = [
     title: '돈 관리',
     items: [
       { href: '/sales', label: '매출', Icon: SalesIcon },
-      { href: '/expenses', label: '비용', Icon: ExpensesIcon },
+      { href: '/expenses', label: '지출', Icon: ExpensesIcon },
       { href: '/reports', label: '리포트', Icon: BarChartIcon },
     ],
   },
@@ -80,7 +80,7 @@ const STAFF_TAB_PREFIXES = ['/employees', '/attendance', '/contracts'];
 
 /** 모바일 "더보기" 시트에 들어가는 보조 메뉴 — 하단탭에 없는 모든 기능을 여기서 접근. */
 const MORE_LINKS: NavItem[] = [
-  { href: '/expenses', label: '비용', Icon: ExpensesIcon },
+  { href: '/expenses', label: '지출', Icon: ExpensesIcon },
   { href: '/reports', label: '리포트', Icon: BarChartIcon },
   { href: '/attendance', label: '근태', Icon: ClockAlarmIcon },
   { href: '/contracts', label: '계약서', Icon: ClipboardIcon },

@@ -54,15 +54,15 @@ export async function deleteExpense(id: string) {
   const adminStore = await getCurrentAdminStore(supabase, user.id);
   if (!adminStore) return { error: '매장 권한이 없습니다.' };
 
-  // 권한 검증: 이 비용이 현재 매장 소속인지 admin client로 확인 후 삭제 (RLS 우회)
+  // 권한 검증: 이 지출이 현재 매장 소속인지 admin client로 확인 후 삭제 (RLS 우회)
   const admin = createAdminClient();
   const { data: row } = await admin
     .from('expenses')
     .select('id, store_id')
     .eq('id', id)
     .maybeSingle();
-  if (!row) return { error: '비용을 찾을 수 없습니다.' };
-  if (row.store_id !== adminStore.storeId) return { error: '이 매장의 비용이 아닙니다.' };
+  if (!row) return { error: '지출을 찾을 수 없습니다.' };
+  if (row.store_id !== adminStore.storeId) return { error: '이 매장의 지출이 아닙니다.' };
 
   const { error } = await admin.from('expenses').delete().eq('id', id);
   if (error) return { error: error.message };

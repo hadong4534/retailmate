@@ -34,7 +34,7 @@ export default async function AIChatPage() {
     ownerAvatarUrl = data?.publicUrl ?? null;
   }
 
-  // 데이터 상황별 추천 질문 — 매출/비용/직원 입력 여부로 동적 분기.
+  // 데이터 상황별 추천 질문 — 매출/지출/직원 입력 여부로 동적 분기.
   // 직원 테이블 이름·필터는 dashboard/page.tsx의 패턴을 그대로 따름.
   const today = todayInKST();
   const monthStart = today.slice(0, 7) + '-01';

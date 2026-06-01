@@ -69,14 +69,14 @@ export function generateRuleBasedInsights(input: InsightInput): InsightItem[] {
     });
   }
 
-  // 2. 비용 입력 미진행
+  // 2. 지출 입력 미진행
   if (input.monthSales > 0 && input.monthExpenses === 0) {
     items.push({
       id: 'no-expenses',
       tone: 'warning',
-      title: '비용 입력이 아직 없어요',
+      title: '지출 입력이 아직 없어요',
       body: '원재료·인건비·임대료를 입력해야 정확한 영업이익을 알 수 있어요.',
-      action: { label: '비용 입력', href: '/expenses/new' },
+      action: { label: '지출 입력', href: '/expenses/new' },
     });
   }
 
@@ -117,8 +117,8 @@ export function generateRuleBasedInsights(input: InsightInput): InsightItem[] {
       id: 'delivery-heavy',
       tone: 'neutral',
       title: '배달앱 의존도가 높아요',
-      body: `배달 비중 ${deliveryPct.toFixed(1)}%. 수수료·프로모션 비용을 비용 페이지에 분리 기록해두면 손익 정확도가 올라갑니다.`,
-      action: { label: '비용 입력', href: '/expenses/new' },
+      body: `배달 비중 ${deliveryPct.toFixed(1)}%. 수수료·프로모션 지출을 지출 페이지에 분리 기록해두면 손익 정확도가 올라갑니다.`,
+      action: { label: '지출 입력', href: '/expenses/new' },
     });
   }
 
@@ -191,7 +191,7 @@ export function generateRuleBasedInsights(input: InsightInput): InsightItem[] {
         id: 'steady',
         tone: 'positive',
         title: '매장 흐름이 안정적이에요',
-        body: '매출·비용이 꾸준히 기록되고 있어요. 리포트에서 채널·요일별 패턴을 확인해 성장 포인트를 찾아보세요.',
+        body: '매출·지출이 꾸준히 기록되고 있어요. 리포트에서 채널·요일별 패턴을 확인해 성장 포인트를 찾아보세요.',
         action: { label: '리포트 보기', href: '/reports' },
       });
     } else {
@@ -199,7 +199,7 @@ export function generateRuleBasedInsights(input: InsightInput): InsightItem[] {
         id: 'getting-started',
         tone: 'tip',
         title: '데이터를 쌓을수록 분석이 정확해져요',
-        body: '매출·비용을 꾸준히 입력하면 손익·목표 달성·인건비 비중까지 자동으로 분석해드려요.',
+        body: '매출·지출을 꾸준히 입력하면 손익·목표 달성·인건비 비중까지 자동으로 분석해드려요.',
         action: { label: '매출 입력', href: '/sales/new' },
       });
     }

@@ -8,7 +8,7 @@ const OG_IMAGE = `${SITE_URL}/og/retailmate-og.png?v=5`;
 
 const TITLE = '리테일메이트 | 자영업자 올인원 플랫폼';
 const DESCRIPTION =
-  '사장님은 숫자만 입력하세요. 정리는 AI가 합니다. 매출·비용·직원·근태·AI 인사이트를 한 곳에서 관리하세요.';
+  '사장님은 숫자만 입력하세요. 정리는 AI가 합니다. 매출·지출·직원·근태·AI 인사이트를 한 곳에서 관리하세요.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

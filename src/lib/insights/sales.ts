@@ -33,15 +33,15 @@ export function generateSalesInsight(input: SalesInsightInput): SalesInsight {
     return {
       title: '카드 매출 비중이 매우 높아요.',
       body: `전체 매출의 ${cardPct.toFixed(1)}%가 카드 결제예요.\n현금 결제 비중은 ${cashPct.toFixed(1)}%로 낮은 편이에요.`,
-      tip: { text: '카드 결제 수수료를 주기적으로 확인해 비용을 최적화해보세요.' },
+      tip: { text: '카드 결제 수수료를 주기적으로 확인해 지출을 최적화해보세요.' },
     };
   }
 
   if (deliveryPct >= 30) {
     return {
       title: '배달앱 의존도가 높습니다.',
-      body: `이달 배달앱 비중 ${deliveryPct.toFixed(1)}%. 배달 매출은 수수료·프로모션 비용이 함께 발생해 실수익이 낮아질 수 있어요.`,
-      tip: { text: '비용 페이지에 배달앱 수수료를 따로 기록하면 채널별 손익을 정확히 볼 수 있습니다.' },
+      body: `이달 배달앱 비중 ${deliveryPct.toFixed(1)}%. 배달 매출은 수수료·프로모션 지출이 함께 발생해 실수익이 낮아질 수 있어요.`,
+      tip: { text: '지출 페이지에 배달앱 수수료를 따로 기록하면 채널별 손익을 정확히 볼 수 있습니다.' },
     };
   }
 
@@ -74,6 +74,6 @@ export function generateSalesInsight(input: SalesInsightInput): SalesInsight {
   return {
     title: '안정적인 매출 추세입니다.',
     body: `이번 달 합계 ₩${total.toLocaleString('ko-KR')}, 일평균 ₩${input.dailyAverage.toLocaleString('ko-KR')}.`,
-    tip: { text: '비용 입력을 함께 진행하면 영업이익이 자동 계산됩니다.' },
+    tip: { text: '지출 입력을 함께 진행하면 영업이익이 자동 계산됩니다.' },
   };
 }

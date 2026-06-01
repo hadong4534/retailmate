@@ -23,26 +23,26 @@ function buildReportInsight(args: {
   if (args.totalSales === 0 && !args.hasExpenses) {
     return {
       title: '아직 분석할 데이터가 부족해요',
-      body: '매출과 비용이 입력되면 자동으로 손익을 요약해 드립니다.',
+      body: '매출과 지출이 입력되면 자동으로 손익을 요약해 드립니다.',
     };
   }
   if (args.totalSales > 0 && !args.hasExpenses) {
     return {
-      title: '비용을 함께 입력해 정확한 손익을 보세요',
-      body: `매출 ${formatWon(args.totalSales)}만 기록되어 영업이익이 100%로 잡혀 있어요. 인건비·재료비 등 실제 비용을 입력하면 진짜 이익률이 보입니다.`,
-      tip: { text: '비용 메뉴에서 카테고리별로 입력할 수 있어요.' },
+      title: '지출을 함께 입력해 정확한 손익을 보세요',
+      body: `매출 ${formatWon(args.totalSales)}만 기록되어 영업이익이 100%로 잡혀 있어요. 인건비·재료비 등 실제 지출을 입력하면 진짜 이익률이 보입니다.`,
+      tip: { text: '지출 메뉴에서 카테고리별로 입력할 수 있어요.' },
     };
   }
   if (args.profit < 0) {
     return {
       title: '이번 달은 적자 흐름이에요',
-      body: `매출 대비 비용이 ${Math.round((args.totalExpenses / Math.max(args.totalSales, 1)) * 100)}%로 높습니다. 가장 큰 지출 항목부터 점검해보세요.`,
-      tip: { text: '비용 페이지의 "가장 큰 지출 항목"을 먼저 확인해보세요.' },
+      body: `매출 대비 지출이 ${Math.round((args.totalExpenses / Math.max(args.totalSales, 1)) * 100)}%로 높습니다. 가장 큰 지출 항목부터 점검해보세요.`,
+      tip: { text: '지출 페이지의 "가장 큰 지출 항목"을 먼저 확인해보세요.' },
     };
   }
   return {
     title: `이익률 ${args.profitRate.toFixed(1)}% — 양호합니다`,
-    body: `매출 ${formatWon(args.totalSales)}, 비용 ${formatWon(args.totalExpenses)}로 영업이익 ${formatWon(args.profit)}을 기록 중이에요.`,
+    body: `매출 ${formatWon(args.totalSales)}, 지출 ${formatWon(args.totalExpenses)}로 영업이익 ${formatWon(args.profit)}을 기록 중이에요.`,
     tip: { text: '더 자세한 분석이 필요하면 AI 챗봇에서 "이번 달 손익 자세히"라고 물어보세요.' },
   };
 }
@@ -103,7 +103,7 @@ export default async function ReportsPage({
             sub={`${month}`}
           />
           <KpiCard
-            label="비용"
+            label="지출"
             value={formatWon(report.totalExpenses)}
             tone="red"
             sub={`매출의 ${expenseRatio}%`}
@@ -138,7 +138,7 @@ export default async function ReportsPage({
                 if (positive.length === 0) {
                   return (
                     <tr>
-                      <td className="whitespace-nowrap py-2 pl-4 text-slate-600">비용</td>
+                      <td className="whitespace-nowrap py-2 pl-4 text-slate-600">지출</td>
                       <td className="whitespace-nowrap py-2 text-right font-mono tabular-nums text-slate-400">
                         − {formatWon(0)}
                       </td>
@@ -184,13 +184,13 @@ export default async function ReportsPage({
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
               <h2 className="text-lg font-bold text-slate-900">일별 추이</h2>
-              <p className="mt-1 text-xs text-slate-500">매출 · 비용 · 이익</p>
+              <p className="mt-1 text-xs text-slate-500">매출 · 지출 · 이익</p>
               <div className="mt-4">
                 <DailyTrendChart data={report.dailySeries} />
               </div>
             </div>
             <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
-              <h2 className="text-lg font-bold text-slate-900">비용 구성</h2>
+              <h2 className="text-lg font-bold text-slate-900">지출 구성</h2>
               <p className="mt-1 text-xs text-slate-500">카테고리별 비중</p>
               <div className="mt-4">
                 <CategoryPieChart data={report.expensesByCategory} />
@@ -221,10 +221,10 @@ export default async function ReportsPage({
           <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-[#E3E5F0] bg-white px-6 py-10 text-center">
             <EmptyChart className="text-slate-400" />
             <p className="mt-3 text-[15px] font-medium text-slate-900">
-              {month}에 기록된 매출·비용이 없습니다
+              {month}에 기록된 매출·지출이 없습니다
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              매출과 비용을 입력하면 자동으로 차트가 표시됩니다.
+              매출과 지출을 입력하면 자동으로 차트가 표시됩니다.
             </p>
           </div>
         )}

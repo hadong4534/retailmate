@@ -76,7 +76,7 @@ export default async function StoresOverviewPage() {
         {/* 합산 요약 */}
         <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Sum label="이달 매출 합계" value={`₩${formatWon(total.sales)}`} tone="primary" />
-          <Sum label="이달 비용 합계" value={`₩${formatWon(total.exp)}`} />
+          <Sum label="이달 지출 합계" value={`₩${formatWon(total.exp)}`} />
           <Sum label="이달 순이익 합계" value={`₩${formatWon(total.sales - total.exp)}`} tone={total.sales - total.exp >= 0 ? 'positive' : 'negative'} />
           <Sum label="근무 중 / 직원" value={`${total.working} / ${total.members}명`} />
         </div>
@@ -93,7 +93,7 @@ export default async function StoresOverviewPage() {
               </div>
               <dl className="mt-3 space-y-1.5 text-[13px]">
                 <Row k="이달 매출" v={`₩${formatWon(r.sales)}`} />
-                <Row k="이달 비용" v={`₩${formatWon(r.exp)}`} />
+                <Row k="이달 지출" v={`₩${formatWon(r.exp)}`} />
                 <Row k="순이익" v={`₩${formatWon(r.profit)}`} strong tone={r.profit >= 0 ? 'pos' : 'neg'} />
                 <Row k="근무 중 / 직원" v={`${r.working} / ${r.members}명`} />
               </dl>

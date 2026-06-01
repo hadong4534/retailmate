@@ -1,10 +1,10 @@
 /**
  * AI 기반 매장 인사이트 생성기.
  *
- * 입력: 룰 기반 컨텍스트 (매출/비용/근태 데이터)
+ * 입력: 룰 기반 컨텍스트 (매출/지출/근태 데이터)
  * 출력: InsightItem 배열 (룰 기반과 동일 인터페이스 — 호환 보장)
  *
- * 호출 실패·비용 한도 초과 시 룰 기반으로 자동 fallback.
+ * 호출 실패·지출 한도 초과 시 룰 기반으로 자동 fallback.
  */
 
 import { complete, MODELS } from './openrouter';
@@ -27,7 +27,7 @@ const SYSTEM_PROMPT = `당신은 한국 자영업자(매장 사장님)를 돕는
 - 우선순위: warning > tip > neutral > positive
 
 [중요] 절대 빈 배열을 반환하지 마세요. 데이터가 부족해도 다음을 활용해 항상 3-4개를 채웁니다:
-1) 데이터 점검: 입력 누락(매출·비용·목표·직원)이나 이상치(매출 급감/급증, 비용률 과다, 특정 채널 편중, 0원 영업일 등)를 짚어줍니다.
+1) 데이터 점검: 입력 누락(매출·지출·목표·직원)이나 이상치(매출 급감/급증, 지출률 과다, 특정 채널 편중, 0원 영업일 등)를 짚어줍니다.
 2) 업종 맞춤 조언: 사장님 매장 업종과 계절·요일 흐름에 맞는 운영 팁(메뉴·재고·인력·마케팅)을 제안합니다.
 3) 데이터가 충분하면 수치 기반 분석을 우선합니다.
 
@@ -96,7 +96,7 @@ function buildPrompt(input: InsightInput, storeName: string, industry: string | 
   return `매장 "${storeName}"${industry ? ` (업종: ${industry})` : ''} 의 ${input.daysIntoMonth}일차 데이터:
 
 이번 달 매출: ${input.monthSales.toLocaleString('ko-KR')}원
-이번 달 비용: ${input.monthExpenses.toLocaleString('ko-KR')}원
+이번 달 지출: ${input.monthExpenses.toLocaleString('ko-KR')}원
 잠정 영업이익: ${monthProfit.toLocaleString('ko-KR')}원 (이익률 ${profitRate}%)
 오늘 매출: ${input.todaySales.toLocaleString('ko-KR')}원 (어제 ${input.yesterdaySales.toLocaleString('ko-KR')}원)
 월 목표: ${input.monthlyTarget.toLocaleString('ko-KR')}원 (${input.daysIntoMonth}/${input.daysInMonth}일 경과)
@@ -107,7 +107,7 @@ function buildPrompt(input: InsightInput, storeName: string, industry: string | 
 응답 형식:
 {
   "insights": [
-    {"id": "unique-id-1", "tone": "warning", "title": "...", "body": "...", "action": {"label": "비용 입력", "href": "/expenses/new"}},
+    {"id": "unique-id-1", "tone": "warning", "title": "...", "body": "...", "action": {"label": "지출 입력", "href": "/expenses/new"}},
     ...
   ]
 }
