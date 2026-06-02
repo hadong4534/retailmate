@@ -52,20 +52,20 @@ export default function LandingPage() {
             />
 
             {/* 가독성 스크림 — 영상을 진하게 덮지 않고 하단에만 은은하게 */}
-            <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(18,16,40,0) 38%, rgba(18,16,40,0.22) 66%, rgba(18,16,40,0.52) 100%)' }} />
+            <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,13,34,0) 30%, rgba(15,13,34,0.30) 56%, rgba(15,13,34,0.62) 80%, rgba(15,13,34,0.82) 100%)' }} />
 
             {/* 콘텐츠 (하단 정렬) */}
             <div className="relative z-10 p-5 pb-7 sm:p-8 lg:p-12">
               <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/35 bg-white/20 px-3 py-1 text-[12px] font-semibold text-white backdrop-blur-md">
                 <span className="h-1.5 w-1.5 rounded-full bg-white" /> POS·연동 없이 완벽한 매장 관리
               </span>
-              <h1 className="mt-3.5 max-w-2xl text-[27px] font-extrabold leading-[1.18] tracking-tight text-white sm:text-[36px] lg:text-[50px]" style={{ wordBreak: 'keep-all', textShadow: '0 2px 22px rgba(10,8,28,0.6), 0 1px 3px rgba(10,8,28,0.45)' }}>
+              <h1 className="mt-3.5 max-w-2xl text-[27px] font-extrabold leading-[1.18] tracking-tight text-white sm:text-[36px] lg:text-[50px]" style={{ wordBreak: 'keep-all', textShadow: '0 1px 2px rgba(8,6,22,0.55), 0 2px 10px rgba(8,6,22,0.55), 0 4px 30px rgba(8,6,22,0.55)' }}>
                 사장님은 <span className="text-[#D7D9FB]">숫자만</span> 입력하세요.
                 <br />
                 정리는{' '}
                 <span className="bg-gradient-to-r from-[#D7D9FB] to-[#CDEBFB] bg-clip-text text-transparent">AI</span>가 합니다.
               </h1>
-              <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-white/90 sm:text-[15.5px]" style={{ textShadow: '0 1px 10px rgba(10,8,28,0.6)' }}>
+              <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-white/90 sm:text-[15.5px]" style={{ textShadow: '0 1px 2px rgba(8,6,22,0.6), 0 1px 16px rgba(8,6,22,0.55)' }}>
                 포스기도, 복잡한 연동도 필요 없어요. 수기 입력만으로 매출·지출·직원·근태·계약이 자동 정리되고,
                 AI가 매장 흐름을 읽어 다음 할 일까지 알려드립니다.
               </p>
