@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChevronRight, Wallet, Receipt, Users, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Wallet, Receipt, Users, Clock, TrendingUp } from 'lucide-react';
 import { MonthSalesChart } from '@/components/charts/MonthSalesChart';
 
 /**
@@ -26,6 +26,10 @@ export interface HomeViewProps {
   workingCount: number;
   totalEmployees: number;
   dailySeries?: { day: number; sales: number }[];
+  monthLabel: string;
+  isCurrentMonth: boolean;
+  prevHref: string;
+  nextHref: string | null;
 }
 
 export function HomeView(p: HomeViewProps) {
@@ -61,14 +65,31 @@ export function HomeView(p: HomeViewProps) {
           <span aria-hidden className="pointer-events-none absolute -left-7 -top-9 -z-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(129,140,248,0.22),transparent_70%)] blur-2xl" />
           <div>
             <h1 className="text-[22px] font-extrabold tracking-tight text-slate-900 lg:text-[26px]">홈</h1>
-            <p className="mt-1 text-[13px] text-slate-500">오늘도 좋은 하루 되세요.</p>
+            <p className="mt-1 text-[13px] text-slate-500">{p.isCurrentMonth ? '오늘도 좋은 하루 되세요.' : `${p.monthLabel} 매장 요약 · 지난달과 비교해 보세요.`}</p>
           </div>
-          <span className="hidden items-center gap-1.5 rounded-xl border border-[#E9EAF4] bg-white/70 px-3 py-2 text-[13px] font-semibold text-slate-500 backdrop-blur sm:inline-flex">
-            {formatKoDateLong(p.baseDate)}
-          </span>
+          {/* 월 이동 — 지난달 비교 보기 */}
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-0.5 rounded-xl border border-[#E9EAF4] bg-white/70 p-1 backdrop-blur">
+              <Link href={p.prevHref} aria-label="지난달" className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-500 transition hover:bg-[#EEF0FE] hover:text-[#5961E6] active:scale-95">
+                <ChevronLeft className="h-4 w-4" strokeWidth={2.4} />
+              </Link>
+              <span className="min-w-[40px] text-center text-[13px] font-bold text-slate-700">{p.monthLabel}</span>
+              {p.nextHref ? (
+                <Link href={p.nextHref} aria-label="다음달" className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-500 transition hover:bg-[#EEF0FE] hover:text-[#5961E6] active:scale-95">
+                  <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
+                </Link>
+              ) : (
+                <span aria-hidden className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300"><ChevronRight className="h-4 w-4" strokeWidth={2.4} /></span>
+              )}
+            </div>
+            {!p.isCurrentMonth && (
+              <Link href="/dashboard" className="text-[11px] font-semibold text-[#6366F1] hover:underline">이번 달로 돌아가기</Link>
+            )}
+          </div>
         </div>
 
-        {/* 모바일 원탭 입력 CTA */}
+        {/* 모바일 원탭 입력 CTA (이번 달에만) */}
+        {p.isCurrentMonth && (
         <Link href="/sales/new" className="mb-4 flex items-center justify-between rounded-2xl bg-gradient-to-r from-[#6366F1] to-[#8E94F2] px-5 py-4 text-white shadow-[0_10px_24px_-12px_rgba(99,102,241,0.7)] transition active:scale-[0.99] lg:hidden">
           <span className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20"><Wallet className="h-5 w-5" /></span>
@@ -76,11 +97,12 @@ export function HomeView(p: HomeViewProps) {
           </span>
           <ChevronRight className="h-5 w-5 opacity-90" />
         </Link>
+        )}
 
         {/* Row 1 — 이달 매출 히어로 (목표는 하단 슬림 바로 서브 표시) */}
         <section className="relative overflow-hidden rounded-[24px] border border-white/70 bg-gradient-to-br from-white to-[#F3F2FE] p-6 shadow-[0_10px_30px_-18px_rgba(99,102,241,0.35)]">
           <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(129,140,248,0.25),transparent_70%)]" />
-          <p className="text-[14px] font-semibold text-slate-500">이달 매출</p>
+          <p className="text-[14px] font-semibold text-slate-500">{p.monthLabel} 매출</p>
           <p className="mt-3 text-[34px] font-extrabold tabular-nums tracking-tight text-slate-900 lg:text-[40px]">
             {hasMonthSales ? `₩${won(p.monthSales)}` : '입력 전'}
           </p>
@@ -101,7 +123,7 @@ export function HomeView(p: HomeViewProps) {
             {p.monthlyTarget > 0 ? (
               <>
                 <div className="flex items-center justify-between text-[12px]">
-                  <span className="font-medium text-slate-500">이달 목표</span>
+                  <span className="font-medium text-slate-500">{p.monthLabel} 목표</span>
                   <span className="font-semibold text-slate-600"><span className="text-[#5961E6]">{goalRate}%</span> · ₩{won(p.monthSales)} / ₩{won(p.monthlyTarget)}</span>
                 </div>
                 <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#EEF0F8]">
@@ -134,6 +156,7 @@ export function HomeView(p: HomeViewProps) {
             </div>
           </section>
 
+          {p.isCurrentMonth ? (
           <section className="relative overflow-hidden rounded-[24px] border border-[#E6E5FB] bg-gradient-to-br from-[#F6F5FE] to-[#EEEFFD] p-5">
             <p className="text-[14px] font-extrabold text-[#3A3F73]">AI 인사이트</p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -143,10 +166,34 @@ export function HomeView(p: HomeViewProps) {
               {ai.ctaLabel} <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </section>
+          ) : (
+          <section className="relative overflow-hidden rounded-[24px] border border-[#E6E5FB] bg-gradient-to-br from-[#F6F5FE] to-[#EEEFFD] p-5">
+            <p className="text-[14px] font-extrabold text-[#3A3F73]">전월 대비 요약</p>
+            <div className="mt-3 space-y-2 text-[13px]">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500">매출</span>
+                <span className="font-semibold tabular-nums text-slate-800">₩{won(p.monthSales)}{monthSalesChange !== null ? <span className={'ml-1 text-[11px] font-bold ' + (monthSalesChange >= 0 ? 'text-[#5961E6]' : 'text-red-500')}>{monthSalesChange >= 0 ? '+' : ''}{monthSalesChange}%</span> : null}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500">지출</span>
+                <span className="font-semibold tabular-nums text-slate-800">₩{won(p.monthExpenses)}</span>
+              </div>
+              <div className="flex items-center justify-between border-t border-[#E2E1F4] pt-2">
+                <span className="text-slate-500">순이익</span>
+                <span className="font-bold tabular-nums text-slate-900">{monthProfit < 0 ? '-' : ''}₩{won(monthProfit)} <span className="text-[11px] font-semibold text-slate-400">({monthProfitRate ?? 0}%)</span></span>
+              </div>
+            </div>
+            <Link href="/reports" className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-[#DCDBF6] bg-white px-3.5 py-2.5 text-[12.5px] font-semibold text-[#5961E6] transition active:scale-95">
+              리포트에서 자세히 <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
+          </section>
+          )}
         </div>
 
         {/* Row 3 — 스탯 4 (우리 데이터) */}
         <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {p.isCurrentMonth ? (
+          <>
           <Stat icon={<Wallet className="h-4 w-4" />} label="어제 매출"
             value={hasBaseSales ? `₩${won(p.baseSales)}` : '입력 전'} muted={!hasBaseSales}
             delta={baseChange !== null ? `어제 대비 ${baseChange >= 0 ? '+' : ''}${baseChange}%` : undefined}
@@ -159,9 +206,28 @@ export function HomeView(p: HomeViewProps) {
           <Stat icon={<Clock className="h-4 w-4" />} label="월 지출"
             value={hasMonthExpenses ? `₩${won(p.monthExpenses)}` : '입력 전'} muted={!hasMonthExpenses}
             delta={monthCostRatio !== null ? `매출의 ${monthCostRatio}%` : undefined} />
+          </>
+          ) : (
+          <>
+          <Stat icon={<Wallet className="h-4 w-4" />} label={`${p.monthLabel} 매출`}
+            value={hasMonthSales ? `₩${won(p.monthSales)}` : '입력 전'} muted={!hasMonthSales}
+            delta={monthSalesChange !== null ? `지난달 ${monthSalesChange >= 0 ? '+' : ''}${monthSalesChange}%` : undefined}
+            deltaUp={monthSalesChange !== null ? monthSalesChange >= 0 : undefined} />
+          <Stat icon={<Receipt className="h-4 w-4" />} label="일평균 매출"
+            value={dailyAverageSales !== null ? `₩${won(dailyAverageSales)}` : '계산 대기'} muted={dailyAverageSales === null} />
+          <Stat icon={<TrendingUp className="h-4 w-4" />} label="순이익"
+            value={hasMonthSales ? `${monthProfit < 0 ? '-' : ''}₩${won(monthProfit)}` : '계산 대기'} muted={!hasMonthSales}
+            delta={monthProfitRate !== null ? `이익률 ${monthProfitRate}%` : undefined}
+            deltaUp={monthProfitRate !== null ? monthProfit >= 0 : undefined} />
+          <Stat icon={<Clock className="h-4 w-4" />} label="월 지출"
+            value={hasMonthExpenses ? `₩${won(p.monthExpenses)}` : '입력 전'} muted={!hasMonthExpenses}
+            delta={monthCostRatio !== null ? `매출의 ${monthCostRatio}%` : undefined} />
+          </>
+          )}
         </div>
 
-        {/* Row 4 — 마감 상태 + 빠른 입력 (운영 흐름) */}
+        {/* Row 4 — 마감 상태 + 빠른 입력 (오늘 운영 흐름 → 이번 달에만 표시) */}
+        {p.isCurrentMonth && (
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
           <ClosingCard
             hasBaseSales={hasBaseSales} hasBaseExpenses={hasBaseExpenses}
@@ -178,6 +244,7 @@ export function HomeView(p: HomeViewProps) {
             </div>
           </section>
         </div>
+        )}
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ function shiftDays(d: Date, days: number): Date {
   return r;
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ month?: string }> }) {
   const supabase = await createClient();
 
   const { data: claimsData } = await supabase.auth.getClaims();
@@ -53,18 +53,38 @@ export default async function DashboardPage() {
   if (!adminStore) return null;
   const storeId = adminStore.storeId;
 
-  // ── 일자 계산 (모두 KST 기준) ────────────────────────────────────────────────
+  // ── 선택 월 계산 (KST) — ?month=YYYY-MM 으로 지난달 보기/비교 지원 ──────────────
+  const sp = await searchParams;
   const now = new Date();
   const kst = getKstYmd(now);
-  const monthStartStr = `${kst.y}-${String(kst.m).padStart(2, '0')}-01`;
-  const daysIntoMonth = kst.day;
-  // 이번 달 총 일수
-  const daysInMonth = new Date(kst.y, kst.m, 0).getDate();
-  // 전월 범위
-  const prevY = kst.m === 1 ? kst.y - 1 : kst.y;
-  const prevM = kst.m === 1 ? 12 : kst.m - 1;
+  let selY = kst.y;
+  let selM = kst.m;
+  const mp = typeof sp?.month === 'string' ? sp.month : undefined;
+  if (mp && /^\d{4}-\d{2}$/.test(mp)) {
+    const [yy, mm] = mp.split('-').map(Number);
+    const isFuture = yy > kst.y || (yy === kst.y && mm > kst.m);
+    if (yy >= 2000 && mm >= 1 && mm <= 12 && !isFuture) { selY = yy; selM = mm; }
+  }
+  const isCurrentMonth = selY === kst.y && selM === kst.m;
+
+  const monthStartStr = `${selY}-${String(selM).padStart(2, '0')}-01`;
+  const monthEndStr = ymdInKST(new Date(selY, selM, 0));   // 선택 월 말일
+  const daysInMonth = new Date(selY, selM, 0).getDate();
+  const daysIntoMonth = isCurrentMonth ? kst.day : daysInMonth;
+
+  // 선택 월의 직전 월(전월 대비 비교용)
+  const prevY = selM === 1 ? selY - 1 : selY;
+  const prevM = selM === 1 ? 12 : selM - 1;
   const prevMonthStartStr = `${prevY}-${String(prevM).padStart(2, '0')}-01`;
-  const prevMonthEndStr = ymdInKST(new Date(kst.y, kst.m - 1, 0));
+  const prevMonthEndStr = ymdInKST(new Date(selY, selM - 1, 0));
+
+  // 월 이동 네비게이션 링크
+  const monthLabel = `${selM}월`;
+  const prevHref = `/dashboard?month=${prevY}-${String(prevM).padStart(2, '0')}`;
+  const nY = selM === 12 ? selY + 1 : selY;
+  const nM = selM === 12 ? 1 : selM + 1;
+  const nextIsFuture = nY > kst.y || (nY === kst.y && nM > kst.m);
+  const nextHref = nextIsFuture ? null : (nY === kst.y && nM === kst.m ? '/dashboard' : `/dashboard?month=${nY}-${String(nM).padStart(2, '0')}`);
 
   const baseDate = shiftDays(now, -1);                              // 어제
   const baseDateStr = ymdInKST(baseDate);
@@ -82,8 +102,8 @@ export default async function DashboardPage() {
   ] = await Promise.all([
     supabase.from('stores').select('name, monthly_target').eq('id', storeId).maybeSingle(),
     // 월간 집계
-    supabase.from('sales').select('sale_date, amount').eq('store_id', storeId).gte('sale_date', monthStartStr),
-    supabase.from('expenses').select('amount').eq('store_id', storeId).gte('expense_date', monthStartStr),
+    supabase.from('sales').select('sale_date, amount').eq('store_id', storeId).gte('sale_date', monthStartStr).lte('sale_date', monthEndStr),
+    supabase.from('expenses').select('amount').eq('store_id', storeId).gte('expense_date', monthStartStr).lte('expense_date', monthEndStr),
     supabase.from('sales').select('amount').eq('store_id', storeId)
       .gte('sale_date', prevMonthStartStr).lte('sale_date', prevMonthEndStr),
     // 어제 (마감 카드용)
@@ -162,6 +182,10 @@ export default async function DashboardPage() {
       workingCount={workingRes.data?.length ?? 0}
       totalEmployees={employeeCountRes.count ?? 0}
       dailySeries={dailySeries}
+      monthLabel={monthLabel}
+      isCurrentMonth={isCurrentMonth}
+      prevHref={prevHref}
+      nextHref={nextHref}
     />
   );
 }
