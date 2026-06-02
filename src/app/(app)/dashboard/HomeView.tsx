@@ -30,6 +30,8 @@ export interface HomeViewProps {
   isCurrentMonth: boolean;
   prevHref: string;
   nextHref: string | null;
+  prevMonthExpenses: number;
+  prevMonthLabel: string;
 }
 
 export function HomeView(p: HomeViewProps) {
@@ -40,6 +42,8 @@ export function HomeView(p: HomeViewProps) {
   const hasAttendance = p.workingCount > 0;
 
   const monthProfit = p.monthSales - p.monthExpenses;
+  const prevMonthProfit = p.prevMonthSales - p.prevMonthExpenses;
+  const hasPrevMonthData = p.prevMonthSales > 0 || p.prevMonthExpenses > 0;
   const monthProfitRate = hasMonthSales ? Math.round((monthProfit / p.monthSales) * 1000) / 10 : null;
   const monthCostRatio = hasMonthSales ? Math.round((p.monthExpenses / p.monthSales) * 1000) / 10 : null;
   const goalRate = p.monthlyTarget > 0 ? Math.round((p.monthSales / p.monthlyTarget) * 100) : null;
@@ -168,20 +172,18 @@ export function HomeView(p: HomeViewProps) {
           </section>
           ) : (
           <section className="relative overflow-hidden rounded-[24px] border border-[#E6E5FB] bg-gradient-to-br from-[#F6F5FE] to-[#EEEFFD] p-5">
-            <p className="text-[14px] font-extrabold text-[#3A3F73]">전월 대비 요약</p>
+            <p className="text-[14px] font-extrabold text-[#3A3F73]">
+              {hasPrevMonthData ? `전월 대비 (${p.monthLabel} vs ${p.prevMonthLabel})` : `${p.monthLabel} 요약`}
+            </p>
+            {!hasPrevMonthData && (
+              <p className="mt-1 text-[11.5px] leading-relaxed text-slate-400">
+                지난달({p.prevMonthLabel}) 입력 데이터가 없어 비교할 수 없어요. {p.monthLabel} 요약만 표시합니다.
+              </p>
+            )}
             <div className="mt-3 space-y-2 text-[13px]">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500">매출</span>
-                <span className="font-semibold tabular-nums text-slate-800">₩{won(p.monthSales)}{monthSalesChange !== null ? <span className={'ml-1 text-[11px] font-bold ' + (monthSalesChange >= 0 ? 'text-[#5961E6]' : 'text-red-500')}>{monthSalesChange >= 0 ? '+' : ''}{monthSalesChange}%</span> : null}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500">지출</span>
-                <span className="font-semibold tabular-nums text-slate-800">₩{won(p.monthExpenses)}</span>
-              </div>
-              <div className="flex items-center justify-between border-t border-[#E2E1F4] pt-2">
-                <span className="text-slate-500">순이익</span>
-                <span className="font-bold tabular-nums text-slate-900">{monthProfit < 0 ? '-' : ''}₩{won(monthProfit)} <span className="text-[11px] font-semibold text-slate-400">({monthProfitRate ?? 0}%)</span></span>
-              </div>
+              <CompareRow label="매출" cur={p.monthSales} prev={p.prevMonthSales} hasPrev={hasPrevMonthData} prevLabel={p.prevMonthLabel} />
+              <CompareRow label="지출" cur={p.monthExpenses} prev={p.prevMonthExpenses} hasPrev={hasPrevMonthData} prevLabel={p.prevMonthLabel} />
+              <CompareRow label="순이익" cur={monthProfit} prev={prevMonthProfit} hasPrev={hasPrevMonthData} prevLabel={p.prevMonthLabel} rate={monthProfitRate} divider />
             </div>
             <Link href="/reports" className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-[#DCDBF6] bg-white px-3.5 py-2.5 text-[12.5px] font-semibold text-[#5961E6] transition active:scale-95">
               리포트에서 자세히 <ChevronRight className="h-3.5 w-3.5" />
@@ -353,6 +355,32 @@ function pickAIInsight(s: {
   if (s.monthProfitRate !== null && s.monthProfitRate >= 25)
     return { text: `이익률 ${s.monthProfitRate}%로 안정적이에요. 여유 자금을 마케팅·시설 개선에 투자하면 매출 성장으로 이어집니다.`, ctaLabel: '리포트 보기', ctaHref: '/reports' };
   return { text: '이번 달 매장 흐름은 안정적이에요. 채널·요일별 패턴을 분석해 성장 포인트를 찾아보세요.', ctaLabel: '리포트 보기', ctaHref: '/reports' };
+}
+
+// ── 전월 대비 한 줄 (선택 월 보기) ───────────────────────────────────────────
+function CompareRow({ label, cur, prev, hasPrev, prevLabel, rate, divider }: {
+  label: string; cur: number; prev: number; hasPrev: boolean; prevLabel: string; rate?: number | null; divider?: boolean;
+}) {
+  const delta = hasPrev && prev > 0 ? Math.round(((cur - prev) / prev) * 100) : null;
+  return (
+    <div className={'flex items-start justify-between gap-2 ' + (divider ? 'border-t border-[#E2E1F4] pt-2' : '')}>
+      <span className="text-slate-500">{label}</span>
+      <span className="text-right">
+        <span className={'tabular-nums ' + (divider ? 'font-bold text-slate-900' : 'font-semibold text-slate-800')}>
+          {cur < 0 ? '-' : ''}₩{won(cur)}
+        </span>
+        {rate !== undefined && rate !== null && <span className="ml-1 text-[11px] font-semibold text-slate-400">({rate}%)</span>}
+        {delta !== null && (
+          <span className={'ml-1 text-[11px] font-bold ' + (delta >= 0 ? 'text-[#5961E6]' : 'text-red-500')}>
+            {delta >= 0 ? '+' : ''}{delta}%
+          </span>
+        )}
+        {hasPrev && (
+          <span className="mt-0.5 block text-[10.5px] text-slate-400">지난달 {prev < 0 ? '-' : ''}₩{won(prev)}</span>
+        )}
+      </span>
+    </div>
+  );
 }
 
 // ── 유틸 ─────────────────────────────────────────────────────────────────────

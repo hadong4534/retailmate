@@ -80,6 +80,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
   // 월 이동 네비게이션 링크
   const monthLabel = `${selM}월`;
+  const prevMonthLabel = `${prevM}월`;
   const prevHref = `/dashboard?month=${prevY}-${String(prevM).padStart(2, '0')}`;
   const nY = selM === 12 ? selY + 1 : selY;
   const nM = selM === 12 ? 1 : selM + 1;
@@ -95,7 +96,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   // ── 단일 라운드트립으로 모든 쿼리 묶음 ──────────────────────────────────────
   const [
     storeRes,
-    monthSalesRes, monthExpensesRes, prevMonthSalesRes,
+    monthSalesRes, monthExpensesRes, prevMonthSalesRes, prevMonthExpensesRes,
     baseSalesRes, baseExpensesRes, prevSalesRes,
     pastWeekSalesRes,
     workingRes, employeeCountRes,
@@ -106,6 +107,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     supabase.from('expenses').select('amount').eq('store_id', storeId).gte('expense_date', monthStartStr).lte('expense_date', monthEndStr),
     supabase.from('sales').select('amount').eq('store_id', storeId)
       .gte('sale_date', prevMonthStartStr).lte('sale_date', prevMonthEndStr),
+    supabase.from('expenses').select('amount').eq('store_id', storeId)
+      .gte('expense_date', prevMonthStartStr).lte('expense_date', prevMonthEndStr),
     // 어제 (마감 카드용)
     supabase.from('sales').select('amount').eq('store_id', storeId).eq('sale_date', baseDateStr),
     supabase.from('expenses').select('amount').eq('store_id', storeId).eq('expense_date', baseDateStr),
@@ -131,6 +134,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const monthSalesEntryDays = new Set(monthSalesRows.map((r) => r.sale_date as string)).size;
   const monthExpenses = sum(monthExpensesRes.data);
   const prevMonthSales = sum(prevMonthSalesRes.data);
+  const prevMonthExpenses = sum(prevMonthExpensesRes.data);
 
   // ── 어제/그제 ────────────────────────────────────────────────────────────────
   const baseSales = sum(baseSalesRes.data);
@@ -186,6 +190,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       isCurrentMonth={isCurrentMonth}
       prevHref={prevHref}
       nextHref={nextHref}
+      prevMonthExpenses={prevMonthExpenses}
+      prevMonthLabel={prevMonthLabel}
     />
   );
 }
