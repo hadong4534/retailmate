@@ -35,22 +35,31 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* HERO — 영상 배경 위 헤드라인 오버레이 (가벼운 스크림 + 비율 고정으로 잘림 최소화) */}
-        <section className="mx-auto w-full max-w-6xl flex-1 px-4 pt-2 pb-5 lg:px-8 lg:pt-5 lg:pb-10">
-          <div className="relative flex aspect-[4/5] w-full flex-col justify-end overflow-hidden rounded-[24px] shadow-[0_24px_70px_-30px_rgba(99,102,241,0.45)] ring-1 ring-white/50 sm:aspect-[16/10] lg:aspect-auto lg:min-h-[540px]">
-            {/* 배경 영상 — 매장이 잘 보이도록 중앙 약간 위 기준으로 크롭 */}
-            <HeroBackgroundVideo className="absolute inset-0 h-full w-full object-cover [object-position:52%_42%]" />
+        {/* HERO — 모바일은 풀블리드(상단 여백 0)+세로 영상, 데스크톱은 카드형+가로 영상 */}
+        <section className="w-full px-0 pt-0 pb-6 sm:mx-auto sm:max-w-6xl sm:px-4 sm:pt-3 lg:px-8 lg:pt-5 lg:pb-10">
+          <div className="relative flex aspect-[3/4] w-full flex-col justify-end overflow-hidden rounded-none shadow-[0_24px_70px_-30px_rgba(99,102,241,0.45)] sm:aspect-[16/10] sm:rounded-[24px] sm:ring-1 sm:ring-white/50 lg:aspect-auto lg:min-h-[540px]">
+            {/* 모바일: 세로 영상 */}
+            <HeroBackgroundVideo
+              src="/home-hero-mobile.mp4"
+              poster="/home-hero-mobile.jpg"
+              className="absolute inset-0 h-full w-full object-cover [object-position:center_38%] sm:hidden"
+            />
+            {/* 데스크톱/태블릿: 가로 영상 */}
+            <HeroBackgroundVideo
+              src="/home-hero.mp4"
+              poster="/home-hero.jpg"
+              className="absolute inset-0 hidden h-full w-full object-cover [object-position:52%_42%] sm:block"
+            />
 
-            {/* 가독성 스크림 — 영상을 진하게 덮지 않고 하단에만 은은하게 (글자 영역만 살짝 어둡게) */}
-            <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(18,16,40,0) 40%, rgba(18,16,40,0.20) 68%, rgba(18,16,40,0.50) 100%)' }} />
-            <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/40" />
+            {/* 가독성 스크림 — 영상을 진하게 덮지 않고 하단에만 은은하게 */}
+            <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(18,16,40,0) 38%, rgba(18,16,40,0.22) 66%, rgba(18,16,40,0.52) 100%)' }} />
 
             {/* 콘텐츠 (하단 정렬) */}
-            <div className="relative z-10 p-5 sm:p-8 lg:p-12">
+            <div className="relative z-10 p-5 pb-7 sm:p-8 lg:p-12">
               <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/35 bg-white/20 px-3 py-1 text-[12px] font-semibold text-white backdrop-blur-md">
                 <span className="h-1.5 w-1.5 rounded-full bg-white" /> POS·연동 없이 완벽한 매장 관리
               </span>
-              <h1 className="mt-3.5 max-w-2xl text-[26px] font-extrabold leading-[1.18] tracking-tight text-white sm:text-[36px] lg:text-[50px]" style={{ wordBreak: 'keep-all', textShadow: '0 2px 22px rgba(10,8,28,0.6), 0 1px 3px rgba(10,8,28,0.45)' }}>
+              <h1 className="mt-3.5 max-w-2xl text-[27px] font-extrabold leading-[1.18] tracking-tight text-white sm:text-[36px] lg:text-[50px]" style={{ wordBreak: 'keep-all', textShadow: '0 2px 22px rgba(10,8,28,0.6), 0 1px 3px rgba(10,8,28,0.45)' }}>
                 사장님은 <span className="text-[#D7D9FB]">숫자만</span> 입력하세요.
                 <br />
                 정리는{' '}
