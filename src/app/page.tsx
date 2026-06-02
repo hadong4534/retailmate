@@ -63,7 +63,7 @@ export default function LandingPage() {
                 사장님은 <span className="text-[#D7D9FB]">숫자만</span> 입력하세요.
                 <br />
                 정리는{' '}
-                <span className="bg-gradient-to-r from-[#D7D9FB] to-[#CDEBFB] bg-clip-text text-transparent">AI</span>가 합니다.
+                <span className="text-[#8FC9FF]">AI</span>가 합니다.
               </h1>
               <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-white/90 sm:text-[15.5px]" style={{ textShadow: '0 1px 2px rgba(8,6,22,0.6), 0 1px 16px rgba(8,6,22,0.55)' }}>
                 포스기도, 복잡한 연동도 필요 없어요. 수기 입력만으로 매출·지출·직원·근태·계약이 자동 정리되고,
