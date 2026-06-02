@@ -421,7 +421,7 @@ export function AppShell({
       <main
         className={cn(
           'flex-1 lg:pb-0',
-          hideMobileTabbar ? 'pb-0' : 'pb-[calc(68px+env(safe-area-inset-bottom))]',
+          hideMobileTabbar ? 'pb-0' : 'pb-[calc(74px+env(safe-area-inset-bottom))]',
         )}
       >
         {children}
@@ -460,17 +460,34 @@ export function AppShell({
       {/* ───────── BottomTab (모바일) — 중앙 AI FAB ───────── */}
       <nav
         className={cn(
-          'fixed bottom-0 left-0 right-0 z-30 border-t border-[#EAEAF7] bg-white/90 backdrop-blur-xl lg:hidden',
+          'fixed bottom-0 left-0 right-0 z-30 overflow-visible border-t border-[#EAEAF7] bg-white/90 backdrop-blur-xl lg:hidden',
           hideMobileTabbar && 'hidden',
         )}
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
-        <div className="relative flex h-[68px] items-stretch justify-around px-0.5">
+        <div className="relative flex h-[70px] items-stretch justify-around px-0.5">
           <BottomLink href="/dashboard" label="홈" Icon={HomeIcon} active={isActive(pathname, '/dashboard')} />
           <BottomLink href="/sales" label="매출" Icon={SalesIcon} active={isActive(pathname, '/sales')} />
           <BottomLink href="/expenses" label="지출" Icon={ExpensesIcon} active={isActive(pathname, '/expenses')} />
           <BottomLink href="/employees" label="직원" Icon={PeopleIcon} active={isStaffTabActive(pathname)} />
-          <BottomLink href="/ai" label="AI" Icon={SparklesIcon} active={isAiActive(pathname)} />
+          {/* AI — Aurora 오브로 도드라지게 (AI 플랫폼 정체성 유지) */}
+          <Link
+            href="/ai"
+            aria-label="AI 도구"
+            aria-current={isAiActive(pathname) ? 'page' : undefined}
+            className="relative flex min-w-[36px] flex-1 flex-col items-center justify-end gap-[3px] pb-[7px]"
+          >
+            <span
+              className={cn(
+                'rm-ai-live -mt-5 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-6px_rgba(99,102,241,0.6)] transition active:scale-95',
+                'bg-gradient-to-br from-[#8E94F2] via-[#6366F1] to-[#7FB8EE]',
+                isAiActive(pathname) ? 'ring-4 ring-[#6366F1]/25' : 'ring-2 ring-white',
+              )}
+            >
+              <SparklesIcon className="h-[26px] w-[26px]" />
+            </span>
+            <span className={cn('leading-none text-[10.5px]', isAiActive(pathname) ? 'font-semibold text-[#6366F1]' : 'font-medium text-slate-500')}>AI</span>
+          </Link>
           <button
             type="button"
             onClick={() => setMoreOpen(true)}
