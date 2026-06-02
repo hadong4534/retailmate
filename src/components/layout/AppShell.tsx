@@ -80,7 +80,6 @@ const STAFF_TAB_PREFIXES = ['/employees', '/attendance', '/contracts'];
 
 /** 모바일 "더보기" 시트에 들어가는 보조 메뉴 — 하단탭에 없는 모든 기능을 여기서 접근. */
 const MORE_LINKS: NavItem[] = [
-  { href: '/expenses', label: '지출', Icon: ExpensesIcon },
   { href: '/reports', label: '리포트', Icon: BarChartIcon },
   { href: '/attendance', label: '근태', Icon: ClockAlarmIcon },
   { href: '/contracts', label: '계약서', Icon: ClipboardIcon },
@@ -422,7 +421,7 @@ export function AppShell({
       <main
         className={cn(
           'flex-1 lg:pb-0',
-          hideMobileTabbar ? 'pb-0' : 'pb-[calc(76px+env(safe-area-inset-bottom))]',
+          hideMobileTabbar ? 'pb-0' : 'pb-[calc(68px+env(safe-area-inset-bottom))]',
         )}
       >
         {children}
@@ -466,34 +465,18 @@ export function AppShell({
         )}
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
-        <div className="relative flex h-[76px] items-stretch justify-around px-1">
-          {/* 좌측: 홈, 매출 */}
+        <div className="relative flex h-[68px] items-stretch justify-around px-0.5">
           <BottomLink href="/dashboard" label="홈" Icon={HomeIcon} active={isActive(pathname, '/dashboard')} />
           <BottomLink href="/sales" label="매출" Icon={SalesIcon} active={isActive(pathname, '/sales')} />
-
-          {/* 중앙 AI FAB */}
-          <div className="flex flex-1 items-start justify-center">
-            <Link
-              href="/ai"
-              aria-label="AI 도구"
-              className={cn(
-                'rm-ai-live relative -top-4 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_10px_26px_-6px_rgba(99,102,241,0.65)] transition active:scale-95',
-                'bg-gradient-to-br from-[#8E94F2] via-[#6366F1] to-[#7FB8EE]',
-                isAiActive(pathname) && 'ring-4 ring-[#6366F1]/25',
-              )}
-            >
-              <SparklesIcon className="h-7 w-7" />
-            </Link>
-          </div>
-
-          {/* 우측: 직원, 더보기 */}
+          <BottomLink href="/expenses" label="지출" Icon={ExpensesIcon} active={isActive(pathname, '/expenses')} />
           <BottomLink href="/employees" label="직원" Icon={PeopleIcon} active={isStaffTabActive(pathname)} />
+          <BottomLink href="/ai" label="AI" Icon={SparklesIcon} active={isAiActive(pathname)} />
           <button
             type="button"
             onClick={() => setMoreOpen(true)}
-            className="relative flex h-full min-w-[44px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[11px] font-medium text-slate-500 transition-all duration-150 active:scale-[0.94] active:bg-[#EEEEFD]/60"
+            className="relative flex h-full min-w-[36px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[10.5px] font-medium text-slate-500 transition-all duration-150 active:scale-[0.94] active:bg-[#EEEEFD]/60"
           >
-            <ChevronDownIcon className="h-[22px] w-[22px] rotate-180" strokeWidth={1.8} />
+            <ChevronDownIcon className="h-[21px] w-[21px] rotate-180" strokeWidth={1.8} />
             <span className="leading-none">더보기</span>
           </button>
         </div>
@@ -508,12 +491,12 @@ function BottomLink({ href, label, Icon, active }: { href: string; label: string
       href={href}
       prefetch={active ? false : true}
       className={cn(
-        'relative flex h-full min-w-[44px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[11px] transition-all duration-150 active:scale-[0.94] active:bg-[#EEEEFD]/60',
+        'relative flex h-full min-w-[36px] flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] text-[10.5px] transition-all duration-150 active:scale-[0.94] active:bg-[#EEEEFD]/60',
         active ? 'font-semibold text-[#6366F1]' : 'font-medium text-slate-500',
       )}
       aria-current={active ? 'page' : undefined}
     >
-      <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.2 : 1.8} />
+      <Icon className="h-[21px] w-[21px]" strokeWidth={active ? 2.2 : 1.8} />
       <span className="leading-none">{label}</span>
     </Link>
   );

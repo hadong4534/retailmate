@@ -49,6 +49,7 @@ interface StoreData {
   weekly_holiday_default: boolean | null;
   pay_day_default: number | null;
   tax_filing_mode: string | null;
+  vat_type: string | null;
   monthly_target: number | null;
   updated_at: string;
 }
@@ -181,6 +182,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
   const [openTime, setOpenTime] = useState(store.open_time?.slice(0, 5) ?? '');
   const [closeTime, setCloseTime] = useState(store.close_time?.slice(0, 5) ?? '');
   const [monthlyTarget, setMonthlyTarget] = useState<number>(store.monthly_target ?? 0);
+  const [vatType, setVatType] = useState(store.vat_type ?? '');
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -200,6 +202,7 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
         radius_m: radius,
         open_time: openTime,
         close_time: closeTime,
+        vat_type: vatType,
         monthly_target: monthlyTarget,
       });
       if ('error' in result) setError(result.error);
@@ -247,6 +250,21 @@ function StoreForm({ store, onSaved }: { store: StoreData; onSaved: (d: Date) =>
             <option value="service">서비스업</option>
             <option value="other">기타</option>
           </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700">부가세 과세유형</label>
+          <select
+            value={vatType}
+            onChange={(e) => setVatType(e.target.value)}
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] bg-white px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
+          >
+            <option value="">선택 안 함</option>
+            <option value="general">일반과세자</option>
+            <option value="simplified">간이과세자</option>
+            <option value="exempt">면세사업자</option>
+          </select>
+          <p className="mt-1 text-[11px] text-slate-400">부가세 신고 구분에 사용돼요. (리포트·세무 자료 정리 기준)</p>
         </div>
 
         <div className="md:col-span-2">

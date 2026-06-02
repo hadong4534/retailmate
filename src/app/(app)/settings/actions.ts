@@ -20,6 +20,7 @@ export async function updateStoreInfo(input: {
   radius_m: number;
   open_time: string;
   close_time: string;
+  vat_type: string;
   monthly_target: number;
 }): Promise<Result> {
   if (!input.name.trim()) return { error: '매장명을 입력해주세요.' };
@@ -46,6 +47,7 @@ export async function updateStoreInfo(input: {
       radius_m: input.radius_m,
       open_time: input.open_time || null,
       close_time: input.close_time || null,
+      vat_type: input.vat_type || null,
       monthly_target: input.monthly_target ?? 0,
     })
     .eq('id', adminStore.storeId);

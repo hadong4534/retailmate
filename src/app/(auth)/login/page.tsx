@@ -29,6 +29,7 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [kakaoLoading, setKakaoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -56,7 +57,9 @@ function LoginForm() {
   }
 
   function handleKakaoLogin() {
+    if (kakaoLoading) return; // 더블탭 방지
     setError(null);
+    setKakaoLoading(true);
     setRememberFlag(remember);
     // 커스텀 카카오 OAuth — scope을 profile_nickname으로 제한해 비즈앱 미인증 KOE205 회피.
     window.location.href = `/api/auth/kakao/start?next=${encodeURIComponent(redirect)}`;
@@ -75,7 +78,8 @@ function LoginForm() {
       <button
         type="button"
         onClick={handleKakaoLogin}
-        className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#FEE500] px-4 text-base font-semibold text-[#3C1E1E] shadow-sm transition active:scale-[0.98] hover:brightness-95"
+        disabled={kakaoLoading}
+        className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#FEE500] px-4 text-base font-semibold text-[#3C1E1E] shadow-sm transition active:scale-[0.98] hover:brightness-95 disabled:opacity-70"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -83,7 +87,7 @@ function LoginForm() {
             fill="#3C1E1E"
           />
         </svg>
-        카카오로 로그인
+        {kakaoLoading ? '카카오로 이동 중…' : '카카오로 로그인'}
       </button>
 
       <div className="mt-5 flex items-center gap-3 text-xs text-slate-400">

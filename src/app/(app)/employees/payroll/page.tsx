@@ -8,6 +8,7 @@ import { PageHeader } from '@/components/app';
 import { formatWon, currentYearMonth } from '@/lib/utils';
 import { getStorePayroll, formatHM, type MemberPayrollRow } from '@/lib/payroll/store-payroll';
 import { PayrollModeSelect } from './PayrollModeSelect';
+import { ReflectPayrollButton } from './ReflectPayrollButton';
 
 export const metadata = {
   title: '급여 계산 · 리테일메이트',
@@ -93,6 +94,10 @@ export default async function PayrollPage({
             </p>
           </div>
         </div>
+
+        {payroll.rows.length > 0 && hasAnyContract && (
+          <ReflectPayrollButton month={month} grossPay={payroll.totals.grossPay} />
+        )}
 
         {/* 직원이 없는 경우 */}
         {payroll.rows.length === 0 && (

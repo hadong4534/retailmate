@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Tags, PieChart, TrendingUp, Trophy, Package, Receipt } from 'lucide-react';
+import { Tags, PieChart, TrendingUp, Trophy, Package, Receipt, Paperclip } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { getPageContext } from '@/lib/auth/page-context';
 import { Button } from '@/components/ui/Button';
 import { MonthPicker } from '@/components/ui/MonthPicker';
@@ -28,6 +29,7 @@ interface ExpenseRow {
   memo: string | null;
   item_name: string | null;
   payment_method: string | null;
+  receipt_url: string | null;
   created_at: string;
 }
 
@@ -59,7 +61,7 @@ export default async function ExpensesPage({
   const [{ data: expensesData }, { data: prevData }, { data: salesData }] = await Promise.all([
     supabase
       .from('expenses')
-      .select('id, expense_date, category, amount, vendor, memo, item_name, payment_method, created_at')
+      .select('id, expense_date, category, amount, vendor, memo, item_name, payment_method, receipt_url, created_at')
       .eq('store_id', store.id)
       .gte('expense_date', start)
       .lte('expense_date', end)
@@ -80,6 +82,19 @@ export default async function ExpensesPage({
   ]);
 
   const rows = (expensesData ?? []) as ExpenseRow[];
+
+  // 영수증 서명 URL (비공개 버킷 → 1시간 유효 링크)
+  const receiptUrls: Record<string, string> = {};
+  const withReceipt = rows.filter((r) => r.receipt_url);
+  if (withReceipt.length > 0) {
+    const admin = createAdminClient();
+    await Promise.all(
+      withReceipt.map(async (r) => {
+        const { data } = await admin.storage.from('receipts').createSignedUrl(r.receipt_url as string, 3600);
+        if (data?.signedUrl) receiptUrls[r.id] = data.signedUrl;
+      }),
+    );
+  }
   const prevMonthExpenses = (prevData ?? []).reduce((acc, r) => acc + Number(r.amount), 0);
   const monthSales = (salesData ?? []).reduce((acc, r) => acc + Number(r.amount), 0);
 
@@ -303,6 +318,11 @@ export default async function ExpensesPage({
                           {desc && (
                             <p className="mt-0.5 truncate text-[12px] text-slate-500">{desc}</p>
                           )}
+                          {receiptUrls[r.id] && (
+                            <a href={receiptUrls[r.id]} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#6366F1]">
+                              <Paperclip className="h-3 w-3" strokeWidth={2.2} /> 영수증 보기
+                            </a>
+                          )}
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-1">
                           <p className="rm-tnum text-[15px] font-bold text-slate-900">
@@ -339,8 +359,13 @@ export default async function ExpensesPage({
                           <td className="whitespace-nowrap px-4 py-3 font-medium text-slate-900">
                             {r.expense_date}
                           </td>
-                          <td className="whitespace-nowrap px-4 py-3 text-slate-900 max-w-[180px] truncate">
+                          <td className="whitespace-nowrap px-4 py-3 text-slate-900 max-w-[200px] truncate">
                             {r.item_name ?? '-'}
+                            {receiptUrls[r.id] && (
+                              <a href={receiptUrls[r.id]} target="_blank" rel="noopener noreferrer" className="ml-2 inline-flex items-center gap-0.5 text-[11px] font-semibold text-[#6366F1]">
+                                <Paperclip className="h-3 w-3" strokeWidth={2.2} />영수증
+                              </a>
+                            )}
                           </td>
                           <td className="whitespace-nowrap px-4 py-3">
                             <span

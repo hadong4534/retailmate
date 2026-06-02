@@ -52,6 +52,10 @@ export default function StoreOnboardingPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    if (lat == null || lng == null) {
+      const proceed = window.confirm('매장 GPS 좌표가 없으면 직원 GPS 출퇴근 인증을 사용할 수 없어요.\n위 주소 검색에서 도로명+건물번호까지 정확히 선택하면 좌표가 자동 등록됩니다.\n그래도 이대로 등록할까요?');
+      if (!proceed) return;
+    }
     setSubmitting(true);
 
     const supabase = createClient();
@@ -168,11 +172,17 @@ export default function StoreOnboardingPage() {
               placeholder="1층 105호"
             />
 
-            {/* 자동 변환된 좌표 미리보기 */}
-            {lat != null && lng != null && (
-              <p className="rounded-md bg-emerald-50 px-3 py-2 text-[11px] text-emerald-800">
-                출퇴근 좌표 자동 등록: <span className="font-mono">{lat}, {lng}</span>
-              </p>
+            {/* 출퇴근 GPS 좌표 — 강하게 유도 */}
+            {lat != null && lng != null ? (
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-[12px] text-emerald-800">
+                <p className="font-semibold">출퇴근 GPS 좌표가 등록되었어요</p>
+                <p className="mt-0.5 font-mono text-[11px]">{lat}, {lng}</p>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-3 text-[12px] text-amber-900">
+                <p className="font-semibold">GPS 좌표가 아직 없어요 — 꼭 등록하세요</p>
+                <p className="mt-1 leading-relaxed">직원 GPS 출퇴근 인증에 매장 좌표가 반드시 필요합니다. 위 <b>주소 검색</b>에서 도로명+건물번호까지 정확히 선택하면 좌표가 자동 등록돼요. 미설정 시 직원이 출근 체크를 할 수 없습니다.</p>
+              </div>
             )}
 
             <div className="grid grid-cols-2 gap-4">
