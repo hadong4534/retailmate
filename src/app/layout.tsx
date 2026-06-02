@@ -52,12 +52,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
-      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon.ico?v=6', sizes: 'any' },
+      { url: '/favicon-32x32.png?v=6', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-16x16.png?v=6', type: 'image/png', sizes: '16x16' },
     ],
-    shortcut: '/favicon.ico',
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+    shortcut: '/favicon.ico?v=6',
+    apple: [{ url: '/apple-touch-icon.png?v=6', sizes: '180x180' }],
   },
   // iOS PWA — 홈 화면에 추가 시 풀스크린·상태바 톤·전화번호 자동 링크 방지
   appleWebApp: {

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 
 export type StoreRole = 'owner' | 'manager' | 'employee';
@@ -19,7 +20,7 @@ export interface StoreContext {
  * 같은 매장에 동시에 여러 row가 있으면 (예: owner + 자기 자신을 manager로 등록)
  * owner > manager > employee 순으로 우선.
  */
-export async function getUserStoreContexts(
+export const getUserStoreContexts = cache(async function getUserStoreContexts(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<StoreContext[]> {
@@ -69,7 +70,7 @@ export async function getUserStoreContexts(
   });
 
   return Array.from(map.values());
-}
+});
 
 /**
  * 현재 활성 매장 컨텍스트 (관리자 권한 필요).

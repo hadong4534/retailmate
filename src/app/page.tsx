@@ -34,57 +34,55 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* HERO */}
-        <section className="mx-auto grid w-full max-w-6xl flex-1 items-center gap-8 px-6 py-10 lg:grid-cols-[1.02fr_1.1fr] lg:gap-12 lg:py-16">
-          {/* 텍스트 */}
-          <div className="order-2 lg:order-1">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E1E0F8] bg-white/80 px-3 py-1 text-[12.5px] font-semibold text-[#5458E6] shadow-sm backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" /> POS·연동 없이 완벽한 매장 관리
-            </span>
-            <h1 className="mt-5 text-[34px] font-extrabold leading-[1.2] tracking-tight text-slate-900 md:text-[44px]" style={{ wordBreak: 'keep-all' }}>
-              사장님은 <span className="text-[#6366F1]">숫자만</span> 입력하세요.
-              <br />
-              정리는{' '}
-              <span className="bg-gradient-to-r from-[#6366F1] to-[#7FB8EE] bg-clip-text text-transparent">AI</span>가 합니다.
-            </h1>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-500 md:text-[16px]">
-              포스기도, 복잡한 연동도 필요 없어요. 수기 입력만으로 매출·지출·직원·근태·계약이 자동 정리되고,
-              AI가 매장 흐름을 읽어 다음 할 일까지 알려드립니다.
-            </p>
+        {/* HERO — 풀블리드 영상 배경 위에 헤드라인 오버레이 (빌딩 잘 된 앱 느낌) */}
+        <section className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 lg:px-8 lg:py-10">
+          <div className="relative overflow-hidden rounded-[28px] shadow-[0_30px_90px_-32px_rgba(99,102,241,0.5)] ring-1 ring-white/50">
+            {/* 배경 영상 */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster="/home-hero.jpg"
+              className="absolute inset-0 h-full w-full object-cover"
+            >
+              <source src="/home-hero.mp4" type="video/mp4" />
+            </video>
+            {/* 가독성 스크림 — 영상이 밝아도 흰 글자가 또렷하게 보이도록 하단·좌측 그라데이션 */}
+            <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(22,19,48,0.10) 0%, rgba(22,19,48,0.34) 46%, rgba(22,19,48,0.80) 100%)' }} />
+            <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(22,19,48,0.46) 0%, rgba(22,19,48,0.10) 55%, transparent 100%)' }} />
+            <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-inset ring-white/40" />
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/login" className="inline-flex h-12 items-center justify-center rounded-2xl bg-[#6366F1] px-6 text-[15px] font-semibold text-white shadow-lg shadow-indigo-600/20 transition active:scale-[0.98] hover:bg-[#5458E6]">
-                로그인
-              </Link>
-              <Link href="/signup" className="inline-flex h-12 items-center justify-center rounded-2xl border border-[#E1E0F8] bg-white/80 px-6 text-[15px] font-semibold text-slate-700 backdrop-blur transition active:scale-[0.98] hover:bg-white">
-                무료로 시작하기
-              </Link>
-            </div>
+            {/* 콘텐츠 */}
+            <div className="relative flex min-h-[80vh] flex-col justify-end p-6 sm:min-h-[68vh] sm:p-10 lg:min-h-[564px] lg:p-14">
+              <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[12.5px] font-semibold text-white backdrop-blur-md">
+                <span className="h-1.5 w-1.5 rounded-full bg-white" /> POS·연동 없이 완벽한 매장 관리
+              </span>
+              <h1 className="mt-4 max-w-2xl text-[30px] font-extrabold leading-[1.18] tracking-tight text-white sm:text-[40px] lg:text-[52px]" style={{ wordBreak: 'keep-all', textShadow: '0 2px 18px rgba(10,8,30,0.45)' }}>
+                사장님은 <span className="text-[#C7C9F7]">숫자만</span> 입력하세요.
+                <br />
+                정리는{' '}
+                <span className="bg-gradient-to-r from-[#C7C9F7] to-[#BBE4FA] bg-clip-text text-transparent">AI</span>가 합니다.
+              </h1>
+              <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-white/85 sm:text-[16px]" style={{ textShadow: '0 1px 12px rgba(10,8,30,0.5)' }}>
+                포스기도, 복잡한 연동도 필요 없어요. 수기 입력만으로 매출·지출·직원·근태·계약이 자동 정리되고,
+                AI가 매장 흐름을 읽어 다음 할 일까지 알려드립니다.
+              </p>
 
-            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12.5px] text-slate-500">
-              <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5 text-[#6366F1]" strokeWidth={2.6} /> 회원가입 무료</span>
-              <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5 text-[#6366F1]" strokeWidth={2.6} /> 카드 등록 없이 시작</span>
-              <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5 text-[#6366F1]" strokeWidth={2.6} /> 3분 만에 시작</span>
-            </div>
-          </div>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link href="/login" className="inline-flex h-12 items-center justify-center rounded-2xl bg-white px-6 text-[15px] font-semibold text-[#5458E6] shadow-lg shadow-indigo-950/20 transition active:scale-[0.98] hover:bg-white/90">
+                  로그인
+                </Link>
+                <Link href="/signup" className="inline-flex h-12 items-center justify-center rounded-2xl border border-white/40 bg-white/15 px-6 text-[15px] font-semibold text-white backdrop-blur-md transition active:scale-[0.98] hover:bg-white/25">
+                  무료로 시작하기
+                </Link>
+              </div>
 
-          {/* 영상 히어로 */}
-          <div className="order-1 lg:order-2">
-            <div className="relative">
-              <span aria-hidden className="pointer-events-none absolute -inset-6 -z-10 rounded-[40px] blur-3xl" style={{ background: 'radial-gradient(60% 55% at 50% 45%, rgba(99,102,241,0.22), transparent 70%)' }} />
-              <div className="relative overflow-hidden rounded-[26px] border border-white/70 shadow-[0_30px_80px_-30px_rgba(99,102,241,0.45)]">
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  poster="/home-hero.jpg"
-                  className="aspect-video h-full w-full object-cover"
-                >
-                  <source src="/home-hero.mp4" type="video/mp4" />
-                </video>
-                <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-inset ring-white/50" />
+              <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[12.5px] text-white/85">
+                <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5 text-[#BBE4FA]" strokeWidth={2.6} /> 회원가입 무료</span>
+                <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5 text-[#BBE4FA]" strokeWidth={2.6} /> 카드 등록 없이 시작</span>
+                <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5 text-[#BBE4FA]" strokeWidth={2.6} /> 3분 만에 시작</span>
               </div>
             </div>
           </div>

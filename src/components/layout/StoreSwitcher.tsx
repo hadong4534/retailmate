@@ -37,11 +37,10 @@ export function StoreSwitcher({
         alert(result.error);
         return;
       }
-      // 사용자 요청: 매장 전환 시 현재 탭 유지가 아니라 홈으로 이동.
-      //   - replace() — 뒤로가기로 이전 매장의 페이지로 돌아가지 않게.
-      //   - refresh() — 서버 컴포넌트가 새 매장 컨텍스트로 다시 렌더되도록.
+      // 매장 전환 시 홈으로 이동. switchStore가 이미 revalidatePath('/', 'layout')로
+      // 서버 캐시를 무효화하므로, replace() 한 번이면 새 매장 컨텍스트로 SSR된다.
+      // (기존엔 replace 직후 refresh()까지 호출해 전체 SSR이 2회 돌며 전환이 느렸음)
       router.replace('/dashboard');
-      router.refresh();
     });
   }
 
