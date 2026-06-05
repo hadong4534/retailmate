@@ -5,7 +5,6 @@ import { getPageContext } from '@/lib/auth/page-context';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
 import { formatWon, todayInKST, memberWageDisplay, kstTodayStartIso } from '@/lib/utils';
-import { formatKoreanPhone } from '@/components/ui/PhoneInput';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { MemberActions } from './MemberActions';
 import { WageEditor } from './WageEditor';
@@ -439,4 +438,30 @@ function Stat({ dot, label, value }: { dot: string; label: string; value: string
       <span className="font-semibold text-slate-900">{value}</span>
     </div>
   );
+}
+
+/**
+ * 한국 전화번호 하이픈 포맷 (서버 전용 복사본).
+ * components/ui/PhoneInput.tsx의 formatKoreanPhone과 동일 로직 —
+ * PhoneInput은 'use client' 모듈이라 서버 컴포넌트에서 직접 호출하면
+ * 런타임 에러("Attempted to call ... from the server")가 발생해 분리함.
+ */
+function formatKoreanPhone(input: string): string {
+  const digits = input.replace(/\D/g, '').slice(0, 11);
+  if (digits.length === 0) return '';
+
+  if (digits.startsWith('02')) {
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 5) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`;
+    return `${digits.slice(0, 2)}-${digits.slice(2, 6)}-${digits.slice(6, 10)}`;
+  }
+
+  const areaLen = 3;
+  if (digits.length <= areaLen) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, areaLen)}-${digits.slice(areaLen)}`;
+  if (digits.length <= 10) {
+    return `${digits.slice(0, areaLen)}-${digits.slice(areaLen, 6)}-${digits.slice(6)}`;
+  }
+  return `${digits.slice(0, areaLen)}-${digits.slice(areaLen, 7)}-${digits.slice(7, 11)}`;
 }
