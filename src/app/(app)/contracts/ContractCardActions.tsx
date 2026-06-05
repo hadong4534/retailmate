@@ -12,6 +12,8 @@ interface Props {
   status: 'draft' | 'sent' | 'signed' | 'terminated' | 'cancelled';
   signToken: string | null;
   inviteName: string | null;
+  /** 만료/임박 계약일 때 갱신 작성 링크 (/contracts/new?renew=...) */
+  renewHref?: string | null;
 }
 
 /**
@@ -21,7 +23,7 @@ interface Props {
  *
  * PC 테이블은 별도 — 가로 폭 충분하므로 버튼 나열 유지.
  */
-export function ContractCardActions({ contractId, status, signToken, inviteName }: Props) {
+export function ContractCardActions({ contractId, status, signToken, inviteName, renewHref }: Props) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -65,6 +67,14 @@ export function ContractCardActions({ contractId, status, signToken, inviteName 
           className="absolute right-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-lg border border-[#EAECF5] bg-white shadow-lg"
           onClick={() => setOpen(false)}
         >
+          {renewHref && (
+            <Link
+              href={renewHref}
+              className="block border-b border-slate-100 px-3 py-2 text-[12px] font-medium text-indigo-700 hover:bg-indigo-50"
+            >
+              갱신 계약서 작성
+            </Link>
+          )}
           {status === 'sent' && signToken && (
             <div className="border-b border-slate-100 px-2 py-1.5">
               <CopySignLinkButton signToken={signToken} />
