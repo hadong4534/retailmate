@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getPageContext } from '@/lib/auth/page-context';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
-import { formatWon, todayInKST, memberWageDisplay } from '@/lib/utils';
+import { formatWon, todayInKST, memberWageDisplay, kstTodayStartIso } from '@/lib/utils';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { MemberActions } from './MemberActions';
 import { WageEditor } from './WageEditor';
@@ -105,7 +105,7 @@ export default async function EmployeesPage() {
       .from('attendances')
       .select('id, user_id, check_in_at, check_out_at')
       .eq('store_id', store.id)
-      .gte('check_in_at', todayStr),
+      .gte('check_in_at', kstTodayStartIso()),
   ]);
 
   const members = (membersRes.data ?? []) as MemberRow[];
@@ -152,7 +152,10 @@ export default async function EmployeesPage() {
   const partCount = active.length - fulltimeCount;
 
   const workingNow = todayAttendances.filter((a) => !a.check_out_at).length;
+  // 출근했던 사람(퇴근 포함) — '미출근' 계산용
   const checkedIn = new Set(todayAttendances.map((a) => a.user_id));
+  // 지금 근무 중인 사람 — '출근중' 배지는 반드시 이걸 사용 (퇴근하면 즉시 해제)
+  const workingNowSet = new Set(todayAttendances.filter((a) => !a.check_out_at).map((a) => a.user_id));
   const tardyCount = 0; // 추후 GPS 도입 후 정확 계산
   const offCount = active.length - checkedIn.size;
 
@@ -246,7 +249,8 @@ export default async function EmployeesPage() {
               {active.slice(0, 6).map((m) => {
                 const profile = profileMap.get(m.user_id);
                 const contract = latestContract.get(m.user_id);
-                const present = checkedIn.has(m.user_id);
+                const working = workingNowSet.has(m.user_id);
+                const attendedToday = checkedIn.has(m.user_id);
                 const displayName =
                   (profile?.name && profile.name.trim()) ||
                   (contract?.invite_name && contract.invite_name.trim()) ||
@@ -268,11 +272,13 @@ export default async function EmployeesPage() {
                           </p>
                           <span className={
                             'rounded-full px-1.5 py-0.5 text-[9px] font-medium ' +
-                            (present
+                            (working
                               ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-slate-100 text-slate-500')
+                              : attendedToday
+                                ? 'bg-indigo-50 text-indigo-600'
+                                : 'bg-slate-100 text-slate-500')
                           }>
-                            {present ? '● 출근중' : '○ 미출근'}
+                            {working ? '● 근무중' : attendedToday ? '퇴근' : '○ 미출근'}
                           </span>
                         </div>
                         <p className="text-[10px] text-slate-500">

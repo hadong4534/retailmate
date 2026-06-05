@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { getMonthRange, currentYearMonth } from '@/lib/utils';
+import { getMonthRange, currentYearMonth, kstTodayStartIso } from '@/lib/utils';
 import {
   SALE_CHANNELS,
   SALE_CHANNEL_LABEL,
@@ -68,7 +68,7 @@ export async function loadStoreChatContext(
   const [sales, expenses, working, employees, contracts, store, sixMonthsSales] = await Promise.all([
     supabase.from('sales').select('sale_date, amount, channel').eq('store_id', storeId).gte('sale_date', start).lte('sale_date', end),
     supabase.from('expenses').select('amount, category').eq('store_id', storeId).gte('expense_date', start).lte('expense_date', end),
-    supabase.from('attendances').select('id').eq('store_id', storeId).is('check_out_at', null),
+    supabase.from('attendances').select('id').eq('store_id', storeId).is('check_out_at', null).gte('check_in_at', kstTodayStartIso()),
     supabase.from('store_members').select('id', { count: 'exact', head: true }).eq('store_id', storeId).neq('role', 'owner').eq('is_active', true),
     supabase.from('labor_contracts').select('id', { count: 'exact', head: true }).eq('store_id', storeId).eq('status', 'signed'),
     supabase.from('stores').select('monthly_target').eq('id', storeId).maybeSingle(),

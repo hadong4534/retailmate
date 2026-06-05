@@ -56,6 +56,11 @@ export function todayInKST(): string {
   return kst.toISOString().slice(0, 10);
 }
 
+/** KST 오늘 0시를 UTC ISO로 — '지금 근무 중' 판정 등 당일 필터용. */
+export function kstTodayStartIso(): string {
+  return new Date(todayInKST() + 'T00:00:00+09:00').toISOString();
+}
+
 export function formatKoDate(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d + 'T00:00:00') : d;
   const days = ['일', '월', '화', '수', '목', '금', '토'];

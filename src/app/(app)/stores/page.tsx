@@ -1,7 +1,7 @@
 import { Store as StoreIcon } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getUserStoreContexts, getCurrentAdminStore } from '@/lib/auth/store-context';
-import { formatWon } from '@/lib/utils';
+import { formatWon, kstTodayStartIso } from '@/lib/utils';
 import { StoreEnterButton } from './StoreEnterButton';
 
 export const metadata = { title: '전체 매장 · 리테일메이트' };
@@ -27,7 +27,7 @@ export default async function StoresOverviewPage() {
   const [salesRes, expRes, workRes, memRes] = await Promise.all([
     supabase.from('sales').select('store_id, amount').in('store_id', ids).gte('sale_date', mStart),
     supabase.from('expenses').select('store_id, amount').in('store_id', ids).gte('expense_date', mStart),
-    supabase.from('attendances').select('store_id').in('store_id', ids).is('check_out_at', null),
+    supabase.from('attendances').select('store_id').in('store_id', ids).is('check_out_at', null).gte('check_in_at', kstTodayStartIso()),
     supabase.from('store_members').select('store_id, role, is_active').in('store_id', ids),
   ]);
 

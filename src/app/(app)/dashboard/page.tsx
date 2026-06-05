@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { kstTodayStartIso } from '@/lib/utils';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { HomeView } from './HomeView';
 
@@ -116,7 +117,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     // baseline (어제 이전 7일)
     supabase.from('sales').select('sale_date, amount').eq('store_id', storeId)
       .gte('sale_date', window7StartStr).lt('sale_date', baseDateStr),
-    supabase.from('attendances').select('id').eq('store_id', storeId).is('check_out_at', null),
+    supabase.from('attendances').select('id').eq('store_id', storeId).is('check_out_at', null).gte('check_in_at', kstTodayStartIso()),
     supabase.from('store_members').select('id', { count: 'exact', head: true })
       .eq('store_id', storeId).neq('role', 'owner').eq('is_active', true),
   ]);

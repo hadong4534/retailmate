@@ -9,7 +9,7 @@ import { getUserStoreContexts } from '@/lib/auth/store-context';
 import { getUnreadNotices, getStoreNotices } from '@/lib/notices/queries';
 import { getEmployeeOverview, formatHM } from '@/lib/employee/queries';
 import { AvatarUploader } from './AvatarUploader';
-import { formatWon } from '@/lib/utils';
+import { formatWon, kstTodayStartIso } from '@/lib/utils';
 
 export const metadata = {
   title: '내 정보 · 리테일메이트',
@@ -63,6 +63,7 @@ export default async function EmployeeMePage() {
         .eq('store_id', primaryStoreId)
         .eq('user_id', user.id)
         .is('check_out_at', null)
+        .gte('check_in_at', kstTodayStartIso())
         .limit(1),
     ]);
     storeHasGps = storeRow?.lat != null && storeRow?.lng != null;

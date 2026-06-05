@@ -9,7 +9,7 @@ import { GpsCheckWidget } from '@/components/attendance/GpsCheckWidget';
 import { ScheduleBoard } from './ScheduleBoard';
 import { PageHeader } from '@/components/app';
 import { formatHM } from '@/lib/employee/queries';
-import { todayInKST } from '@/lib/utils';
+import { todayInKST, kstTodayStartIso } from '@/lib/utils';
 
 interface AttRow {
   id: string;
@@ -98,6 +98,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
       .eq('store_id', store.id)
       .eq('user_id', ctx.userId)
       .is('check_out_at', null)
+      .gte('check_in_at', kstTodayStartIso())
       .limit(1),
   ]);
   const storeHasGps = storeRow?.lat != null && storeRow?.lng != null;
@@ -140,7 +141,15 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
 
   const totalMembers = memberRows.length;
 
-  const todayAtts = allAtts.filter((a) => a.check_in_at.slice(0, 10) === todayStr);
+  // check_in_at은 UTC — KST 날짜로 변환해 비교 (오전 9시 이전 출근이 '어제'로 빠지던 버그 수정)
+  const kstDateOf = (iso: string) => new Date(new Date(iso).getTime() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  const todayAtts = allAtts.filter((a) => kstDateOf(a.check_in_at) === todayStr);
+  // 같은 사람이 하루 2회 근무한 경우: 진행 중(미퇴근) 기록 우선, 없으면 가장 최근 기록
+  const pickAtt = (userId: string) => {
+    const mine = todayAtts.filter((a) => a.user_id === userId);
+    if (mine.length === 0) return undefined;
+    return mine.find((a) => !a.check_out_at) ?? mine.reduce((x, y) => (x.check_in_at > y.check_in_at ? x : y));
+  };
   const checkedInToday = new Set(todayAtts.map((a) => a.user_id));
   const workingNow = todayAtts.filter((a) => !a.check_out_at);
   const offToday = totalMembers - checkedInToday.size;
@@ -429,7 +438,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
               <ul className="divide-y divide-slate-100 lg:hidden">
                 {memberRows.map((m) => {
                   const profile = profileMap.get(m.user_id);
-                  const att = todayAtts.find((a) => a.user_id === m.user_id);
+                  const att = pickAtt(m.user_id);
                   const checkIn = att ? new Date(att.check_in_at) : null;
                   const checkOut = att?.check_out_at ? new Date(att.check_out_at) : null;
                   return (
@@ -490,7 +499,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                   <tbody className="divide-y divide-slate-100">
                     {memberRows.map((m) => {
                       const profile = profileMap.get(m.user_id);
-                      const att = todayAtts.find((a) => a.user_id === m.user_id);
+                      const att = pickAtt(m.user_id);
                       const checkIn = att ? new Date(att.check_in_at) : null;
                       const checkOut = att?.check_out_at ? new Date(att.check_out_at) : null;
                       return (
