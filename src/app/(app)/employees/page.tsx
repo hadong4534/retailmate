@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Users, Wallet, BarChart3, Bell, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getPageContext } from '@/lib/auth/page-context';
+import { getStorePayroll } from '@/lib/payroll/store-payroll';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
 import { formatWon, todayInKST, memberWageDisplay, kstTodayStartIso } from '@/lib/utils';
@@ -172,13 +173,17 @@ export default async function EmployeesPage() {
     ? Math.round(wagedMembers.reduce((acc, m) => acc + (m.hourly_wage ?? 0), 0) / wagedMembers.length)
     : 0;
 
-  // 이번 달 인건비 예상 — 정규직 월급 + 알바 시급 × 평균 근무시간 추정 (근태 없으니 단순 추정)
-  const expectedLabor = active.reduce((acc, m) => {
-    if (m.monthly_wage) return acc + m.monthly_wage;
-    if (m.hourly_wage) return acc + m.hourly_wage * 160; // 월 160시간 가정
-    if (m.daily_wage) return acc + m.daily_wage * 22;
-    return acc;
-  }, 0);
+  // 이번 달 인건비 — '현재까지' 실집계 (임의 시간 가정 없음).
+  //  · 월급제: 계약 월급 그대로 반영
+  //  · 시급제: 출퇴근 기록(분 단위) × 계약 시급 — 퇴근 찍을 때마다 즉시 반영
+  //  · 일용직: 근무일수 × 계약 일급
+  // getStorePayroll이 근태+계약서를 결합해 계산 (급여 계산 페이지와 동일 엔진 → 숫자 일치).
+  const payroll = await getStorePayroll(supabase, store.id, todayStr.slice(0, 7));
+  const laborSoFar = payroll.totals.grossPay;
+  // 4대보험 처리방식 직원들의 보험료(본인부담 공제 추정) 합산 — 작게 병기.
+  const fourMajorInsurance = payroll.rows
+    .filter((r) => r.payrollMode === 'four_major')
+    .reduce((acc, r) => acc + r.insurance.total, 0);
 
   // 오늘 출근 현황
   const totalActive = active.length;
@@ -228,9 +233,11 @@ export default async function EmployeesPage() {
             Icon={BarChart3}
             iconBg="bg-emerald-100"
             iconColor="text-emerald-600"
-            label="이번 달 인건비 예상"
-            value={formatWon(expectedLabor)}
-            sub="추정치 · 시급제는 월 160시간 가정"
+            label="이번 달 인건비 (현재까지)"
+            value={formatWon(laborSoFar)}
+            sub={fourMajorInsurance > 0
+              ? `4대보험료: ${formatWon(fourMajorInsurance)}`
+              : '출퇴근 기록 × 계약 시급 실시간 집계'}
           />
           <KpiCard
             Icon={Bell}
