@@ -334,6 +334,7 @@ export default async function ContractsPage() {
                   const profile = c.employee_id ? profileMap.get(c.employee_id) : null;
                   const name = profile?.name ?? c.invite_name ?? '(직원 미등록)';
                   const meta = STATUS_META[c.status];
+                  const expiry = getExpiry(c, todayStr, today);
                   return (
                     <li key={c.id} className="px-4 py-3">
                       <div className="flex items-center justify-between gap-2">
@@ -348,9 +349,16 @@ export default async function ContractsPage() {
                             </p>
                           </div>
                         </div>
-                        <span className={`whitespace-nowrap rounded px-2 py-0.5 text-[11px] font-medium ${meta.chip} ${meta.chipText}`}>
-                          {meta.text}
-                        </span>
+                        <div className="flex shrink-0 flex-col items-end gap-1">
+                          <span className={`whitespace-nowrap rounded px-2 py-0.5 text-[11px] font-medium ${meta.chip} ${meta.chipText}`}>
+                            {meta.text}
+                          </span>
+                          {expiry && (
+                            <span className={`whitespace-nowrap rounded px-2 py-0.5 text-[10px] font-medium ${expiry.expired ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                              {expiry.label}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="mt-2 flex justify-end">
                         <ContractCardActions
@@ -358,6 +366,7 @@ export default async function ContractsPage() {
                           status={c.status}
                           signToken={c.sign_token}
                           inviteName={c.invite_name}
+                          renewHref={expiry ? `/contracts/new?renew=${c.id}` : null}
                         />
                       </div>
                     </li>
@@ -384,13 +393,7 @@ export default async function ContractsPage() {
                       const profile = c.employee_id ? profileMap.get(c.employee_id) : null;
                       const name = profile?.name ?? c.invite_name ?? '(직원 미등록)';
                       const meta = STATUS_META[c.status];
-                      let dDay: string | null = null;
-                      if (c.status === 'signed' && c.work_end_date) {
-                        const days = Math.ceil(
-                          (new Date(c.work_end_date).getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-                        );
-                        if (days >= 0 && days <= 30) dDay = `D-${days}`;
-                      }
+                      const expiry = getExpiry(c, todayStr, today);
                       return (
                         <tr key={c.id} className="hover:bg-slate-50">
                           <td className="whitespace-nowrap px-4 py-3">
@@ -419,9 +422,9 @@ export default async function ContractsPage() {
                             </span>
                           </td>
                           <td className="whitespace-nowrap px-4 py-3">
-                            {dDay ? (
-                              <span className="rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-medium text-red-700">
-                                {dDay} 만료 임박
+                            {expiry ? (
+                              <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${expiry.expired ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                                {expiry.label}
                               </span>
                             ) : (
                               <span className="text-xs text-slate-400">정상</span>
@@ -429,6 +432,14 @@ export default async function ContractsPage() {
                           </td>
                           <td className="whitespace-nowrap px-4 py-3 text-right">
                             <div className="inline-flex items-center gap-1.5">
+                              {expiry && (
+                                <Link
+                                  href={`/contracts/new?renew=${c.id}`}
+                                  className="rounded border border-indigo-200 bg-indigo-50 px-2 py-1 text-[11px] font-medium text-indigo-700 hover:bg-indigo-100"
+                                >
+                                  갱신
+                                </Link>
+                              )}
                               {c.status === 'sent' && c.sign_token && (
                                 <CopySignLinkButton signToken={c.sign_token} />
                               )}
@@ -462,6 +473,21 @@ export default async function ContractsPage() {
       </div>
     </div>
   );
+}
+
+/** 서명 완료된 기간제 근로계약의 만료 상태 — 만료됨 또는 30일 내 임박일 때만 반환. */
+function getExpiry(
+  c: ContractRow,
+  todayStr: string,
+  today: Date,
+): { label: string; expired: boolean } | null {
+  if (c.status !== 'signed' || !c.work_end_date || c.contract_type === 'nda') return null;
+  if (c.work_end_date < todayStr) return { label: '기간 만료 · 갱신 필요', expired: true };
+  const days = Math.ceil(
+    (new Date(c.work_end_date).getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  if (days >= 0 && days <= 30) return { label: `D-${days} 만료 임박`, expired: false };
+  return null;
 }
 
 function StatusCard({
