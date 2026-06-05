@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore, getUserStoreContexts } from '@/lib/auth/store-context';
 
 type Result =
-  | { ok: true; attendanceId: string; distanceM: number }
+  | { ok: true; attendanceId: string; distanceM?: number }
   | { error: string; distanceM?: number };
 
 /**
@@ -40,7 +40,7 @@ async function resolveStoreId(): Promise<{ storeId: string } | { error: string }
 /**
  * GPS 출근 — 위치를 받아 매장 좌표 반경 내인지 검증 후 attendances row 생성.
  */
-export async function gpsCheckIn(input: { lat: number; lng: number }): Promise<Result> {
+export async function gpsCheckIn(input: { lat: number; lng: number; accuracy?: number }): Promise<Result> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: '로그인이 필요합니다.' };
@@ -62,9 +62,13 @@ export async function gpsCheckIn(input: { lat: number; lng: number }): Promise<R
   const radius = store.radius_m ?? 100;
   const dist = distanceMeters(input.lat, input.lng, Number(store.lat), Number(store.lng));
 
-  if (dist > radius) {
+  // 휴대폰 GPS 오차 보정 — 실내에서는 수십~수백 m 튀는 게 정상이라,
+  // 기기가 보고한 정확도(±accuracy)를 최대 100m까지 허용 오차로 인정한다.
+  const accuracyBuffer = Math.min(Math.max(Math.round(input.accuracy ?? 0), 0), 100);
+  if (dist > radius + accuracyBuffer) {
+    const accNote = accuracyBuffer > 0 ? ` · GPS 오차 ±${accuracyBuffer}m 감안` : '';
     return {
-      error: `매장 반경 ${radius}m 밖입니다 (현재 ${dist}m). 매장 가까이에서 다시 시도해주세요.`,
+      error: `매장 반경 ${radius}m 밖입니다 (현재 ${dist}m${accNote}). 창가나 야외 등 GPS가 잘 잡히는 곳에서 다시 시도해주세요.`,
       distanceM: dist,
     };
   }
@@ -103,13 +107,19 @@ export async function gpsCheckIn(input: { lat: number; lng: number }): Promise<R
 
   revalidatePath('/attendance');
   revalidatePath('/dashboard');
+  revalidatePath('/employee/me');
   return { ok: true, attendanceId: row.id, distanceM: dist };
 }
 
 /**
- * GPS 퇴근 — 가장 최근 미완료 출근 row를 업데이트.
+ * 퇴근 — 가장 최근 미완료 출근 row를 업데이트.
+ *
+ * ⚠ 퇴근은 GPS를 요구하지 않는다 (어디서나 가능).
+ *   - 출근은 '매장에 있다'는 인증이 목적이지만, 퇴근은 깜빡하고 매장을 떠난 뒤
+ *     누르는 경우가 많고, 실내 GPS 불량으로 매장 안에서도 차단되는 문제가 있었음.
+ *   - 좌표가 오면 기록용으로만 쓰고, 없거나 멀어도 퇴근 처리는 항상 진행한다.
  */
-export async function gpsCheckOut(input: { lat: number; lng: number }): Promise<Result> {
+export async function gpsCheckOut(input?: { lat?: number | null; lng?: number | null }): Promise<Result> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: '로그인이 필요합니다.' };
@@ -118,24 +128,17 @@ export async function gpsCheckOut(input: { lat: number; lng: number }): Promise<
   if ('error' in storeRes) return { error: storeRes.error };
   const storeId = storeRes.storeId;
 
-  const { data: store } = await supabase
-    .from('stores')
-    .select('lat, lng, radius_m')
-    .eq('id', storeId)
-    .maybeSingle();
-
-  if (!store || store.lat == null || store.lng == null) {
-    return { error: '매장 GPS 좌표가 설정되지 않았습니다.' };
-  }
-
-  const radius = store.radius_m ?? 100;
-  const dist = distanceMeters(input.lat, input.lng, Number(store.lat), Number(store.lng));
-
-  if (dist > radius) {
-    return {
-      error: `매장 반경 ${radius}m 밖입니다 (현재 ${dist}m). 매장 가까이에서 다시 시도해주세요.`,
-      distanceM: dist,
-    };
+  // (기록용) 좌표가 있으면 매장과의 거리만 계산 — 차단하지 않음
+  let dist: number | undefined;
+  if (input?.lat != null && input?.lng != null) {
+    const { data: store } = await supabase
+      .from('stores')
+      .select('lat, lng')
+      .eq('id', storeId)
+      .maybeSingle();
+    if (store?.lat != null && store?.lng != null) {
+      dist = distanceMeters(input.lat, input.lng, Number(store.lat), Number(store.lng));
+    }
   }
 
   // 가장 최근 미완료 row
@@ -167,5 +170,6 @@ export async function gpsCheckOut(input: { lat: number; lng: number }): Promise<
 
   revalidatePath('/attendance');
   revalidatePath('/dashboard');
+  revalidatePath('/employee/me');
   return { ok: true, attendanceId: openRow.id, distanceM: dist };
 }

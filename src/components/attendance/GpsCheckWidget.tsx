@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { MapPin, AlertTriangle, Check } from 'lucide-react';
 import { gpsCheckIn, gpsCheckOut } from '@/app/(app)/attendance/actions';
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<
@@ -20,7 +22,7 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
     | null
   >(null);
 
-  function getPosition(): Promise<GeolocationPosition> {
+  function getPosition(timeoutMs = 12000): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
         reject(new Error('이 기기에서는 위치 서비스를 사용할 수 없습니다.'));
@@ -35,7 +37,7 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
               : new Error('위치를 가져오지 못했습니다. GPS 신호가 약하거나 잠시 후 다시 시도해주세요.'),
           );
         },
-        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 },
+        { enableHighAccuracy: true, timeout: timeoutMs, maximumAge: 0 },
       );
     });
   }
@@ -43,30 +45,53 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
   async function handle(action: 'in' | 'out') {
     setResult(null);
     setBusy(true);
-    try {
-      const pos = await getPosition();
-      const lat = Number(pos.coords.latitude.toFixed(6));
-      const lng = Number(pos.coords.longitude.toFixed(6));
-      startTransition(async () => {
-        const fn = action === 'in' ? gpsCheckIn : gpsCheckOut;
-        const res = await fn({ lat, lng });
-        if ('error' in res) {
-          setResult({ kind: 'error', message: res.error });
-        } else {
-          setResult({
-            kind: 'ok',
-            message:
-              action === 'in'
-                ? `출근 완료 — 매장 ${res.distanceM}m 거리에서 인증되었습니다.`
-                : `퇴근 완료 — 매장 ${res.distanceM}m 거리에서 인증되었습니다.`,
-          });
-        }
+
+    if (action === 'in') {
+      // 출근: GPS 필수 (매장 반경 인증) — 기기 정확도(±m)도 함께 보내 오차 보정
+      try {
+        const pos = await getPosition();
+        const lat = Number(pos.coords.latitude.toFixed(6));
+        const lng = Number(pos.coords.longitude.toFixed(6));
+        const accuracy = Number.isFinite(pos.coords.accuracy) ? Math.round(pos.coords.accuracy) : undefined;
+        startTransition(async () => {
+          const res = await gpsCheckIn({ lat, lng, accuracy });
+          if ('error' in res) {
+            setResult({ kind: 'error', message: res.error });
+          } else {
+            setResult({ kind: 'ok', message: `출근 완료 — 매장 ${res.distanceM}m 거리에서 인증되었습니다.` });
+            router.refresh();
+          }
+          setBusy(false);
+        });
+      } catch (e) {
+        setResult({ kind: 'error', message: (e as Error).message });
         setBusy(false);
-      });
-    } catch (e) {
-      setResult({ kind: 'error', message: (e as Error).message });
-      setBusy(false);
+      }
+      return;
     }
+
+    // 퇴근: GPS 없이도 가능 — 위치를 짧게 시도해보고(기록용), 실패해도 그대로 진행
+    let coords: { lat: number; lng: number } | undefined;
+    try {
+      // 퇴근은 기록용이라 5초만 시도 — 안 잡히면 바로 진행
+      const pos = await getPosition(5000);
+      coords = {
+        lat: Number(pos.coords.latitude.toFixed(6)),
+        lng: Number(pos.coords.longitude.toFixed(6)),
+      };
+    } catch {
+      coords = undefined; // GPS가 안 잡혀도 퇴근은 진행
+    }
+    startTransition(async () => {
+      const res = await gpsCheckOut(coords);
+      if ('error' in res) {
+        setResult({ kind: 'error', message: res.error });
+      } else {
+        setResult({ kind: 'ok', message: '퇴근 완료 — 수고하셨습니다.' });
+        router.refresh();
+      }
+      setBusy(false);
+    });
   }
 
   if (!storeHasGps) {
@@ -139,7 +164,7 @@ export function GpsCheckWidget({ hasOpenAttendance, storeHasGps }: Props) {
       )}
 
       <p className="mt-2 text-[10px] text-slate-500">
-        매장 반경 안에 있는지 GPS로 자동 확인합니다.
+        출근은 매장 반경 안에서 GPS로 인증돼요. 퇴근은 GPS가 안 잡혀도, 매장 밖에서도 가능합니다.
       </p>
     </div>
   );
