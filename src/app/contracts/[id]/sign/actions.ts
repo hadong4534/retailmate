@@ -179,6 +179,23 @@ export async function submitEmployeeSignature(
   const { error: consentErr } = await admin.from('consent_logs').insert(consentRows);
   if (consentErr) return { error: consentErr.message };
 
+  // 2.5) 계약 갱신 자동 처리 — 이 직원의 같은 매장 기존 활성 근로계약(sent/signed)을 종료.
+  //      · 새 계약이 서명되는 순간 기존 계약을 terminated로 전환해
+  //        "직원당 활성 계약 1건" 유니크 인덱스(uniq_active_contract_emp) 충돌을 방지한다.
+  //      · NDA 서명은 근로계약과 무관하므로 서로 건드리지 않는다.
+  //      · 첫 서명(기존 계약 없음)이면 매칭 row가 없어 아무 일도 일어나지 않는다.
+  if (contract.contract_type !== 'nda') {
+    const { error: oldTermErr } = await admin
+      .from('labor_contracts')
+      .update({ status: 'terminated' })
+      .eq('store_id', contract.store_id)
+      .eq('employee_id', user.id)
+      .neq('contract_type', 'nda')
+      .in('status', ['sent', 'signed'])
+      .neq('id', contract.id);
+    if (oldTermErr) return { error: oldTermErr.message };
+  }
+
   // 3) 계약 업데이트: 서명 처리
   // 사용자 정책: 서명 완료 후에도 sign_token은 유지한다.
   // 이유: 직원이 SMS 링크를 다시 열어도 page.tsx의 isSigned 분기가 "이미 서명 완료" 카드를 보여주려면
