@@ -184,6 +184,14 @@ export default async function EmployeesPage() {
   const fourMajorInsurance = payroll.rows
     .filter((r) => r.payrollMode === 'four_major')
     .reduce((acc, r) => acc + r.insurance.total, 0);
+  // 3.3% 사업소득(프리랜서) 직원들의 원천징수 공제 합산.
+  const freelanceDeduction = payroll.rows
+    .filter((r) => r.payrollMode === 'freelance_3_3')
+    .reduce((acc, r) => acc + r.insurance.total, 0);
+  const laborSubParts = [
+    fourMajorInsurance > 0 ? `4대보험료: ${formatWon(fourMajorInsurance)}` : null,
+    freelanceDeduction > 0 ? `3.3% 공제: ${formatWon(freelanceDeduction)}` : null,
+  ].filter(Boolean);
 
   // 오늘 출근 현황
   const totalActive = active.length;
@@ -235,8 +243,8 @@ export default async function EmployeesPage() {
             iconColor="text-emerald-600"
             label="이번 달 인건비 (현재까지)"
             value={formatWon(laborSoFar)}
-            sub={fourMajorInsurance > 0
-              ? `4대보험료: ${formatWon(fourMajorInsurance)}`
+            sub={laborSubParts.length > 0
+              ? laborSubParts.join(' · ')
               : '출퇴근 기록 × 계약 시급 실시간 집계'}
           />
           <KpiCard
