@@ -5,6 +5,7 @@ import { getPageContext } from '@/lib/auth/page-context';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
 import { formatWon, todayInKST, memberWageDisplay, kstTodayStartIso } from '@/lib/utils';
+import { formatKoreanPhone } from '@/components/ui/PhoneInput';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { MemberActions } from './MemberActions';
 import { WageEditor } from './WageEditor';
@@ -89,7 +90,7 @@ export default async function EmployeesPage() {
   // 사장 본인이 잘못 employee로 등록된 row가 있어도 목록에서 제외.
   if (ownerUserId) membersQuery.neq('user_id', ownerUserId);
 
-  const [membersRes, contractsRes, monthHiresRes, attTodayRes] = await Promise.all([
+  const [membersRes, contractsRes, monthHiresRes, attTodayRes, staleOpenRes] = await Promise.all([
     membersQuery,
     supabase
       .from('labor_contracts')
@@ -106,6 +107,13 @@ export default async function EmployeesPage() {
       .select('id, user_id, check_in_at, check_out_at')
       .eq('store_id', store.id)
       .gte('check_in_at', kstTodayStartIso()),
+    // 퇴근 미처리(어제 이전에 출근했는데 안 닫힌 기록) — 근태 이상 알림에 사용
+    supabase
+      .from('attendances')
+      .select('id', { count: 'exact', head: true })
+      .eq('store_id', store.id)
+      .is('check_out_at', null)
+      .lt('check_in_at', kstTodayStartIso()),
   ]);
 
   const members = (membersRes.data ?? []) as MemberRow[];
@@ -156,7 +164,7 @@ export default async function EmployeesPage() {
   const checkedIn = new Set(todayAttendances.map((a) => a.user_id));
   // 지금 근무 중인 사람 — '출근중' 배지는 반드시 이걸 사용 (퇴근하면 즉시 해제)
   const workingNowSet = new Set(todayAttendances.filter((a) => !a.check_out_at).map((a) => a.user_id));
-  const tardyCount = 0; // 추후 GPS 도입 후 정확 계산
+  const staleOpenCount = staleOpenRes.count ?? 0; // 퇴근 미처리(과거 미퇴근) 기록 수
   const offCount = active.length - checkedIn.size;
 
   // 평균 시급 + 인건비 예상 (active만)
@@ -173,15 +181,10 @@ export default async function EmployeesPage() {
     return acc;
   }, 0);
 
-  // 오늘 출근 현황 도넛 데이터
+  // 오늘 출근 현황
   const totalActive = active.length;
   const presentCount = checkedIn.size;
-  const attDonut = totalActive > 0
-    ? [
-        { name: '출근', value: presentCount, color: '#7177EE' },
-        { name: '미출근', value: Math.max(0, totalActive - presentCount), color: '#cbd5e1' },
-      ].filter((d) => d.value > 0)
-    : [];
+  const leftCount = Math.max(0, presentCount - workingNow); // 출근 후 퇴근한 인원
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">
@@ -228,15 +231,15 @@ export default async function EmployeesPage() {
             iconColor="text-emerald-600"
             label="이번 달 인건비 예상"
             value={formatWon(expectedLabor)}
-            sub="시급/월급/일급 기준 추정"
+            sub="추정치 · 시급제는 월 160시간 가정"
           />
           <KpiCard
             Icon={Bell}
             iconBg="bg-amber-100"
             iconColor="text-amber-600"
             label="근태 이상 알림"
-            value={`${tardyCount}건`}
-            sub={tardyCount === 0 ? '정상' : '확인 필요'}
+            value={`${staleOpenCount}건`}
+            sub={staleOpenCount === 0 ? '정상' : '퇴근 미처리 기록 — 확인 필요'}
             href="/attendance"
           />
         </div>
@@ -288,7 +291,7 @@ export default async function EmployeesPage() {
                     </div>
                     <div className="mt-2 space-y-0.5 text-[11px] text-slate-500">
                       {(() => { const w = memberWageDisplay(m); return <p>{w.label} · {w.value}</p>; })()}
-                      {displayPhone && <p>{displayPhone}</p>}
+                      {displayPhone && <p>{formatKoreanPhone(displayPhone)}</p>}
                     </div>
                   </div>
                 );
@@ -301,32 +304,28 @@ export default async function EmployeesPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border border-[#EAECF5] bg-white p-5">
+          <section className="flex flex-col rounded-xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">오늘 출근 현황</h2>
             {totalActive === 0 ? (
               <p className="mt-3 text-xs text-slate-500">직원이 없습니다.</p>
-            ) : attDonut.length === 0 || presentCount === 0 ? (
-              <div className="mt-3 flex flex-col items-center rounded-lg bg-slate-50 px-4 py-6 text-center">
+            ) : presentCount === 0 ? (
+              <div className="mt-3 flex flex-1 flex-col items-center justify-center rounded-lg bg-slate-50 px-4 py-6 text-center">
                 <Clock className="h-6 w-6 text-slate-400" strokeWidth={1.8} />
                 <p className="mt-2 text-xs text-slate-500">아직 오늘 출근한 직원이 없습니다.</p>
               </div>
             ) : (
-              <div className="mt-3 grid grid-cols-2 gap-3">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-indigo-600">{presentCount}/{totalActive}</p>
-                  <p className="mt-1 text-[10px] text-slate-500">
-                    출근율 {((presentCount / totalActive) * 100).toFixed(1)}%
-                  </p>
-                </div>
-                <div className="space-y-1.5 text-xs">
-                  <Stat dot="bg-indigo-500" label="출근" value={`${presentCount}명`} />
+              <div className="mt-2 flex flex-1 flex-col items-center justify-center gap-4">
+                <AttendanceRing present={presentCount} total={totalActive} />
+                <div className="w-full space-y-1.5 text-xs">
+                  <Stat dot="bg-emerald-500" label="근무 중" value={`${workingNow}명`} />
+                  <Stat dot="bg-indigo-400" label="퇴근" value={`${leftCount}명`} />
                   <Stat dot="bg-slate-300" label="미출근" value={`${offCount}명`} />
                 </div>
               </div>
             )}
             <Link
               href="/attendance"
-              className="mt-3 block text-right text-[11px] font-medium text-indigo-600 hover:underline"
+              className="mt-4 block border-t border-[#F0F1F8] pt-3 text-right text-[11px] font-medium text-indigo-600 hover:underline"
             >
               근태 현황 보기 →
             </Link>
@@ -359,7 +358,7 @@ export default async function EmployeesPage() {
               resign_date: m.resign_date,
               is_active: m.is_active,
               name: displayName,
-              phone: displayPhone,
+              phone: displayPhone ? formatKoreanPhone(displayPhone) : displayPhone,
               // NDA는 위에서 이미 제외했으므로 contract_type은 fulltime/parttime/daily 셋 중 하나로 안전.
               contract: contract && contract.contract_type !== 'nda'
                 ? { contract_type: contract.contract_type as 'fulltime' | 'parttime' | 'daily', status: contract.status }
@@ -396,6 +395,29 @@ function KpiCard({
   );
   if (href) return <Link href={href}>{inner}</Link>;
   return inner;
+}
+
+/** 출근율 도넛 링 — 가운데 N/M, 아래 출근율 % */
+function AttendanceRing({ present, total }: { present: number; total: number }) {
+  const pct = total > 0 ? Math.round((present / total) * 100) : 0;
+  const r = 44;
+  const c = 2 * Math.PI * r;
+  const dash = (Math.min(100, pct) / 100) * c;
+  return (
+    <svg viewBox="0 0 110 110" className="h-[112px] w-[112px]" role="img" aria-label={`출근율 ${pct}%`}>
+      <defs>
+        <linearGradient id="attRingG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#A5AEF9" />
+          <stop offset="1" stopColor="#7177EE" />
+        </linearGradient>
+      </defs>
+      <circle cx="55" cy="55" r={r} fill="none" stroke="#EEF0F8" strokeWidth="10" />
+      <circle cx="55" cy="55" r={r} fill="none" stroke="url(#attRingG)" strokeWidth="10" strokeLinecap="round"
+        strokeDasharray={`${dash} ${c}`} transform="rotate(-90 55 55)" />
+      <text x="55" y="53" textAnchor="middle" fontSize="20" fontWeight="800" fill="#1E2333">{present}/{total}</text>
+      <text x="55" y="71" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#8A90A6">출근율 {pct}%</text>
+    </svg>
+  );
 }
 
 function SmallStat({ label, value }: { label: string; value: string }) {
