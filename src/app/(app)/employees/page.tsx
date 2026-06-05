@@ -193,6 +193,28 @@ export default async function EmployeesPage() {
     freelanceDeduction > 0 ? `3.3% 공제: ${formatWon(freelanceDeduction)}` : null,
   ].filter(Boolean);
 
+  // 계약 만료 알림 — 재직 직원의 최신 근로계약(NDA 제외) 기준: 만료됨 / 30일 내 만료.
+  const expireSoonStr = (() => {
+    const d = new Date(`${todayStr}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() + 30);
+    return d.toISOString().slice(0, 10);
+  })();
+  const activeUserIds = new Set(active.map((m) => m.user_id));
+  const expiredNames: string[] = [];
+  const expiringNames: string[] = [];
+  latestContract.forEach((c, userId) => {
+    if (!activeUserIds.has(userId) || c.status !== 'signed' || !c.work_end_date) return;
+    const profile = profileMap.get(userId);
+    const nm =
+      (profile?.name && profile.name.trim()) ||
+      (c.invite_name && c.invite_name.trim()) ||
+      '이름 미입력';
+    if (c.work_end_date < todayStr) expiredNames.push(nm);
+    else if (c.work_end_date <= expireSoonStr) expiringNames.push(nm);
+  });
+  const nameSummary = (names: string[]) =>
+    `${names.slice(0, 3).join(', ')}${names.length > 3 ? ` 외 ${names.length - 3}명` : ''}`;
+
   // 오늘 출근 현황
   const totalActive = active.length;
   const presentCount = checkedIn.size;
@@ -216,6 +238,25 @@ export default async function EmployeesPage() {
           }
           className="mb-5"
         />
+
+        {/* 계약 만료 알림 배너 — 만료/임박 직원이 있을 때만 노출 */}
+        {(expiredNames.length > 0 || expiringNames.length > 0) && (
+          <Link
+            href="/contracts"
+            className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] text-amber-900 transition hover:bg-amber-100"
+          >
+            <span className="min-w-0">
+              <b>근로계약 확인 필요</b>
+              {expiredNames.length > 0 && (
+                <> · 기간 만료 <b>{expiredNames.length}명</b> ({nameSummary(expiredNames)})</>
+              )}
+              {expiringNames.length > 0 && (
+                <> · 30일 내 만료 <b>{expiringNames.length}명</b> ({nameSummary(expiringNames)})</>
+              )}
+            </span>
+            <span className="shrink-0 text-[12px] font-semibold">계약서에서 갱신 →</span>
+          </Link>
+        )}
 
         {/* 상단 KPI */}
         <div className="rm-stagger grid grid-cols-1 gap-4 lg:grid-cols-4">
