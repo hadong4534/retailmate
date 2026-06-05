@@ -68,9 +68,15 @@ const PAYROLL_MODE_TEXT: Record<string, string> = {
 export function ContractWizard({
   defaultWorkplaceAddress,
   initialContractType,
+  initialData,
+  renewOfId,
 }: {
   defaultWorkplaceAddress: string;
   initialContractType?: 'fulltime' | 'parttime' | 'daily';
+  /** 갱신 작성: 기존 계약 내용 프리필 (서버에서 검증·조회해 전달) */
+  initialData?: Partial<ContractFormData>;
+  /** 갱신 대상 계약 id — createContract의 중복 활성 계약 검사를 갱신 모드로 통과시키기 위함 */
+  renewOfId?: string;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -90,6 +96,8 @@ export function ContractWizard({
     wage_type: initialContractType === 'fulltime' ? 'monthly'
       : initialContractType === 'daily' ? 'monthly'
       : 'hourly',
+    // 갱신 프리필은 마지막에 덮어써서 기존 계약 내용을 그대로 가져온다.
+    ...initialData,
   });
   const [signature, setSignature] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -173,7 +181,11 @@ export function ContractWizard({
       return;
     }
     startTransition(async () => {
-      const result = await createContract(data, signature);
+      const result = await createContract(
+        data,
+        signature,
+        renewOfId ? { renewOfId } : undefined,
+      );
       if (result.error) {
         setError(result.error);
         return;
