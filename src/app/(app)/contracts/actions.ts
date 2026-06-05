@@ -60,6 +60,7 @@ function generateSignToken(): string {
 export async function createContract(
   input: ContractFormData,
   ownerSignatureDataUrl: string,
+  opts?: { renewOfId?: string },
 ): Promise<CreateContractResult> {
   const validation = validate(input);
   if (validation) return { error: validation };
@@ -88,9 +89,16 @@ export async function createContract(
     .eq('invite_phone', invitePhoneDigits)
     .in('status', ['sent', 'signed']);
   if (existing && existing.length > 0) {
-    return {
-      error: '이 직원에게 이미 진행 중인 계약서가 있습니다. 기존 계약을 먼저 종료하거나 수정해주세요.',
-    };
+    // 갱신 작성: 활성 계약이 "갱신 대상 1건"뿐이면 통과 —
+    // 직원이 새 계약서에 서명하는 순간 기존 계약은 자동 종료된다 (sign/actions.ts 2.5단계).
+    // DB 유니크 인덱스도 안전: 새 row는 employee_id=null(sent)이라 기존 signed(employee_id 보유)와 충돌하지 않음.
+    const isRenewal =
+      !!opts?.renewOfId && existing.every((e) => e.id === opts.renewOfId);
+    if (!isRenewal) {
+      return {
+        error: '이 직원에게 이미 진행 중인 계약서가 있습니다. 기존 계약을 먼저 종료하거나, 계약서 목록의 "갱신" 버튼으로 작성해주세요.',
+      };
+    }
   }
 
   const signToken = generateSignToken();
