@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useTransition } from 'react';
+import { appConfirm, appAlert } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { Pencil, UserMinus, X, ChevronUp, ChevronDown, AlertTriangle } from 'lucide-react';
 import { MoreIcon } from '@/components/icons';
@@ -47,33 +48,33 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
   // owner는 액션 메뉴 숨김
   if (role === 'owner') return null;
 
-  function handlePromote() {
+  async function handlePromote() {
     setOpen(false);
-    if (!confirm('이 직원을 매니저로 임명하시겠습니까?\n매니저는 사장님과 동일한 관리 권한을 가집니다.')) return;
+    if (!await appConfirm('이 직원을 매니저로 임명하시겠습니까?\n매니저는 사장님과 동일한 관리 권한을 가집니다.')) return;
     startTransition(async () => {
       const r = await promoteToManager(memberId);
       if ('error' in r) {
-        alert(r.error);
+        void appAlert(r.error);
         return;
       }
       router.refresh();
     });
   }
-  function handleDemote() {
+  async function handleDemote() {
     setOpen(false);
-    if (!confirm('이 매니저를 일반 직원으로 강등하시겠습니까?')) return;
+    if (!await appConfirm('이 매니저를 일반 직원으로 강등하시겠습니까?')) return;
     startTransition(async () => {
       const r = await demoteToEmployee(memberId);
       if ('error' in r) {
-        alert(r.error);
+        void appAlert(r.error);
         return;
       }
       router.refresh();
     });
   }
-  function handleResign() {
+  async function handleResign() {
     setOpen(false);
-    if (!confirm(
+    if (!await appConfirm(
       '이 직원을 완전히 삭제하시겠습니까?\n\n' +
       '• 직원 목록에서 즉시 제거됩니다.\n' +
       '• 근무·계약서 기록은 유지되지만 직원으로는 검색되지 않습니다.\n' +
@@ -83,7 +84,7 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
     startTransition(async () => {
       const r = await resignMember(memberId);
       if ('error' in r) {
-        alert(r.error);
+        void appAlert(r.error);
         return;
       }
       router.refresh();
