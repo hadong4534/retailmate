@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { appConfirm } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { cancelContract } from './actions';
 
@@ -20,9 +21,9 @@ export function CancelContractButton({
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  function handleClick() {
+  async function handleClick() {
     const name = inviteName ?? '직원';
-    if (!confirm(`${name}님에게 보낸 계약서를 취소하시겠어요?\n\n· 서명 링크가 즉시 무효화되어 직원이 더 이상 서명할 수 없게 됩니다.\n· 취소된 계약은 복구할 수 없습니다.\n· 동일 직원에게 새로 계약을 보낼 수는 있습니다.`)) {
+    if (!await appConfirm(`${name}님에게 보낸 계약서를 취소하시겠어요?\n\n· 서명 링크가 즉시 무효화되어 직원이 더 이상 서명할 수 없게 됩니다.\n· 취소된 계약은 복구할 수 없습니다.\n· 동일 직원에게 새로 계약을 보낼 수는 있습니다.`)) {
       return;
     }
     setError(null);
