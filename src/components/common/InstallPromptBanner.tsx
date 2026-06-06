@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { appAlert } from '@/components/ui/appDialog';
 import { Download, Share2, Plus, X, AlertTriangle, MoreVertical } from 'lucide-react';
 
 /**
@@ -132,7 +133,7 @@ export function InstallPromptBanner() {
     }
     // 그 외 인앱: 주소 복사 안내
     copyUrl();
-    alert('주소를 복사했어요. 우측 상단 메뉴에서 "다른 브라우저로 열기"를 누르거나, 복사한 주소를 브라우저에 붙여넣어 주세요.');
+    void appAlert('주소를 복사했어요. 우측 상단 메뉴에서 "다른 브라우저로 열기"를 누르거나, 복사한 주소를 브라우저에 붙여넣어 주세요.');
   }
 
   if (!show) return null;
