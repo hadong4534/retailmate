@@ -10,6 +10,7 @@ import { MoneyInput } from '@/components/ui/MoneyInput';
 import { PhoneInput } from '@/components/ui/PhoneInput';
 import { SignaturePad } from '@/components/ui/SignaturePad';
 import { todayInKST, formatWon } from '@/lib/utils';
+import { scheduleDaysText, scheduleTimeText } from '@/lib/contract/schedule';
 import {
   createContract,
   type ContractFormData,
@@ -26,9 +27,12 @@ const DAYS: { key: WeekDay; label: string }[] = [
   { key: 'sun', label: '일' },
 ];
 
-const WEEKDAY_LABEL: Record<WeekDay, string> = {
-  mon: '월', tue: '화', wed: '수', thu: '목', fri: '금', sat: '토', sun: '일',
-};
+const MODE_OPTIONS = [
+  { key: 'same', label: '매일 동일' },
+  { key: 'per_day', label: '요일별 설정' },
+  { key: 'daily_hours', label: '일 N시간' },
+  { key: 'weekly_hours', label: '주 N시간' },
+] as const;
 
 const initial: ContractFormData = {
   invite_name: '',
@@ -41,6 +45,7 @@ const initial: ContractFormData = {
   work_days: ['mon', 'tue', 'wed', 'thu', 'fri'],
   work_start_time: '09:00',
   work_end_time: '18:00',
+  work_schedule: null,
   break_minutes: 60,
   wage_type: 'hourly',
   wage_amount: 0,
@@ -148,7 +153,14 @@ export function ContractWizard({
     }
     if (s === 2) {
       if (data.work_days.length === 0) return '근무 요일을 1개 이상 선택해주세요.';
-      if (!data.work_start_time || !data.work_end_time) return '근무 시간을 입력해주세요.';
+      const ws = data.work_schedule;
+      if (ws?.mode === 'daily_hours') {
+        if (!ws.daily_hours || ws.daily_hours <= 0 || ws.daily_hours > 24) return '1일 근무시간을 1~24시간 사이로 입력해주세요.';
+      } else if (ws?.mode === 'weekly_hours') {
+        if (!ws.weekly_hours || ws.weekly_hours <= 0 || ws.weekly_hours > 168) return '주 근무시간을 1~168시간 사이로 입력해주세요.';
+      } else if (!ws || ws.mode === 'same') {
+        if (!data.work_start_time || !data.work_end_time) return '근무 시간을 입력해주세요.';
+      }
     }
     if (s === 3) {
       if (data.wage_amount <= 0) return '임금 금액을 입력해주세요.';
@@ -181,8 +193,17 @@ export function ContractWizard({
       return;
     }
     startTransition(async () => {
+      // per_day 모드: 선택 요일 기준으로 누락된 요일별 시간을 기본 시간으로 채워 정규화
+      let ws = data.work_schedule ?? null;
+      if (ws?.mode === 'per_day') {
+        const per: Record<string, { start: string; end: string }> = {};
+        for (const d of data.work_days) {
+          per[d] = ws.per_day?.[d] ?? { start: data.work_start_time, end: data.work_end_time };
+        }
+        ws = { mode: 'per_day', per_day: per };
+      }
       const result = await createContract(
-        data,
+        { ...data, work_schedule: ws },
         signature,
         renewOfId ? { renewOfId } : undefined,
       );
@@ -454,7 +475,99 @@ function Step2({
         </div>
       </div>
 
+      <div>
+        <label className="block text-sm font-medium text-slate-700">근무시간 방식</label>
+        <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+          {MODE_OPTIONS.map((m) => {
+            const active = (data.work_schedule?.mode ?? 'same') === m.key;
+            return (
+              <button
+                key={m.key}
+                type="button"
+                onClick={() => {
+                  if (m.key === 'same') update('work_schedule', null);
+                  else if (m.key === 'per_day') {
+                    const per: Record<string, { start: string; end: string }> = {};
+                    for (const d of data.work_days) per[d] = { start: data.work_start_time, end: data.work_end_time };
+                    update('work_schedule', { mode: 'per_day', per_day: per });
+                  } else if (m.key === 'daily_hours') update('work_schedule', { mode: 'daily_hours', daily_hours: 8 });
+                  else update('work_schedule', { mode: 'weekly_hours', weekly_hours: 15 });
+                }}
+                className={
+                  'h-10 rounded-md border px-2 text-sm font-semibold transition ' +
+                  (active
+                    ? 'border-indigo-400 bg-[#7177EE] text-white'
+                    : 'border-[#EAECF5] bg-white text-slate-600 hover:bg-slate-50')
+                }
+              >
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
+        {(data.work_schedule?.mode === 'daily_hours' || data.work_schedule?.mode === 'weekly_hours') && (
+          <p className="mt-1.5 text-xs text-slate-500">구체적 근무시간은 매장 스케줄에 따르고, 계약서에는 총 근무시간으로 명시됩니다.</p>
+        )}
+      </div>
+
+      {data.work_schedule?.mode === 'per_day' && (
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-slate-700">요일별 근무 시간</label>
+          {data.work_days.length === 0 && (
+            <p className="text-xs text-amber-600">근무 요일을 먼저 선택해주세요.</p>
+          )}
+          {DAYS.filter((d) => data.work_days.includes(d.key)).map((d) => {
+            const t = data.work_schedule?.per_day?.[d.key] ?? { start: data.work_start_time, end: data.work_end_time };
+            const setT = (k: 'start' | 'end', v: string) => {
+              const per = { ...(data.work_schedule?.per_day ?? {}) };
+              per[d.key] = { ...t, [k]: v };
+              update('work_schedule', { mode: 'per_day', per_day: per });
+            };
+            return (
+              <div key={d.key} className="flex items-center gap-2">
+                <span className="w-7 shrink-0 text-sm font-semibold text-slate-700">{d.label}</span>
+                <input type="time" value={t.start} onChange={(e) => setT('start', e.target.value)} className="h-10 min-w-0 flex-1 rounded-md border border-[#E3E5F0] px-2 text-sm text-slate-900 focus:border-[#7177EE] focus:outline-none" />
+                <span className="text-slate-400">~</span>
+                <input type="time" value={t.end} onChange={(e) => setT('end', e.target.value)} className="h-10 min-w-0 flex-1 rounded-md border border-[#E3E5F0] px-2 text-sm text-slate-900 focus:border-[#7177EE] focus:outline-none" />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {data.work_schedule?.mode === 'daily_hours' && (
+        <div>
+          <label className="block text-sm font-medium text-slate-700">1일 근무시간 (시간)</label>
+          <input
+            type="number"
+            min={1}
+            max={24}
+            step={0.5}
+            value={data.work_schedule.daily_hours ?? ''}
+            onChange={(e) => update('work_schedule', { mode: 'daily_hours', daily_hours: Number(e.target.value) })}
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
+          />
+        </div>
+      )}
+
+      {data.work_schedule?.mode === 'weekly_hours' && (
+        <div>
+          <label className="block text-sm font-medium text-slate-700">주 근무시간 (시간)</label>
+          <input
+            type="number"
+            min={1}
+            max={168}
+            step={0.5}
+            value={data.work_schedule.weekly_hours ?? ''}
+            onChange={(e) => update('work_schedule', { mode: 'weekly_hours', weekly_hours: Number(e.target.value) })}
+            className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
+          />
+          <p className="mt-1 text-xs text-slate-500">주 15시간 이상이면 주휴수당·4대보험 의무가 발생할 수 있어요.</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {(data.work_schedule?.mode ?? 'same') === 'same' && (<>
         <div>
           <label className="block text-sm font-medium text-slate-700">시작 시간</label>
           <input
@@ -473,6 +586,7 @@ function Step2({
             className="mt-1 h-11 w-full rounded-md border border-[#E3E5F0] px-3 text-base text-slate-900 focus:border-[#7177EE] focus:outline-none focus:ring-2 focus:ring-[#E4E6FB]"
           />
         </div>
+        </>)}
         <div>
           <label className="block text-sm font-medium text-slate-700">휴게 시간 (분)</label>
           <input
@@ -714,11 +828,11 @@ function Step4({
         <Row label="담당 업무" value={data.job_description} />
         <Row
           label="근무 요일"
-          value={data.work_days.map((d) => WEEKDAY_LABEL[d]).join(', ')}
+          value={scheduleDaysText(data)}
         />
         <Row
           label="근무 시간"
-          value={`${data.work_start_time} ~ ${data.work_end_time} (휴게 ${data.break_minutes}분)`}
+          value={scheduleTimeText(data)}
         />
         <Row label={wageLabel} value={formatWon(data.wage_amount)} />
         <Row
