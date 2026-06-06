@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { appAlert } from '@/components/ui/appDialog';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { switchStore } from '@/lib/auth/actions';
 import type { StoreRole } from '@/lib/auth/store-context';
 
 export interface StoreOption {
@@ -31,17 +29,18 @@ export function StoreSwitcher({
       setOpen(false);
       return;
     }
-    startTransition(async () => {
-      const result = await switchStore(storeId);
-      setOpen(false);
-      if ('error' in result) {
-        void appAlert(result.error);
-        return;
-      }
-      // 매장 전환 시 홈으로 이동. switchStore가 이미 revalidatePath('/', 'layout')로
-      // 서버 캐시를 무효화하므로, replace() 한 번이면 새 매장 컨텍스트로 SSR된다.
-      // (기존엔 replace 직후 refresh()까지 호출해 전체 SSR이 2회 돌며 전환이 느렸음)
+    setOpen(false);
+    startTransition(() => {
+      // 서버 액션 왕복 없이 클라이언트에서 매장 쿠키를 직접 교체 (httpOnly 아님).
+      // 권한 검증은 모든 페이지의 서버 렌더(getCurrentAdminStore)가 매번 수행하므로 안전 —
+      // 권한 없는 매장 id가 들어와도 서버가 기존 admin 매장으로 자동 fallback 한다.
+      // options에는 admin 매장만 내려오므로 정상 흐름에선 항상 유효한 id다.
+      const host = location.hostname.toLowerCase();
+      const domain = /(^|\.)retailmate\.io$/.test(host) ? '; domain=retailmate.io' : '';
+      document.cookie = `rm_current_store=${storeId}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax${domain}`;
+      // refresh()가 레이아웃(사이드바 매장명)까지 전체 트리를 새 쿠키로 1회 SSR 한다.
       router.replace('/dashboard');
+      router.refresh();
     });
   }
 
