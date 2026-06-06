@@ -65,6 +65,15 @@ export async function deleteMyAccount(): Promise<{ ok: true } | { error: string 
     }
   }
 
+  // 3.5) 본인 명의 활성 근로계약(sent/signed)은 종료 처리.
+  //      계정 삭제 시 employee_id만 NULL로 남아 'signed' 계약이 같은 번호의 재계약을
+  //      영구히 막는 문제 방지. (계약 원본은 법적 보관을 위해 유지)
+  await admin
+    .from('labor_contracts')
+    .update({ status: 'terminated' })
+    .eq('employee_id', user.id)
+    .in('status', ['sent', 'signed']);
+
   // 4) 계정 삭제 (나머지 개인정보는 CASCADE로 정리)
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) return { error: error.message };
