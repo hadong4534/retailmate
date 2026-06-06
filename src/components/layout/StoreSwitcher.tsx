@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { appAlert } from '@/components/ui/appDialog';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { switchStore } from '@/lib/auth/actions';
@@ -34,7 +35,7 @@ export function StoreSwitcher({
       const result = await switchStore(storeId);
       setOpen(false);
       if ('error' in result) {
-        alert(result.error);
+        void appAlert(result.error);
         return;
       }
       // 매장 전환 시 홈으로 이동. switchStore가 이미 revalidatePath('/', 'layout')로
