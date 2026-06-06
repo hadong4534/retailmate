@@ -61,6 +61,14 @@ export function kstTodayStartIso(): string {
   return new Date(todayInKST() + 'T00:00:00+09:00').toISOString();
 }
 
+export function formatTimeKST(d: Date | string): string {
+  // 서버(UTC)에서도 항상 한국시간(KST, UTC+9)으로 HH:MM 표시.
+  // new Date().getHours()는 서버 로컬(Vercel=UTC) 기준이라 9시간 어긋나는 문제를 막는다.
+  const dt = typeof d === 'string' ? new Date(d) : d;
+  const kst = new Date(dt.getTime() + 9 * 60 * 60 * 1000);
+  return `${String(kst.getUTCHours()).padStart(2, '0')}:${String(kst.getUTCMinutes()).padStart(2, '0')}`;
+}
+
 export function formatKoDate(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d + 'T00:00:00') : d;
   const days = ['일', '월', '화', '수', '목', '금', '토'];
