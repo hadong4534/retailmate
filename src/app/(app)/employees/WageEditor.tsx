@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { appAlert } from '@/components/ui/appDialog';
 import { updateMemberWage } from './actions';
 import { formatWon, parseMoney } from '@/lib/utils';
 
@@ -17,7 +18,7 @@ export function WageEditor({ memberId, initialWage }: Props) {
   function save() {
     startTransition(async () => {
       const result = await updateMemberWage(memberId, wage);
-      if ('error' in result) alert(result.error);
+      if ('error' in result) void appAlert(result.error);
       else setEditing(false);
     });
   }
