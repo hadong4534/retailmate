@@ -6,6 +6,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { randomBytes } from 'node:crypto';
 import { validateWith, contractFormSchema, ndaFormSchema } from '@/lib/validation/schemas';
+import type { WorkSchedule } from '@/types/database';
 
 export type ContractType = 'fulltime' | 'parttime' | 'daily';
 export type WageType = 'hourly' | 'monthly' | 'daily';
@@ -30,6 +31,8 @@ export interface ContractFormData {
   work_start_time: string;
   work_end_time: string;
   break_minutes: number;
+  /** 근무시간 세부 옵션 — null/생략 = 동일시간 모드 */
+  work_schedule?: WorkSchedule | null;
   wage_type: WageType;
   wage_amount: number;
   weekly_holiday_allowance: boolean;
@@ -126,6 +129,7 @@ export async function createContract(
       work_start_time: input.work_start_time,
       work_end_time: input.work_end_time,
       break_minutes: input.break_minutes,
+      work_schedule: input.work_schedule ?? null,
       wage_type: input.wage_type,
       wage_amount: input.wage_amount,
       weekly_holiday_allowance: input.weekly_holiday_allowance,
