@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
+import { appAlert } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
 
@@ -65,7 +66,7 @@ export function DriveCard({
         router.refresh();
       } else {
         const json = await res.json().catch(() => null);
-        alert(json?.error ?? '삭제 실패');
+        void appAlert(json?.error ?? '삭제 실패');
       }
     });
   }
