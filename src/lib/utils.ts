@@ -51,8 +51,10 @@ export function formatMoneyInput(value: number | string): string {
 }
 
 export function todayInKST(): string {
-  const now = new Date();
-  const kst = new Date(now.getTime() + (now.getTimezoneOffset() + 9 * 60) * 60 * 1000);
+  // epoch에 +9h 후 UTC 필드로 읽으면 서버(UTC)·클라이언트(KST) 어디서나 같은 KST 날짜.
+  // 이전 구현은 getTimezoneOffset() 보정이 클라이언트에서 이중 적용돼 UTC 날짜가 나왔고,
+  // KST 새벽 0~9시에 SSR(서버)과 달라져 hydration 오류(#418)로 페이지가 깨졌다.
+  const kst = new Date(Date.now() + 9 * 60 * 60 * 1000);
   return kst.toISOString().slice(0, 10);
 }
 
