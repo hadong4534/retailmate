@@ -22,7 +22,7 @@ export default async function SignContractPage({
   const { data: contract } = await admin
     .from('labor_contracts')
     .select(
-      'id, store_id, contract_type, status, sign_token_expires_at, invite_name, invite_phone, work_start_date, work_end_date, workplace_address, job_description, work_days, work_start_time, work_end_time, break_minutes, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, pay_day, pay_method, annual_leave_policy, additional_terms',
+      'id, store_id, contract_type, status, sign_token_expires_at, invite_name, invite_phone, work_start_date, work_end_date, workplace_address, job_description, work_days, work_start_time, work_end_time, break_minutes, work_schedule, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, pay_day, pay_method, annual_leave_policy, additional_terms',
     )
     .eq('sign_token', token)
     .maybeSingle();
