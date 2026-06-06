@@ -333,6 +333,7 @@ export function getEmptyContractPreview(storeName = '(매장명)', ownerName = '
       work_start_time: '09:00:00',
       work_end_time: '18:00:00',
       break_minutes: 60,
+      work_schedule: null,
       wage_type: 'hourly',
       wage_amount: 10500,
       weekly_holiday_allowance: true,
