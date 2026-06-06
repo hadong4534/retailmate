@@ -1,16 +1,17 @@
 'use client';
 
 import { useTransition } from 'react';
+import { appConfirm, appAlert } from '@/components/ui/appDialog';
 import { deleteNotice } from './actions';
 
 export function DeleteNoticeButton({ id }: { id: string }) {
   const [pending, startTransition] = useTransition();
 
-  function handleClick() {
-    if (!confirm('이 공지를 삭제하시겠습니까?')) return;
+  async function handleClick() {
+    if (!await appConfirm('이 공지를 삭제하시겠습니까?')) return;
     startTransition(async () => {
       const result = await deleteNotice(id);
-      if (result?.error) alert(result.error);
+      if (result?.error) void appAlert(result.error);
     });
   }
 
