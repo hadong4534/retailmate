@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { appConfirm } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { Wallet, Check } from 'lucide-react';
 import { reflectPayrollToExpense } from './actions';
@@ -11,9 +12,9 @@ export function ReflectPayrollButton({ month, grossPay }: { month: string; gross
   const [pending, startTransition] = useTransition();
   const [msg, setMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null);
 
-  function onClick() {
+  async function onClick() {
     if (grossPay <= 0) { setMsg({ kind: 'err', text: '반영할 급여 금액이 없어요.' }); return; }
-    const ok = window.confirm(`${month} 총급여 ₩${grossPay.toLocaleString('ko-KR')}을(를) 지출의 '인건비'로 반영할까요?\n(같은 달 인건비가 이미 있으면 금액이 갱신됩니다)`);
+    const ok = await appConfirm(`${month} 총급여 ₩${grossPay.toLocaleString('ko-KR')}을(를) 지출의 '인건비'로 반영할까요?\n(같은 달 인건비가 이미 있으면 금액이 갱신됩니다)`);
     if (!ok) return;
     setMsg(null);
     startTransition(async () => {
