@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
@@ -7,7 +8,7 @@ import { AIToastWatcher } from '@/components/ai/AIToastWatcher';
 import { Toaster } from '@/components/ui/Toaster';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SessionGuard } from '@/components/auth/SessionGuard';
-import { getCurrentAdminStore, getUserStoreContexts } from '@/lib/auth/store-context';
+import { getCurrentAdminStore, getUserStoreContexts, type StoreRole } from '@/lib/auth/store-context';
 import { getUnreadNotices } from '@/lib/notices/queries';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -44,8 +45,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect('/onboarding/store');
   }
 
-  const roleMap = new Map(allContexts.map((c) => [c.storeId, c.role]));
-  const unread = await getUnreadNotices(supabase, userId, roleMap);
+  const roleEntries: [string, StoreRole][] = allContexts.map((c) => [c.storeId, c.role]);
 
   const adminOptions = allContexts
     .filter((c) => c.isAdmin)
@@ -65,11 +65,28 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       storeOptions={adminOptions}
     >
       <SessionGuard />
-      {unread.length > 0 && <NoticePopup notices={unread} />}
+      {/* 공지 조회는 페이지 렌더를 막지 않도록 Suspense로 스트리밍 (SSR 1~2왕복 절감) */}
+      <Suspense fallback={null}>
+        <UnreadNotices userId={userId} roleEntries={roleEntries} />
+      </Suspense>
       <AIToastWatcher />
       <Toaster />
       <PullToRefresh />
       {children}
     </AppShell>
   );
+}
+
+/** 미확인 공지 팝업 — 비차단 스트리밍용 서버 컴포넌트. */
+async function UnreadNotices({
+  userId,
+  roleEntries,
+}: {
+  userId: string;
+  roleEntries: [string, StoreRole][];
+}) {
+  const supabase = await createClient();
+  const unread = await getUnreadNotices(supabase, userId, new Map(roleEntries));
+  if (unread.length === 0) return null;
+  return <NoticePopup notices={unread} />;
 }
