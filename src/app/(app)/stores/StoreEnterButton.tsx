@@ -1,6 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
+import { appAlert } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { switchStore } from '@/lib/auth/actions';
 
@@ -12,7 +13,7 @@ export function StoreEnterButton({ storeId, isCurrent }: { storeId: string; isCu
     start(async () => {
       if (!isCurrent) {
         const r = await switchStore(storeId);
-        if ('error' in r) { alert(r.error); return; }
+        if ('error' in r) { void appAlert(r.error); return; }
       }
       router.replace('/dashboard');
       router.refresh();
