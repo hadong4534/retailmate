@@ -12,12 +12,11 @@ import { getUnreadNotices } from '@/lib/notices/queries';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
-  // getUser()는 Auth 서버 왕복(수백ms). 미들웨어가 세션을 이미 검증·갱신하므로
-  // 로컬 JWT 검증(getClaims)으로 충분 — 대시보드와 동일 패턴.
-  const { data: claimsData } = await supabase.auth.getClaims();
-  const claims = claimsData?.claims as { sub?: string; email?: string } | undefined;
-  if (!claims?.sub) redirect('/login');
-  const userId = claims.sub;
+  // 주의: 이 getUser()가 앱 전체의 유일한 서버측 토큰 검증·갱신 지점이다 (middleware 없음).
+  // getClaims()로 바꾸면 만료 토큰이 갱신되지 않아 세션이 끊긴다 — 반드시 getUser() 유지.
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+  const userId = user.id;
 
   // 프로필과 매장 컨텍스트는 서로 독립 → 병렬 조회로 SSR 시간 단축
   const [{ data: profile }, allContexts] = await Promise.all([
@@ -55,7 +54,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <AppShell
       storeName={adminStore.storeName}
-      ownerName={profile?.name ?? claims.email ?? ''}
+      ownerName={profile?.name ?? user.email ?? ''}
       ownerAvatarUrl={avatarUrl}
       role={adminStore.role}
       currentStore={{
