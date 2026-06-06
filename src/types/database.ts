@@ -167,6 +167,18 @@ export interface SocialInsurance {
   industrial_accident: boolean;
 }
 
+/** 근무시간 세부 옵션 (labor_contracts.work_schedule jsonb). null = 동일시간 모드 */
+export type WorkScheduleMode = 'same' | 'per_day' | 'daily_hours' | 'weekly_hours';
+export interface WorkSchedule {
+  mode: WorkScheduleMode;
+  /** mode=per_day: 요일별 시작/종료 (예: { mon: { start: '09:00', end: '15:00' } }) */
+  per_day?: Record<string, { start: string; end: string }>;
+  /** mode=daily_hours: 1일 N시간 */
+  daily_hours?: number;
+  /** mode=weekly_hours: 주 N시간 */
+  weekly_hours?: number;
+}
+
 export interface LaborContract {
   id: string;
   store_id: string;
@@ -182,6 +194,7 @@ export interface LaborContract {
   work_start_time: string;
   work_end_time: string;
   break_minutes: number;
+  work_schedule: WorkSchedule | null;
   wage_type: WageType;
   wage_amount: number;
   weekly_holiday_allowance: boolean;
