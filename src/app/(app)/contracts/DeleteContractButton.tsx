@@ -1,6 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
+import { appConfirm, appAlert } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
 import { deleteContract } from './actions';
@@ -17,9 +18,9 @@ export function DeleteContractButton({ contractId, label, variant = 'icon' }: Pr
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  function handle() {
+  async function handle() {
     const who = label ? `(${label})` : '';
-    if (!confirm(
+    if (!await appConfirm(
       `계약서${who}를 영구 삭제하시겠습니까?\n\n` +
       '• 계약서 row와 PDF 파일이 즉시 제거됩니다.\n' +
       '• 서명 완료 계약서도 삭제됩니다.\n' +
@@ -28,7 +29,7 @@ export function DeleteContractButton({ contractId, label, variant = 'icon' }: Pr
     startTransition(async () => {
       const r = await deleteContract(contractId);
       if ('error' in r) {
-        alert(r.error);
+        void appAlert(r.error);
         return;
       }
       router.refresh();
