@@ -55,6 +55,13 @@ export function StoreSwitcher({
 
   return (
     <div className="relative">
+      {/* 전환 중 전체 화면 피드백 — SSR 재렌더 동안 멈춘 것처럼 보이지 않게 */}
+      {pending && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#6366F1] border-t-transparent" />
+          <p className="mt-3 text-sm font-semibold text-slate-700">매장 전환 중…</p>
+        </div>
+      )}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
