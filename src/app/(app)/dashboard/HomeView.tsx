@@ -330,8 +330,9 @@ function pickAIInsight(s: {
     return { text: '매출·지출·근무 데이터를 입력하면 매장 손익과 목표 달성률이 자동으로 정리돼요.', ctaLabel: '첫 데이터 입력', ctaHref: '/sales/new' };
   if (s.monthSales === 0)
     return { text: '아직 이번 달 매출이 없어요. 입력하면 목표 달성률·순이익 분석이 시작됩니다.', ctaLabel: '매출 입력', ctaHref: '/sales/new' };
-  if (s.monthCostRatio === null || s.monthCostRatio < 10)
-    return { text: '매출은 확인됐지만 지출 입력이 부족해 순이익 정확도가 낮아요. 원재료비·인건비·임대료부터 입력해보세요.', ctaLabel: '지출 입력', ctaHref: '/expenses/new' };
+  // 지출이 실제로 0원일 때만 입력 유도 — 지출이 있는데도 '부족' 반복 노출 금지 (사장님 피드백)
+  if (s.monthSales > 0 && s.monthExpenses === 0)
+    return { text: '매출은 확인됐지만 지출이 아직 없어요. 원재료비·인건비·임대료를 입력하면 순이익이 정확해집니다.', ctaLabel: '지출 입력', ctaHref: '/expenses/new' };
 
   if (s.baseChange !== null && s.baseChange <= -25)
     return { text: `어제 매출이 직전일 대비 ${Math.abs(s.baseChange)}% 급감했어요. 요일·날씨·이벤트 등 외부 요인을 점검해보세요.`, ctaLabel: '매출 추이', ctaHref: '/sales' };
