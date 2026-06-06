@@ -29,13 +29,14 @@ export async function GET(request: Request) {
 
   // 신규 가입자(=매장 없음)는 매장 등록 단계로 보낸다.
   const userId = exchanged.user.id;
-  const { data: stores } = await supabase
-    .from('stores')
-    .select('id')
-    .eq('owner_id', userId)
-    .limit(1);
+  // 소유 매장 OR 소속 매장이 하나라도 있으면 온보딩(매장 생성)으로 보내지 않는다.
+  const [{ data: owned }, { data: member }] = await Promise.all([
+    supabase.from('stores').select('id').eq('owner_id', userId).limit(1),
+    supabase.from('store_members').select('store_id').eq('user_id', userId).eq('is_active', true).limit(1),
+  ]);
+  const hasStore = (owned?.length ?? 0) > 0 || (member?.length ?? 0) > 0;
 
-  if (!stores || stores.length === 0) {
+  if (!hasStore) {
     return NextResponse.redirect(new URL('/onboarding/store', url.origin));
   }
 
