@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Logo } from '@/components/ui/Logo';
 import { LogoutButton } from './LogoutButton';
+import { WithdrawButton } from './WithdrawButton';
 import { NoticePopup } from '@/components/notices/NoticePopup';
 import { GpsCheckWidget } from '@/components/attendance/GpsCheckWidget';
 import { getUserStoreContexts } from '@/lib/auth/store-context';
@@ -334,6 +335,7 @@ export default async function EmployeeMePage() {
             />
           </div>
         )}
+        <WithdrawButton />
       </main>
     </div>
   );
