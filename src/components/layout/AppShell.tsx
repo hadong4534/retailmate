@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, type ComponentType, type SVGProps } from 'react';
+import { appAlert } from '@/components/ui/appDialog';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -157,7 +158,7 @@ export function AppShell({
       const result = await switchStore(storeId);
       setStorePickerOpen(false);
       if ('error' in result) {
-        alert(result.error);
+        void appAlert(result.error);
         return;
       }
       router.replace('/dashboard');
