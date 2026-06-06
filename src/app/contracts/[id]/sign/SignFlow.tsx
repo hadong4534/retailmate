@@ -8,13 +8,9 @@ import { Input } from '@/components/ui/Input';
 import { PhoneInput, formatKoreanPhone } from '@/components/ui/PhoneInput';
 import { SignaturePad } from '@/components/ui/SignaturePad';
 import { createClient } from '@/lib/supabase/client';
+import { scheduleDaysText, scheduleTimeText } from '@/lib/contract/schedule';
 import { formatWon } from '@/lib/utils';
 import { submitEmployeeSignature } from './actions';
-
-const DAY_KO: Record<string, string> = {
-  mon: '월', tue: '화', wed: '수', thu: '목',
-  fri: '금', sat: '토', sun: '일',
-};
 
 const TYPE_KO: Record<string, string> = {
   fulltime: '정규직',
@@ -38,6 +34,7 @@ interface ContractData {
   workplace_address: string;
   job_description: string;
   work_days: string[];
+  work_schedule?: import('@/types/database').WorkSchedule | null;
   work_start_time: string;
   work_end_time: string;
   break_minutes: number;
@@ -528,11 +525,11 @@ function ReviewStep({
           <Row label="담당 업무" value={contract.job_description} />
           <Row
             label="근무 요일"
-            value={contract.work_days.map((d) => DAY_KO[d] ?? d).join(', ')}
+            value={scheduleDaysText(contract)}
           />
           <Row
             label="근무 시간"
-            value={`${contract.work_start_time.slice(0, 5)} ~ ${contract.work_end_time.slice(0, 5)} (휴게 ${contract.break_minutes}분)`}
+            value={scheduleTimeText(contract)}
           />
           <Row
             label={WAGE_KO[contract.wage_type] ?? '임금'}
