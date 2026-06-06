@@ -193,7 +193,7 @@ export async function GET(request: Request) {
         provider: 'kakao',
         kakao_id: kakaoId,
         name: nickname,
-        role: 'owner',
+        // role은 저장하지 않는다 — 권한은 store_members(직원)/stores.owner_id(사장)가 단일 진실.
       },
     });
     if (createErr || !created.user) {
