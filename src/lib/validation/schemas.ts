@@ -37,6 +37,16 @@ export const contractFormSchema = z.object({
   work_start_time: z.string().min(1, '근무 시간을 입력해주세요.'),
   work_end_time: z.string().min(1, '근무 시간을 입력해주세요.'),
   break_minutes: z.number().min(0, '휴게 시간이 올바르지 않습니다.'),
+  // 근무시간 세부 옵션 — null/생략 = 동일시간 모드
+  work_schedule: z
+    .object({
+      mode: z.enum(['same', 'per_day', 'daily_hours', 'weekly_hours']),
+      per_day: z.record(z.object({ start: z.string(), end: z.string() })).optional(),
+      daily_hours: z.number().positive().max(24).optional(),
+      weekly_hours: z.number().positive().max(168).optional(),
+    })
+    .nullable()
+    .optional(),
   wage_type: z.enum(['hourly', 'monthly', 'daily']),
   wage_amount: z.number().positive('임금 금액을 입력해주세요.'),
   weekly_holiday_allowance: z.boolean(),
