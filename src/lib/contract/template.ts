@@ -7,6 +7,7 @@
  */
 
 import type { LaborContract, Profile, Store } from '@/types/database';
+import { scheduleTimeText, scheduleWeeklyHours } from '@/lib/contract/schedule';
 
 export interface ContractTemplateData {
   contract: LaborContract;
@@ -227,8 +228,7 @@ function renderLaborContractHTML(data: ContractTemplateData): string {
   <tr>
     <th>5. 소정근로시간</th>
     <td>
-      ${formatTime(contract.work_start_time)} ~ ${formatTime(contract.work_end_time)}
-      (휴게시간 ${contract.break_minutes}분 포함)
+      ${scheduleTimeText(contract)}
     </td>
   </tr>
   <tr>
@@ -416,22 +416,41 @@ function renderTypeSpecificClauses(
   }
 
   if (contract.contract_type === 'parttime') {
-    const weekdayHours = computeWeeklyHours(
-      contract.work_start_time,
-      contract.work_end_time,
-      contract.break_minutes,
-      contract.work_days.length,
-    );
-    const dayRows = (contract.work_days as string[])
-      .map(
-        (d) => `<tr>
+    const ws = contract.work_schedule;
+    const weekdayHours =
+      scheduleWeeklyHours(contract) ??
+      computeWeeklyHours(
+        contract.work_start_time,
+        contract.work_end_time,
+        contract.break_minutes,
+        contract.work_days.length,
+      );
+    // 요일별 설정(per_day)은 요일마다 다른 시간으로, 일/주 N시간 모드는 요약 행으로 표기
+    const dayRows =
+      ws?.mode === 'per_day' && ws.per_day
+        ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+            .filter((d) => ws.per_day![d])
+            .map(
+              (d) => `<tr>
+          <td>${DAY_KO[d] ?? d}요일</td>
+          <td>${formatTime(ws.per_day![d].start)}</td>
+          <td>${formatTime(ws.per_day![d].end)}</td>
+          <td>${contract.break_minutes}분</td>
+        </tr>`,
+            )
+            .join('')
+        : ws && (ws.mode === 'daily_hours' || ws.mode === 'weekly_hours')
+          ? `<tr><td colspan="4">${scheduleTimeText(contract)} — 요일별 상세 시간은 매장 근무 스케줄표에 따른다.</td></tr>`
+          : (contract.work_days as string[])
+              .map(
+                (d) => `<tr>
           <td>${DAY_KO[d] ?? d}요일</td>
           <td>${formatTime(contract.work_start_time)}</td>
           <td>${formatTime(contract.work_end_time)}</td>
           <td>${contract.break_minutes}분</td>
         </tr>`,
-      )
-      .join('');
+              )
+              .join('');
     return `
 <div class="clause-title">단시간 근로자 특약사항</div>
 <div class="clause-body">
