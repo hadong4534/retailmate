@@ -1,6 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
+import { appConfirm, appAlert } from '@/components/ui/appDialog';
 import { promoteToManager, demoteToEmployee } from './actions';
 
 interface Props {
@@ -11,19 +12,19 @@ interface Props {
 export function RoleActions({ memberId, role }: Props) {
   const [pending, startTransition] = useTransition();
 
-  function handlePromote() {
-    if (!confirm('이 직원을 매니저로 임명하시겠습니까?\n매니저는 사장님과 동일한 관리 권한을 가집니다.')) return;
+  async function handlePromote() {
+    if (!await appConfirm('이 직원을 매니저로 임명하시겠습니까?\n매니저는 사장님과 동일한 관리 권한을 가집니다.')) return;
     startTransition(async () => {
       const result = await promoteToManager(memberId);
-      if ('error' in result) alert(result.error);
+      if ('error' in result) void appAlert(result.error);
     });
   }
 
-  function handleDemote() {
-    if (!confirm('이 매니저를 일반 직원으로 강등하시겠습니까?')) return;
+  async function handleDemote() {
+    if (!await appConfirm('이 매니저를 일반 직원으로 강등하시겠습니까?')) return;
     startTransition(async () => {
       const result = await demoteToEmployee(memberId);
-      if ('error' in result) alert(result.error);
+      if ('error' in result) void appAlert(result.error);
     });
   }
 
