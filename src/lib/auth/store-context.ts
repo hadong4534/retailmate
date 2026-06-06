@@ -28,23 +28,18 @@ export const getUserStoreContexts = cache(async function getUserStoreContexts(
     supabase.from('stores').select('id, name').eq('owner_id', userId),
     supabase
       .from('store_members')
-      .select('store_id, role')
+      // 매장 이름을 조인으로 함께 조회 — 추가 왕복 1회 제거 (RLS는 기존 별도 조회와 동일하게 적용)
+      .select('store_id, role, stores(id, name)')
       .eq('user_id', userId)
       .eq('is_active', true),
   ]);
 
   const owned = (ownedRes.data ?? []) as { id: string; name: string }[];
-  const members = (memberRes.data ?? []) as { store_id: string; role: StoreRole }[];
-
-  const memberStoreIds = members.map((m) => m.store_id).filter(Boolean);
-  let memberStores: { id: string; name: string }[] = [];
-  if (memberStoreIds.length > 0) {
-    const { data } = await supabase
-      .from('stores')
-      .select('id, name')
-      .in('id', memberStoreIds);
-    memberStores = (data ?? []) as { id: string; name: string }[];
-  }
+  const members = (memberRes.data ?? []) as unknown as {
+    store_id: string;
+    role: StoreRole;
+    stores: { id: string; name: string } | null;
+  }[];
 
   const map = new Map<string, StoreContext>();
 
@@ -59,7 +54,7 @@ export const getUserStoreContexts = cache(async function getUserStoreContexts(
 
   members.forEach((m) => {
     if (map.has(m.store_id)) return; // owner가 우선
-    const store = memberStores.find((s) => s.id === m.store_id);
+    const store = m.stores;
     if (!store) return;
     map.set(m.store_id, {
       storeId: m.store_id,
