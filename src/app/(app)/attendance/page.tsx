@@ -9,7 +9,7 @@ import { GpsCheckWidget } from '@/components/attendance/GpsCheckWidget';
 import { ScheduleBoard } from './ScheduleBoard';
 import { PageHeader } from '@/components/app';
 import { formatHM } from '@/lib/employee/queries';
-import { todayInKST, kstTodayStartIso } from '@/lib/utils';
+import { todayInKST, kstTodayStartIso, formatTimeKST } from '@/lib/utils';
 
 interface AttRow {
   id: string;
@@ -288,7 +288,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                         <div>
                           <p className="text-sm font-medium text-slate-900">{profile?.name ?? '이름 미입력'}</p>
                           <p className="text-[10px] text-slate-500">
-                            {checkIn.getHours().toString().padStart(2, '0')}:{checkIn.getMinutes().toString().padStart(2, '0')} 출근
+                            {formatTimeKST(checkIn)} 출근
                           </p>
                         </div>
                       </div>
@@ -462,13 +462,13 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                         <div>
                           <p className="text-[10px] text-slate-500">출근</p>
                           <p className="mt-0.5 whitespace-nowrap text-[13px] font-semibold tabular-nums text-slate-700">
-                            {checkIn ? `${checkIn.getHours().toString().padStart(2, '0')}:${checkIn.getMinutes().toString().padStart(2, '0')}` : '-'}
+                            {checkIn ? formatTimeKST(checkIn) : '-'}
                           </p>
                         </div>
                         <div>
                           <p className="text-[10px] text-slate-500">퇴근</p>
                           <p className="mt-0.5 whitespace-nowrap text-[13px] font-semibold tabular-nums text-slate-700">
-                            {checkOut ? `${checkOut.getHours().toString().padStart(2, '0')}:${checkOut.getMinutes().toString().padStart(2, '0')}` : att ? '근무 중' : '-'}
+                            {checkOut ? formatTimeKST(checkOut) : att ? '근무 중' : '-'}
                           </p>
                         </div>
                         <div>
@@ -511,10 +511,10 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-4 py-3 text-slate-700">
-                            {checkIn ? `${checkIn.getHours().toString().padStart(2, '0')}:${checkIn.getMinutes().toString().padStart(2, '0')}` : '-'}
+                            {checkIn ? formatTimeKST(checkIn) : '-'}
                           </td>
                           <td className="whitespace-nowrap px-4 py-3 text-slate-700">
-                            {checkOut ? `${checkOut.getHours().toString().padStart(2, '0')}:${checkOut.getMinutes().toString().padStart(2, '0')}` : att ? '근무 중' : '-'}
+                            {checkOut ? formatTimeKST(checkOut) : att ? '근무 중' : '-'}
                           </td>
                           <td className="whitespace-nowrap px-4 py-3 text-slate-700">
                             {att?.work_minutes ? formatHM(att.work_minutes) : '-'}
