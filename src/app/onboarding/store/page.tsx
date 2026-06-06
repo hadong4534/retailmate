@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { appConfirm } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/Button';
@@ -53,7 +54,7 @@ export default function StoreOnboardingPage() {
     e.preventDefault();
     setError(null);
     if (lat == null || lng == null) {
-      const proceed = window.confirm('매장 GPS 좌표가 없으면 직원 GPS 출퇴근 인증을 사용할 수 없어요.\n위 주소 검색에서 도로명+건물번호까지 정확히 선택하면 좌표가 자동 등록됩니다.\n그래도 이대로 등록할까요?');
+      const proceed = await appConfirm('매장 GPS 좌표가 없으면 직원 GPS 출퇴근 인증을 사용할 수 없어요.\n위 주소 검색에서 도로명+건물번호까지 정확히 선택하면 좌표가 자동 등록됩니다.\n그래도 이대로 등록할까요?');
       if (!proceed) return;
     }
     setSubmitting(true);
