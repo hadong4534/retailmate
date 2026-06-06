@@ -41,7 +41,7 @@ export const contractFormSchema = z.object({
   work_schedule: z
     .object({
       mode: z.enum(['same', 'per_day', 'daily_hours', 'weekly_hours']),
-      per_day: z.record(z.object({ start: z.string(), end: z.string() })).optional(),
+      per_day: z.record(z.string(), z.object({ start: z.string(), end: z.string() })).optional(),
       daily_hours: z.number().positive().max(24).optional(),
       weekly_hours: z.number().positive().max(168).optional(),
     })
