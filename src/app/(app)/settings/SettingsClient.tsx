@@ -1,6 +1,7 @@
 'use client';
 
 import { PushToggle } from '@/components/settings/PushToggle';
+import { appConfirm } from '@/components/ui/appDialog';
 
 import { useState, useTransition, useRef } from 'react';
 import { Button } from '@/components/ui/Button';
@@ -431,8 +432,8 @@ function AccountForm({ profile, onSaved }: { profile: ProfileData; onSaved: (d: 
     reader.readAsDataURL(file);
   }
 
-  function handleRemove() {
-    if (!confirm('프로필 사진을 제거하시겠어요?')) return;
+  async function handleRemove() {
+    if (!await appConfirm('프로필 사진을 제거하시겠어요?')) return;
     startPhoto(async () => {
       const result = await removeAvatar();
       if ('error' in result) setError(result.error);
