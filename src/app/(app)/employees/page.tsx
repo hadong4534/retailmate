@@ -328,16 +328,16 @@ export default async function EmployeesPage() {
                           <p className="truncate text-sm font-semibold text-slate-900">
                             {displayName ?? '이름 미입력'}
                           </p>
-                          <span className={
-                            'rounded-full px-1.5 py-0.5 text-[9px] font-medium ' +
-                            (working
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : attendedToday
-                                ? 'bg-indigo-50 text-indigo-600'
-                                : 'bg-slate-100 text-slate-500')
-                          }>
-                            {working ? '● 근무중' : attendedToday ? '퇴근' : '○ 미출근'}
-                          </span>
+                          {(working || attendedToday) && (
+                            <span className={
+                              'rounded-full px-1.5 py-0.5 text-[9px] font-medium ' +
+                              (working
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : 'bg-indigo-50 text-indigo-600')
+                            }>
+                              {working ? '● 근무중' : '퇴근'}
+                            </span>
+                          )}
                         </div>
                         <p className="text-[10px] text-slate-500">
                           {contract ? (contract.contract_type === 'fulltime' ? '정규직' : contract.contract_type === 'parttime' ? '파트타임' : '일용직') : ROLE_LABEL[m.role]}
@@ -374,7 +374,7 @@ export default async function EmployeesPage() {
                 <div className="w-full space-y-1.5 text-xs">
                   <Stat dot="bg-emerald-500" label="근무 중" value={`${workingNow}명`} />
                   <Stat dot="bg-indigo-400" label="퇴근" value={`${leftCount}명`} />
-                  <Stat dot="bg-slate-300" label="미출근" value={`${offCount}명`} />
+                  <Stat dot="bg-slate-300" label="기록 없음" value={`${offCount}명`} />
                 </div>
               </div>
             )}
