@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, useRef } from 'react';
+import { appConfirm } from '@/components/ui/appDialog';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { updateBrandSettings, uploadLogo, removeLogo } from './actions';
@@ -65,7 +66,7 @@ export function BrandClient({ initial }: Props) {
   }
 
   async function handleRemoveLogo() {
-    if (!confirm('매장 로고를 삭제하시겠습니까?')) return;
+    if (!await appConfirm('매장 로고를 삭제하시겠습니까?')) return;
     setUploadPending(true);
     setError(null);
     try {
