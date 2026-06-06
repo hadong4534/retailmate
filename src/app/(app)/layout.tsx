@@ -12,15 +12,22 @@ import { getUnreadNotices } from '@/lib/notices/queries';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // getUser()는 Auth 서버 왕복(수백ms). 미들웨어가 세션을 이미 검증·갱신하므로
+  // 로컬 JWT 검증(getClaims)으로 충분 — 대시보드와 동일 패턴.
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const claims = claimsData?.claims as { sub?: string; email?: string } | undefined;
+  if (!claims?.sub) redirect('/login');
+  const userId = claims.sub;
 
-  if (!user) redirect('/login');
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, name, avatar_path')
-    .eq('id', user.id)
-    .single();
+  // 프로필과 매장 컨텍스트는 서로 독립 → 병렬 조회로 SSR 시간 단축
+  const [{ data: profile }, allContexts] = await Promise.all([
+    supabase
+      .from('profiles')
+      .select('id, name, avatar_path')
+      .eq('id', userId)
+      .single(),
+    getUserStoreContexts(supabase, userId),
+  ]);
 
   let avatarUrl: string | null = null;
   if (profile?.avatar_path) {
@@ -29,8 +36,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     avatarUrl = data?.publicUrl ?? null;
   }
 
-  const allContexts = await getUserStoreContexts(supabase, user.id);
-  const adminStore = await getCurrentAdminStore(supabase, user.id);
+  const adminStore = await getCurrentAdminStore(supabase, userId);
 
   if (!adminStore) {
     if (allContexts.length > 0) {
@@ -40,7 +46,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   const roleMap = new Map(allContexts.map((c) => [c.storeId, c.role]));
-  const unread = await getUnreadNotices(supabase, user.id, roleMap);
+  const unread = await getUnreadNotices(supabase, userId, roleMap);
 
   const adminOptions = allContexts
     .filter((c) => c.isAdmin)
@@ -49,7 +55,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <AppShell
       storeName={adminStore.storeName}
-      ownerName={profile?.name ?? user.email ?? ''}
+      ownerName={profile?.name ?? claims.email ?? ''}
       ownerAvatarUrl={avatarUrl}
       role={adminStore.role}
       currentStore={{
