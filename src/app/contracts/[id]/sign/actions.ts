@@ -70,6 +70,17 @@ export async function submitEmployeeSignature(
   // 0) 사장/매니저 본인은 자기 계약서에 서명할 수 없음 (자기 매장의 직원이 될 수 없음).
   //    이 가드가 없으면 아래 upsert에서 owner role이 employee로 강등되어
   //    직원관리 페이지에 사장이 직원으로 노출됨.
+  const { data: ownerRow } = await admin
+    .from('stores')
+    .select('owner_id')
+    .eq('id', contract.store_id)
+    .maybeSingle();
+  if (ownerRow?.owner_id === user.id) {
+    return {
+      error:
+        '사장님은 본인 매장의 근로계약서에 직접 서명할 수 없습니다. 직원 본인 계정으로 로그인해주세요.',
+    };
+  }
   const { data: existingMember } = await admin
     .from('store_members')
     .select('role')
