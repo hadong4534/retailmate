@@ -201,7 +201,8 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
     { name: '정상', value: statusCounts.normal, color: '#10b981' },
     { name: '지각', value: statusCounts.tardy, color: '#f59e0b' },
     { name: '조퇴', value: statusCounts.early, color: '#3b82f6' },
-    { name: '결근', value: statusCounts.absent, color: '#ef4444' },
+    // 근무 요일·시간이 직원마다 달라 '결근' 단정 불가 — 중립 표기.
+    { name: '기록 없음', value: statusCounts.absent, color: '#cbd5e1' },
   ].filter((d) => d.value > 0);
 
   return (
@@ -305,18 +306,15 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
           <section className="rounded-2xl border border-[#EAECF5] bg-white p-5">
             <h2 className="text-sm font-semibold text-slate-900">근태 인사이트</h2>
             <ul className="mt-3 space-y-2 text-xs">
-              {/* 미출근: 인원 있을 때만 amber accent. 없으면 차분한 slate. */}
+              {/* 근무 요일·시간이 직원마다 달라 '미출근' 단정은 하지 않는다 — 출근 현황만 중립 표기. */}
               <li className="flex items-start gap-2.5 rounded-lg border border-[#EAECF5] bg-slate-50/60 p-3">
-                <span className={
-                  'mt-1 h-1.5 w-1.5 shrink-0 rounded-full ' +
-                  (statusCounts.absent > 0 ? 'bg-amber-500' : 'bg-emerald-500')
-                } aria-hidden />
+                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden />
                 <div className="min-w-0">
                   <p className="font-semibold text-slate-900">
-                    {statusCounts.absent > 0 ? `오늘 미출근 ${statusCounts.absent}명` : '전원 출근 완료'}
+                    {`오늘 출근 기록 ${todayAtts.length}건`}
                   </p>
                   <p className="mt-0.5 text-slate-600">
-                    {statusCounts.absent > 0 ? '직원에게 확인 연락을 보내보세요.' : '오늘은 모두가 정상 출근했어요.'}
+                    근무 요일·시간은 직원마다 달라요. 계약된 날이 아니면 기록이 없어도 정상이에요.
                   </p>
                 </div>
               </li>
@@ -451,7 +449,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                           </p>
                         </div>
                         {!att ? (
-                          <span className="whitespace-nowrap rounded bg-red-100 px-2 py-0.5 text-[11px] font-medium text-red-700">미출근</span>
+                          <span className="whitespace-nowrap rounded bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">기록 없음</span>
                         ) : att.check_out_at ? (
                           <span className="whitespace-nowrap rounded bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700">퇴근</span>
                         ) : (
@@ -524,7 +522,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                           </td>
                           <td className="whitespace-nowrap px-4 py-3">
                             {!att ? (
-                              <span className="rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-medium text-red-700">미출근</span>
+                              <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">기록 없음</span>
                             ) : att.check_out_at ? (
                               <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-700">퇴근</span>
                             ) : (
