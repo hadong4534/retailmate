@@ -35,11 +35,15 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
   const [editOpen, setEditOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     function onClick(e: MouseEvent) {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      // 시트(고정 메뉴)는 wrapRef 밖에 렌더되므로 내부 클릭을 닫기로 오인하지 않도록 함께 검사.
+      if (wrapRef.current?.contains(t) || sheetRef.current?.contains(t)) return;
+      setOpen(false);
     }
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
@@ -118,7 +122,7 @@ export function MemberActions({ memberId, role, isActive, initialName, initialPh
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px]"
           />
-          <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md rounded-t-2xl border-t border-[#EAECF5] bg-white p-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
+          <div ref={sheetRef} className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md rounded-t-2xl border-t border-[#EAECF5] bg-white p-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
             <div className="mx-auto mb-1 h-1 w-10 rounded-full bg-slate-200 sm:hidden" />
             <p className="px-3 py-2 text-[13px] font-bold text-slate-900">직원 관리</p>
             <MenuItem Icon={Pencil} onClick={() => { setOpen(false); setEditOpen(true); }}>
