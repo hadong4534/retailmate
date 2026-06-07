@@ -26,6 +26,7 @@ interface ContractDetail {
   wage_amount: number;
   weekly_holiday_allowance: boolean;
   social_insurance: SocialInsuranceFlags;
+  work_end_date?: string | null;
   work_schedule?: ScheduleForPay['work_schedule'];
   work_start_time?: string | null;
   work_days?: string[] | null;
@@ -113,7 +114,7 @@ export async function getStorePayroll(
   const [profilesRes, contractsRes, attsRes] = await Promise.all([
     supabase.from('profiles').select('id, name, phone').in('id', userIds),
     supabase.from('labor_contracts')
-      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, work_schedule, work_start_time, work_days, invite_name, invite_phone, created_at')
+      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, work_end_date, work_schedule, work_start_time, work_days, invite_name, invite_phone, created_at')
       .eq('store_id', storeId).in('employee_id', userIds).in('status', ['signed', 'sent'])
       .order('created_at', { ascending: false }),
     supabase.from('attendances').select('user_id, check_in_at, check_out_at')
