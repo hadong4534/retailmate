@@ -164,7 +164,11 @@ export default function FindAccountPage() {
                   <>
                     <p className="mt-1 break-all text-[15px] font-bold text-indigo-600">{a.email}</p>
                     <p className="mt-1 text-xs text-slate-500">
-                      이 이메일과 비밀번호로 로그인하세요.
+                      이 이메일과 비밀번호로 로그인하세요. 비밀번호를 잊으셨다면{' '}
+                      <Link href="/reset-password" className="font-semibold text-indigo-600 hover:underline">
+                        재설정
+                      </Link>
+                      하세요.
                     </p>
                   </>
                 )}
