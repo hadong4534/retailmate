@@ -5,6 +5,7 @@ import {
   type InsuranceBreakdown,
   type SocialInsuranceFlags,
 } from '@/lib/payroll/insurance';
+import { paidMinutes } from '@/lib/payroll/paid-minutes';
 
 interface ContractDetail {
   id: string;
@@ -97,7 +98,7 @@ export async function getEmployeeOverview(
   const { data: contracts } = await supabase
     .from('labor_contracts')
     .select(
-      'id, store_id, contract_type, status, work_start_date, work_end_date, wage_type, wage_amount, work_start_time, work_end_time, work_days, pay_day, pay_method, weekly_holiday_allowance, social_insurance',
+      'id, store_id, contract_type, status, work_start_date, work_end_date, wage_type, wage_amount, work_start_time, work_end_time, work_days, work_schedule, pay_day, pay_method, weekly_holiday_allowance, social_insurance',
     )
     .eq('employee_id', userId)
     .in('status', ['sent', 'signed', 'terminated'])
@@ -117,7 +118,7 @@ export async function getEmployeeOverview(
   const monthEnd = endOfThisMonthIso();
   const { data: atts } = await supabase
     .from('attendances')
-    .select('store_id, check_in_at, work_minutes')
+    .select('store_id, check_in_at, check_out_at')
     .eq('user_id', userId)
     .gte('check_in_at', monthStart)
     .lt('check_in_at', monthEnd);
@@ -128,7 +129,14 @@ export async function getEmployeeOverview(
       monthlyByStore.set(a.store_id, { minutes: 0, days: new Set() });
     }
     const agg = monthlyByStore.get(a.store_id)!;
-    agg.minutes += Number(a.work_minutes ?? 0);
+    // 계약 시작시간 이전의 자발적 조기 출근분은 절사
+    agg.minutes += paidMinutes(
+      String(a.check_in_at),
+      (a as { check_out_at?: string | null }).check_out_at
+        ? String((a as { check_out_at?: string | null }).check_out_at)
+        : null,
+      contractByStore.get(a.store_id) ?? null,
+    );
     agg.days.add(String(a.check_in_at).slice(0, 10));
   });
 
