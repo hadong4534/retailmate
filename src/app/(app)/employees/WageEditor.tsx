@@ -19,7 +19,13 @@ export function WageEditor({ memberId, initialWage }: Props) {
     startTransition(async () => {
       const result = await updateMemberWage(memberId, wage);
       if ('error' in result) void appAlert(result.error);
-      else setEditing(false);
+      else {
+        setEditing(false);
+        // 시급 이원화 안내 — 급여 계산은 근로계약서 시급 기준
+        void appAlert(
+          '명부 시급을 변경했어요.\n\n급여 계산은 근로계약서의 시급을 기준으로 하므로, 급여에 반영하려면 계약서 목록에서 [갱신]으로 새 시급의 계약서를 보내주세요.',
+        );
+      }
     });
   }
 
