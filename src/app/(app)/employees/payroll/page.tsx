@@ -235,6 +235,12 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
                 매니저
               </span>
             )}
+            {row.contract?.work_end_date &&
+              row.contract.work_end_date < new Date(Date.now() + 32400000).toISOString().slice(0, 10) && (
+                <span className="shrink-0 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-semibold text-red-700">
+                  계약 만료
+                </span>
+              )}
           </div>
           {row.contract ? (
             <p className="mt-0.5 text-[12px] text-slate-500">
@@ -291,6 +297,10 @@ function PcPayrollRow({ row }: { row: MemberPayrollRow }) {
             <p className="text-[10px] text-slate-500">
               {row.role === 'manager' ? '매니저' : '직원'}
               {!row.isActive && ' · 퇴사'}
+              {row.contract?.work_end_date &&
+                row.contract.work_end_date < new Date(Date.now() + 32400000).toISOString().slice(0, 10) && (
+                  <span className="font-semibold text-red-600"> · 계약 만료</span>
+                )}
             </p>
           </div>
         </div>
