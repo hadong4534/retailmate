@@ -7,6 +7,15 @@ import {
 } from '@/lib/payroll/insurance';
 import { paidMinutes } from '@/lib/payroll/paid-minutes';
 
+/** 'YYYY-MM-DD' → 그 주 월요일 키 — 주휴수당 주 단위 집계 (store-payroll과 동일 규칙). */
+function weekStartKey(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00Z');
+  const day = d.getUTCDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setUTCDate(d.getUTCDate() + diff);
+  return d.toISOString().slice(0, 10);
+}
+
 interface ContractDetail {
   id: string;
   contract_type: 'fulltime' | 'parttime' | 'daily';
@@ -123,21 +132,25 @@ export async function getEmployeeOverview(
     .gte('check_in_at', monthStart)
     .lt('check_in_at', monthEnd);
 
-  const monthlyByStore = new Map<string, { minutes: number; days: Set<string> }>();
+  const monthlyByStore = new Map<string, { minutes: number; days: Set<string>; weekMinutes: Map<string, number> }>();
   (atts ?? []).forEach((a) => {
     if (!monthlyByStore.has(a.store_id)) {
-      monthlyByStore.set(a.store_id, { minutes: 0, days: new Set() });
+      monthlyByStore.set(a.store_id, { minutes: 0, days: new Set(), weekMinutes: new Map() });
     }
     const agg = monthlyByStore.get(a.store_id)!;
     // 계약 시작시간 이전의 자발적 조기 출근분은 절사
-    agg.minutes += paidMinutes(
+    const mins = paidMinutes(
       String(a.check_in_at),
       (a as { check_out_at?: string | null }).check_out_at
         ? String((a as { check_out_at?: string | null }).check_out_at)
         : null,
       contractByStore.get(a.store_id) ?? null,
     );
-    agg.days.add(String(a.check_in_at).slice(0, 10));
+    agg.minutes += mins;
+    const dayStr = String(a.check_in_at).slice(0, 10);
+    agg.days.add(dayStr);
+    const wk = weekStartKey(dayStr);
+    agg.weekMinutes.set(wk, (agg.weekMinutes.get(wk) ?? 0) + mins);
   });
 
   // 5) 매장별 요약 조립
@@ -155,6 +168,15 @@ export async function getEmployeeOverview(
       const hours = workMinutes / 60;
       if (contract.wage_type === 'hourly') {
         grossPay = Math.round(hours * contract.wage_amount);
+        // 주휴수당 — 사장님 급여 화면(store-payroll)과 동일 규칙 → 양쪽 숫자 일치
+        if (contract.weekly_holiday_allowance && agg) {
+          for (const wkMin of agg.weekMinutes.values()) {
+            const wkHours = wkMin / 60;
+            if (wkHours >= 15) {
+              grossPay += Math.round((Math.min(wkHours, 40) / 40) * 8 * contract.wage_amount);
+            }
+          }
+        }
       } else if (contract.wage_type === 'monthly') {
         grossPay = contract.wage_amount;
       } else if (contract.wage_type === 'daily') {
