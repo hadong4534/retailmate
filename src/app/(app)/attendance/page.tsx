@@ -7,6 +7,7 @@ import { ChannelDonut } from '@/components/charts/ChannelDonut';
 import { WeekBarChart } from '@/components/charts/WeekBarChart';
 import { GpsCheckWidget } from '@/components/attendance/GpsCheckWidget';
 import { ScheduleBoard } from './ScheduleBoard';
+import { EditAttendanceButton } from './EditAttendanceButton';
 import { PageHeader } from '@/components/app';
 import { formatHM } from '@/lib/employee/queries';
 import { todayInKST, kstTodayStartIso, formatTimeKST } from '@/lib/utils';
@@ -455,6 +456,14 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                         ) : (
                           <span className="whitespace-nowrap rounded bg-indigo-100 px-2 py-0.5 text-[11px] font-medium text-indigo-700">근무 중</span>
                         )}
+                        {att && (
+                          <EditAttendanceButton
+                            attendanceId={att.id}
+                            name={profile?.name ?? '직원'}
+                            checkInHM={checkIn ? formatTimeKST(checkIn) : '09:00'}
+                            checkOutHM={checkOut ? formatTimeKST(checkOut) : null}
+                          />
+                        )}
                       </div>
                       <div className="mt-2 grid grid-cols-3 gap-2 rounded-lg bg-slate-50 px-3 py-2 text-center">
                         <div>
@@ -492,6 +501,7 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                       <th className="whitespace-nowrap px-4 py-2.5 text-left font-medium">총 근무</th>
                       <th className="whitespace-nowrap px-4 py-2.5 text-left font-medium">위치</th>
                       <th className="whitespace-nowrap px-4 py-2.5 text-left font-medium">상태</th>
+                      <th className="whitespace-nowrap px-4 py-2.5 text-left font-medium">관리</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -527,6 +537,16 @@ export default async function AttendancePage({ searchParams }: { searchParams: P
                               <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-700">퇴근</span>
                             ) : (
                               <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700">근무 중</span>
+                            )}
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-3">
+                            {att && (
+                              <EditAttendanceButton
+                                attendanceId={att.id}
+                                name={profile?.name ?? '직원'}
+                                checkInHM={checkIn ? formatTimeKST(checkIn) : '09:00'}
+                                checkOutHM={checkOut ? formatTimeKST(checkOut) : null}
+                              />
                             )}
                           </td>
                         </tr>
