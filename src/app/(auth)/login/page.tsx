@@ -159,6 +159,10 @@ function LoginForm() {
         <Link href="/signup" className="font-semibold text-indigo-600 hover:underline">
           회원가입
         </Link>
+        <span className="mx-2 text-slate-300">|</span>
+        <Link href="/find-account" className="font-semibold text-indigo-600 hover:underline">
+          아이디 찾기
+        </Link>
       </div>
 
       <div className="mt-4 flex items-start gap-2 rounded-md bg-slate-50 px-3 py-2.5 text-[12px] text-slate-600">
