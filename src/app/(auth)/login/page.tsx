@@ -163,6 +163,10 @@ function LoginForm() {
         <Link href="/find-account" className="font-semibold text-indigo-600 hover:underline">
           아이디 찾기
         </Link>
+        <span className="mx-2 text-slate-300">|</span>
+        <Link href="/reset-password" className="font-semibold text-indigo-600 hover:underline">
+          비밀번호 재설정
+        </Link>
       </div>
 
       <div className="mt-4 flex items-start gap-2 rounded-md bg-slate-50 px-3 py-2.5 text-[12px] text-slate-600">
