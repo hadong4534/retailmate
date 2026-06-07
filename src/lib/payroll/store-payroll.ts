@@ -16,6 +16,7 @@ import {
   type SocialInsuranceFlags,
   type PayrollMode,
 } from './insurance';
+import { paidMinutes, type ScheduleForPay } from './paid-minutes';
 
 interface ContractDetail {
   id: string;
@@ -25,6 +26,9 @@ interface ContractDetail {
   wage_amount: number;
   weekly_holiday_allowance: boolean;
   social_insurance: SocialInsuranceFlags;
+  work_schedule?: ScheduleForPay['work_schedule'];
+  work_start_time?: string | null;
+  work_days?: string[] | null;
 }
 
 export interface MemberPayrollRow {
@@ -109,10 +113,10 @@ export async function getStorePayroll(
   const [profilesRes, contractsRes, attsRes] = await Promise.all([
     supabase.from('profiles').select('id, name, phone').in('id', userIds),
     supabase.from('labor_contracts')
-      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, invite_name, invite_phone, created_at')
+      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, work_schedule, work_start_time, work_days, invite_name, invite_phone, created_at')
       .eq('store_id', storeId).in('employee_id', userIds).in('status', ['signed', 'sent'])
       .order('created_at', { ascending: false }),
-    supabase.from('attendances').select('user_id, check_in_at, work_minutes')
+    supabase.from('attendances').select('user_id, check_in_at, check_out_at')
       .eq('store_id', storeId).in('user_id', userIds)
       .gte('check_in_at', start).lt('check_in_at', end),
   ]);
@@ -139,7 +143,12 @@ export async function getStorePayroll(
   (atts ?? []).forEach((a) => {
     if (!workByUser.has(a.user_id)) workByUser.set(a.user_id, { minutes: 0, days: new Set(), weekMinutes: new Map() });
     const agg = workByUser.get(a.user_id)!;
-    const mins = Number(a.work_minutes ?? 0);
+    // 계약 시작시간 이전의 자발적 조기 출근분은 절사 (paid-minutes.ts)
+    const mins = paidMinutes(
+      String(a.check_in_at),
+      a.check_out_at ? String(a.check_out_at) : null,
+      contractByUser.get(a.user_id) ?? null,
+    );
     agg.minutes += mins;
     const dayStr = String(a.check_in_at).slice(0, 10);
     agg.days.add(dayStr);
