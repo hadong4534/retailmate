@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentAdminStore, getUserStoreContexts } from '@/lib/auth/store-context';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 type Result =
   | { ok: true; attendanceId: string; distanceM?: number }
@@ -172,4 +173,69 @@ export async function gpsCheckOut(input?: { lat?: number | null; lng?: number | 
   revalidatePath('/dashboard');
   revalidatePath('/employee/me');
   return { ok: true, attendanceId: openRow.id, distanceM: dist };
+}
+/**
+ * 출퇴근 시간 수정 — 사장/매니저 전용.
+ * 직원이 퇴근을 늦게 찍는 등 실제와 다른 기록을 사장님이 바로잡는 용도.
+ * 시간은 해당 기록의 KST 날짜 기준 'HH:MM'으로 받는다. 퇴근이 출근보다 이르면 익일로 간주(야간 근무).
+ */
+export async function updateAttendanceTimes(input: {
+  attendanceId: string;
+  checkInHM: string;          // 'HH:MM' (KST)
+  checkOutHM: string | null;  // null이면 '근무 중'으로 되돌림
+}): Promise<{ ok: true } | { error: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: '로그인이 필요합니다.' };
+
+  const adminStore = await getCurrentAdminStore(supabase, user.id);
+  if (!adminStore) return { error: '관리자만 수정할 수 있습니다.' };
+
+  if (!/^\d{2}:\d{2}$/.test(input.checkInHM)) return { error: '출근 시간이 올바르지 않습니다.' };
+  if (input.checkOutHM !== null && !/^\d{2}:\d{2}$/.test(input.checkOutHM)) {
+    return { error: '퇴근 시간이 올바르지 않습니다.' };
+  }
+
+  const admin = createAdminClient();
+  const { data: row } = await admin
+    .from('attendances')
+    .select('id, store_id, check_in_at')
+    .eq('id', input.attendanceId)
+    .maybeSingle();
+  if (!row || row.store_id !== adminStore.storeId) {
+    return { error: '해당 기록을 찾을 수 없습니다.' };
+  }
+
+  // 기존 출근 시각의 KST 날짜를 유지한 채 시:분만 교체
+  const kstDate = new Date(new Date(row.check_in_at).getTime() + 9 * 3600 * 1000)
+    .toISOString()
+    .slice(0, 10);
+  const newIn = new Date(`${kstDate}T${input.checkInHM}:00+09:00`);
+  let newOut: Date | null = null;
+  if (input.checkOutHM !== null) {
+    newOut = new Date(`${kstDate}T${input.checkOutHM}:00+09:00`);
+    if (newOut.getTime() <= newIn.getTime()) {
+      newOut = new Date(newOut.getTime() + 24 * 3600 * 1000); // 자정 넘김(야간 근무)
+    }
+    if (newOut.getTime() - newIn.getTime() > 24 * 3600 * 1000) {
+      return { error: '근무 시간이 24시간을 넘을 수 없습니다.' };
+    }
+  }
+
+  // work_minutes는 generated column — check_in/out만 갱신하면 자동 재계산된다
+  const { error } = await admin
+    .from('attendances')
+    .update({
+      check_in_at: newIn.toISOString(),
+      check_out_at: newOut ? newOut.toISOString() : null,
+    })
+    .eq('id', row.id);
+  if (error) return { error: error.message };
+
+  revalidatePath('/attendance');
+  revalidatePath('/dashboard');
+  revalidatePath('/employees');
+  revalidatePath('/employees/payroll');
+  revalidatePath('/employee/me');
+  return { ok: true };
 }
