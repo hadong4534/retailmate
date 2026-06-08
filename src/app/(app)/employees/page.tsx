@@ -159,11 +159,15 @@ export default async function EmployeesPage() {
   const fulltimeCount = active.filter((m) => latestContract.get(m.user_id)?.contract_type === 'fulltime').length;
   const partCount = active.length - fulltimeCount;
 
-  const workingNow = todayAttendances.filter((a) => !a.check_out_at).length;
+  // 출근 기록을 '활성 직원'으로 한정 — 사장(owner)·퇴사자의 출근 기록이 섞여도
+  // 주요 직원 현황(active 기준)과 카운트가 어긋나지 않도록 통일.
+  const activeIds = new Set(active.map((m) => m.user_id));
+  const todayActiveAtts = todayAttendances.filter((a) => activeIds.has(a.user_id));
+  const workingNow = todayActiveAtts.filter((a) => !a.check_out_at).length;
   // 출근했던 사람(퇴근 포함) — '미출근' 계산용
-  const checkedIn = new Set(todayAttendances.map((a) => a.user_id));
+  const checkedIn = new Set(todayActiveAtts.map((a) => a.user_id));
   // 지금 근무 중인 사람 — '출근중' 배지는 반드시 이걸 사용 (퇴근하면 즉시 해제)
-  const workingNowSet = new Set(todayAttendances.filter((a) => !a.check_out_at).map((a) => a.user_id));
+  const workingNowSet = new Set(todayActiveAtts.filter((a) => !a.check_out_at).map((a) => a.user_id));
   const staleOpenCount = staleOpenRes.count ?? 0; // 퇴근 미처리(과거 미퇴근) 기록 수
   const offCount = active.length - checkedIn.size;
 
@@ -304,7 +308,15 @@ export default async function EmployeesPage() {
           <section className="rounded-xl border border-[#EAECF5] bg-white p-5 lg:col-span-2">
             <h2 className="text-sm font-semibold text-slate-900">주요 직원 현황</h2>
             <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-              {active.slice(0, 6).map((m) => {
+              {[...active]
+                .sort((a, b) => {
+                  // 근무 중 → 오늘 출근 → 나머지 순으로 정렬해, 근무 중인 직원이 6명 미리보기에서 잘리지 않게.
+                  const rank = (m: typeof a) =>
+                    workingNowSet.has(m.user_id) ? 2 : checkedIn.has(m.user_id) ? 1 : 0;
+                  return rank(b) - rank(a);
+                })
+                .slice(0, 6)
+                .map((m) => {
                 const profile = profileMap.get(m.user_id);
                 const contract = latestContract.get(m.user_id);
                 const working = workingNowSet.has(m.user_id);
