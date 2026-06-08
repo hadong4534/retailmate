@@ -151,13 +151,13 @@ export default async function EmployeeMePage() {
             <KpiCard
               label={`${monthLabel} 세전 급여`}
               value={formatWon(overview.totalGrossPay)}
-              sub={overview.totalInsurance > 0 ? `4대보험 −${formatWon(overview.totalInsurance)}` : '4대보험 미적용'}
+              sub={overview.totalInsurance > 0 ? `공제 −${formatWon(overview.totalInsurance)}` : '공제 없음'}
               tone="slate"
             />
             <KpiCard
               label={`${monthLabel} 실수령액`}
               value={formatWon(overview.totalNetPay)}
-              sub="세전 − 4대보험 본인부담"
+              sub="세전 급여 − 공제"
               tone="emerald"
             />
           </div>
@@ -232,7 +232,7 @@ export default async function EmployeeMePage() {
 
                     {s.monthly.insurance.total > 0 && (
                       <div className="mt-3 space-y-1 border-t border-[#EAECF5] pt-3 text-xs">
-                        <p className="font-medium text-slate-600">4대보험 본인부담</p>
+                        <p className="font-medium text-slate-600">{s.monthly.deductionLabel}</p>
                         {s.monthly.insurance.nationalPension > 0 && (
                           <Row label="국민연금 4.5%" value={`−${formatWon(s.monthly.insurance.nationalPension)}`} />
                         )}
@@ -260,10 +260,8 @@ export default async function EmployeeMePage() {
                       </span>
                     </div>
 
-                    {s.contract && s.contract.contract_type !== 'fulltime' && (
-                      <p className="mt-2 text-[10px] text-slate-400">
-                        {s.contract.contract_type === 'parttime' ? '파트타임(시급)' : '일용직'} — 4대보험 본인부담 미적용
-                      </p>
+                    {s.monthly.insurance.total === 0 && (
+                      <p className="mt-2 text-[10px] text-slate-400">공제 없는 계약 — 세전 그대로 지급</p>
                     )}
                   </div>
                 </li>
