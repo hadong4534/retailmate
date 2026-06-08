@@ -1,9 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
-  calculateNetPay,
+  calculatePayroll,
   ZERO_BREAKDOWN,
   type InsuranceBreakdown,
   type SocialInsuranceFlags,
+  type PayrollMode,
 } from '@/lib/payroll/insurance';
 import { paidMinutes } from '@/lib/payroll/paid-minutes';
 
@@ -79,10 +80,14 @@ export async function getEmployeeOverview(
   // 1) 본인 멤버 매장
   const { data: members } = await supabase
     .from('store_members')
-    .select('store_id')
+    .select('store_id, payroll_mode')
     .eq('user_id', userId)
     .eq('is_active', true);
   const storeIds = (members ?? []).map((m) => m.store_id);
+  // 처리방식(4대보험/3.3%/일용)은 store_members.payroll_mode 기준 — 사장님 급여 화면과 동일 소스
+  const payrollModeByStore = new Map<string, PayrollMode>(
+    (members ?? []).map((m) => [m.store_id as string, ((m as { payroll_mode?: string }).payroll_mode ?? 'none') as PayrollMode]),
+  );
 
   if (storeIds.length === 0) {
     return {
@@ -182,9 +187,14 @@ export async function getEmployeeOverview(
       } else if (contract.wage_type === 'daily') {
         grossPay = workDays * contract.wage_amount;
       }
-      const calc = calculateNetPay(grossPay, contract.contract_type, contract.social_insurance);
-      insurance = calc.insurance;
-      netPay = calc.net;
+      // 공제: 사장님 급여 화면(store-payroll)과 동일하게 payroll_mode 기준으로 계산 → 실수령액 일치
+      const pr = calculatePayroll(grossPay, payrollModeByStore.get(storeId) ?? 'none', {
+        dailyWage: contract.wage_type === 'daily' ? contract.wage_amount : undefined,
+        workDays,
+        flags: contract.social_insurance,
+      });
+      insurance = { ...ZERO_BREAKDOWN, total: pr.deductionTotal };
+      netPay = pr.net;
     }
 
     return {
