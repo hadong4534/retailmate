@@ -44,6 +44,7 @@ export interface EmployeeStoreSummary {
     grossPay: number;
     insurance: InsuranceBreakdown;
     netPay: number;
+    deductionLabel: string;
   };
 }
 
@@ -168,6 +169,7 @@ export async function getEmployeeOverview(
     let grossPay = 0;
     let insurance: InsuranceBreakdown = ZERO_BREAKDOWN;
     let netPay = 0;
+    let deductionLabel = '공제 없음';
 
     if (contract) {
       const hours = workMinutes / 60;
@@ -195,13 +197,14 @@ export async function getEmployeeOverview(
       });
       insurance = { ...ZERO_BREAKDOWN, total: pr.deductionTotal };
       netPay = pr.net;
+      deductionLabel = pr.deductionLabel;
     }
 
     return {
       storeId,
       storeName: storeNameMap.get(storeId) ?? '(매장)',
       contract,
-      monthly: { workMinutes, workDays, grossPay, insurance, netPay },
+      monthly: { workMinutes, workDays, grossPay, insurance, netPay, deductionLabel },
     };
   });
 
