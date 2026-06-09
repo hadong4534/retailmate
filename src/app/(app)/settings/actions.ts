@@ -32,7 +32,10 @@ export async function updateStoreInfo(input: {
   const adminStore = await getCurrentAdminStore(supabase, user.id);
   if (!adminStore) return { error: '매장을 찾을 수 없습니다.' };
 
-  const { error } = await supabase
+  // 권한은 getCurrentAdminStore로 검증 완료(사장 또는 매니저). stores UPDATE RLS는 owner만 허용하므로
+  // 매니저가 매장 정보(GPS 반경 등)를 바꾸면 조용히 무시됐다 → 검증된 매장 한정으로 admin client 사용.
+  const admin = createAdminClient();
+  const { error } = await admin
     .from('stores')
     .update({
       name: input.name.trim(),
@@ -71,7 +74,9 @@ export async function updateWageSettings(input: {
   const adminStore = await getCurrentAdminStore(supabase, user.id);
   if (!adminStore) return { error: '매장을 찾을 수 없습니다.' };
 
-  const { error } = await supabase
+  // 매니저도 저장 가능하도록 검증된 매장 한정 admin client 사용 (stores RLS는 owner 전용).
+  const admin = createAdminClient();
+  const { error } = await admin
     .from('stores')
     .update({
       wage_calc_mode: input.wage_calc_mode,
