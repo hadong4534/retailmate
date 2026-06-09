@@ -21,7 +21,10 @@ export async function updateBrandSettings(input: UpdateBrandInput): Promise<Resu
   const adminStore = await getCurrentAdminStore(supabase, user.id);
   if (!adminStore) return { error: '매장을 찾을 수 없습니다.' };
 
-  const { error } = await supabase
+  // 권한은 getCurrentAdminStore로 검증(사장+매니저). stores RLS는 owner 전용이라
+  // 매니저가 브랜드 정보를 저장하면 막혔다 → 검증된 매장 한정 admin client 사용 (로고 업로드와 동일).
+  const admin = createAdminClient();
+  const { error } = await admin
     .from('stores')
     .update({
       brand_color: input.brand_color || '#7177EE',
