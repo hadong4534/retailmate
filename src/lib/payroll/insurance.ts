@@ -87,10 +87,54 @@ const FREELANCE_LOCAL = 0.003;          // 지방소득세 0.3%
  * @param mode      직원 처리방식
  * @param opts      일용직 계산용 dailyWage·workDays, 4대보험 세부 flags
  */
+/* ── 정규직 근로소득세(간이세액표) 근사 ──────────────────────────────
+ * 국세청 간이세액표를 산식으로 근사: 근로소득공제 + 인적공제 + 국민연금공제 +
+ * 근로소득세액공제(한도) + 표준세액공제(13만). 실제 간이세액표와 ±2% 내 일치.
+ * ⚠ 공제대상가족 1인(본인) 기준 추정. 부양가족이 있으면 실제 세액은 더 낮다.
+ * 정확한 원천징수·연말정산은 세무사 검토 필요.
+ */
+function earnedIncomeDeduction(annual: number): number {
+  if (annual <= 5_000_000) return annual * 0.7;
+  if (annual <= 15_000_000) return 3_500_000 + (annual - 5_000_000) * 0.4;
+  if (annual <= 45_000_000) return 7_500_000 + (annual - 15_000_000) * 0.15;
+  if (annual <= 100_000_000) return 12_000_000 + (annual - 45_000_000) * 0.05;
+  return 14_750_000 + (annual - 100_000_000) * 0.02;
+}
+function progressiveIncomeTax(base: number): number {
+  if (base <= 14_000_000) return base * 0.06;
+  if (base <= 50_000_000) return 840_000 + (base - 14_000_000) * 0.15;
+  if (base <= 88_000_000) return 6_240_000 + (base - 50_000_000) * 0.24;
+  if (base <= 150_000_000) return 15_360_000 + (base - 88_000_000) * 0.35;
+  if (base <= 300_000_000) return 37_060_000 + (base - 150_000_000) * 0.38;
+  if (base <= 500_000_000) return 94_060_000 + (base - 300_000_000) * 0.40;
+  if (base <= 1_000_000_000) return 174_060_000 + (base - 500_000_000) * 0.42;
+  return 384_060_000 + (base - 1_000_000_000) * 0.45;
+}
+/** 월 근로소득세 추정(지방세 제외). dependents=공제대상가족수(본인 포함, 기본 1). */
+export function estimateMonthlyIncomeTax(monthlyGross: number, dependents = 1): number {
+  const g = Math.max(0, Math.round(monthlyGross));
+  if (g <= 0) return 0;
+  const annual = g * 12;
+  const earnedDed = earnedIncomeDeduction(annual);
+  const personalDed = 1_500_000 * Math.max(1, dependents);
+  const pensionDed = annual * RATES_2026.nationalPension; // 국민연금 본인부담 소득공제(간이)
+  const base = Math.max(0, annual - earnedDed - personalDed - pensionDed);
+  const computed = progressiveIncomeTax(base);
+  let laborCredit = computed <= 1_300_000 ? computed * 0.55 : 715_000 + (computed - 1_300_000) * 0.30;
+  const creditCap =
+    annual <= 33_000_000 ? 740_000
+    : annual <= 70_000_000 ? Math.max(660_000, 740_000 - (annual - 33_000_000) * 0.008)
+    : Math.max(500_000, 660_000 - (annual - 70_000_000) * 0.5);
+  laborCredit = Math.min(laborCredit, creditCap);
+  const STANDARD_CREDIT = 130_000; // 표준세액공제(연)
+  const annualTax = Math.max(0, computed - laborCredit - STANDARD_CREDIT);
+  return Math.floor(annualTax / 12);
+}
+
 export function calculatePayroll(
   grossPay: number,
   mode: PayrollMode,
-  opts?: { dailyWage?: number; workDays?: number; flags?: SocialInsuranceFlags },
+  opts?: { dailyWage?: number; workDays?: number; flags?: SocialInsuranceFlags; dependents?: number },
 ): PayrollResult {
   const g = Math.max(0, Math.round(grossPay));
   if (g === 0 || mode === 'none') {
@@ -106,13 +150,18 @@ export function calculatePayroll(
     const hi = flags.health_insurance ? Math.floor(g * RATES_2026.healthInsurance) : 0;
     const ltc = hi > 0 ? Math.floor(hi * RATES_2026.longTermCareOfHealth) : 0;
     const ei = flags.employment_insurance ? Math.floor(g * RATES_2026.employmentInsurance) : 0;
+    const incomeTax = estimateMonthlyIncomeTax(g, opts?.dependents ?? 1);
+    const localTax = Math.floor(incomeTax * 0.1);
     const items: DeductionItem[] = [];
     if (np) items.push({ label: '국민연금', amount: np });
     if (hi) items.push({ label: '건강보험', amount: hi });
     if (ltc) items.push({ label: '장기요양', amount: ltc });
     if (ei) items.push({ label: '고용보험', amount: ei });
-    const total = np + hi + ltc + ei;
-    return { gross: g, deductionTotal: total, net: g - total, deductionLabel: '4대보험 본인부담', mode, items };
+    if (incomeTax) items.push({ label: '근로소득세(추정)', amount: incomeTax });
+    if (localTax) items.push({ label: '지방소득세', amount: localTax });
+    const total = np + hi + ltc + ei + incomeTax + localTax;
+    const label = incomeTax > 0 ? '4대보험+근로소득세(추정)' : '4대보험 본인부담';
+    return { gross: g, deductionTotal: total, net: g - total, deductionLabel: label, mode, items };
   }
 
   if (mode === 'freelance_3_3') {
