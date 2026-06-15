@@ -2,7 +2,7 @@
 
 import { PushToggle } from '@/components/settings/PushToggle';
 
-import { useState, useTransition, useRef } from 'react';
+import { useState, useTransition, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { PhoneInput } from '@/components/ui/PhoneInput';
@@ -786,6 +786,37 @@ function SecurityForm({ onSaved }: { onSaved: (d: Date) => void }) {
           </Button>
         </div>
       </form>
+
+      <KakaoLinkCard />
+    </div>
+  );
+}
+
+// 카카오 로그인 연결 — 이메일로 가입한 계정에 카카오를 추가 로그인 수단으로 붙인다.
+function KakaoLinkCard() {
+  const [linked, setLinked] = useState(false);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('linked') === '1') setLinked(true);
+  }, []);
+  return (
+    <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
+      <h2 className="text-base font-bold text-slate-900">카카오 로그인 연결</h2>
+      <p className="mt-1 text-xs text-slate-500">
+        연결해두면 이메일·카카오 어느 쪽으로 로그인해도 같은 계정으로 들어옵니다.
+      </p>
+      {linked && (
+        <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+          ✓ 카카오 로그인이 연결되었습니다.
+        </p>
+      )}
+      <div className="mt-4">
+        <a
+          href="/api/auth/kakao/start?link=1"
+          className="inline-flex items-center justify-center rounded-lg bg-[#FEE500] px-4 py-2.5 text-sm font-semibold text-[#3C1E1E] transition hover:brightness-95"
+        >
+          카카오 연결하기
+        </a>
+      </div>
     </div>
   );
 }
