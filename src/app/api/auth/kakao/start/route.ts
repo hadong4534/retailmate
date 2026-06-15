@@ -15,6 +15,8 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const next = url.searchParams.get('next') ?? '/dashboard';
+  // link=1 이면 '로그인'이 아니라 '현재 로그인 계정에 카카오 연결' 모드.
+  const linkMode = url.searchParams.get('link') === '1';
 
   const clientId = process.env.KAKAO_REST_API_KEY;
   if (!clientId) {
@@ -48,5 +50,15 @@ export async function GET(request: Request) {
     path: '/',
     maxAge: 600,
   });
+  if (linkMode) {
+    // 콜백이 '연결 모드'임을 알도록 단기 쿠키 저장 (현재 로그인 세션은 유지됨)
+    res.cookies.set('kakao_link', '1', {
+      httpOnly: true,
+      secure: proto === 'https',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 600,
+    });
+  }
   return res;
 }

@@ -175,45 +175,79 @@ export async function GET(request: Request) {
 
   const placeholderEmail = `kakao_${kakaoId}@retailmate.local`;
 
-  // 기존 사용자 조회: placeholder 이메일로 페이지네이션 순회.
-  // (이전 코드는 listUsers의 첫 50명만 봐서 그 이후 가입한 카카오 사용자는 매번 신규로 생성되는 버그였음)
-  const existing = await findKakaoUserByEmail(svc, placeholderEmail);
-
-  let userId: string;
-  if (existing) {
-    userId = existing.id;
-  } else {
-    // 신규 — 무작위 비밀번호로 생성 (로그인에 직접 안 씀)
-    const randomPassword = randomBytes(24).toString('hex');
-    const { data: created, error: createErr } = await svc.auth.admin.createUser({
-      email: placeholderEmail,
-      password: randomPassword,
-      email_confirm: true,
-      user_metadata: {
-        provider: 'kakao',
-        kakao_id: kakaoId,
-        name: nickname,
-        // role은 저장하지 않는다 — 권한은 store_members(직원)/stores.owner_id(사장)가 단일 진실.
-      },
-    });
-    if (createErr || !created.user) {
-      return NextResponse.redirect(
-        new URL('/login?error=kakao_user_create_failed', url.origin),
-      );
+  // 3-A) 카카오 '연결' 모드 — 이미 로그인한 사용자가 설정에서 "카카오 연결"을 요청한 경우.
+  //   세션 전환 없이 account_links(kakao_id → 현재 계정)만 저장하고 설정으로 돌아간다.
+  if ((await cookies()).get('kakao_link')?.value === '1') {
+    const supabaseForLink = await createClient();
+    const { data: { user: current } } = await supabaseForLink.auth.getUser();
+    const res = current
+      ? NextResponse.redirect(new URL('/settings?linked=1', url.origin))
+      : NextResponse.redirect(new URL('/login?error=kakao_link_no_session', url.origin));
+    if (current) {
+      await svc.from('account_links').upsert({ kakao_id: kakaoId, user_id: current.id });
     }
-    userId = created.user.id;
-
-    // profiles 행 채우기 (트리거가 만든 빈 행 갱신)
-    await svc.from('profiles').upsert({
-      id: userId,
-      name: nickname,
-    });
+    res.cookies.delete('kakao_link');
+    res.cookies.delete('kakao_oauth_nonce');
+    return res;
   }
 
-  // 4. magiclink 생성 → 즉시 verifyOtp 로 세션 발급
+  // 3-B) 로그인 모드 — 이 카카오가 주(主)계정(예: 이메일 계정)에 연결돼 있으면 그 계정으로 로그인.
+  const { data: link } = await svc
+    .from('account_links')
+    .select('user_id')
+    .eq('kakao_id', kakaoId)
+    .maybeSingle();
+
+  let loginEmail = placeholderEmail;
+  let userId: string;
+
+  if (link?.user_id) {
+    userId = link.user_id;
+    const { data: primary } = await svc.auth.admin.getUserById(userId);
+    if (!primary?.user?.email) {
+      return NextResponse.redirect(new URL('/login?error=kakao_link_broken', url.origin));
+    }
+    loginEmail = primary.user.email; // 연결된 주계정 이메일로 세션 발급
+  } else {
+    // 기존 사용자 조회: placeholder 이메일로 페이지네이션 순회.
+    // (이전 코드는 listUsers의 첫 50명만 봐서 그 이후 가입한 카카오 사용자는 매번 신규로 생성되는 버그였음)
+    const existing = await findKakaoUserByEmail(svc, placeholderEmail);
+
+    if (existing) {
+      userId = existing.id;
+    } else {
+      // 신규 — 무작위 비밀번호로 생성 (로그인에 직접 안 씀)
+      const randomPassword = randomBytes(24).toString('hex');
+      const { data: created, error: createErr } = await svc.auth.admin.createUser({
+        email: placeholderEmail,
+        password: randomPassword,
+        email_confirm: true,
+        user_metadata: {
+          provider: 'kakao',
+          kakao_id: kakaoId,
+          name: nickname,
+          // role은 저장하지 않는다 — 권한은 store_members(직원)/stores.owner_id(사장)가 단일 진실.
+        },
+      });
+      if (createErr || !created.user) {
+        return NextResponse.redirect(
+          new URL('/login?error=kakao_user_create_failed', url.origin),
+        );
+      }
+      userId = created.user.id;
+
+      // profiles 행 채우기 (트리거가 만든 빈 행 갱신)
+      await svc.from('profiles').upsert({
+        id: userId,
+        name: nickname,
+      });
+    }
+  }
+
+  // 4. magiclink 생성 → 즉시 verifyOtp 로 세션 발급 (연결된 주계정 이메일 우선)
   const { data: linkData, error: linkErr } = await svc.auth.admin.generateLink({
     type: 'magiclink',
-    email: placeholderEmail,
+    email: loginEmail,
   });
   if (linkErr || !linkData?.properties?.hashed_token) {
     return NextResponse.redirect(
