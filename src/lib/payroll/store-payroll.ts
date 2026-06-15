@@ -17,6 +17,8 @@ import {
   type PayrollMode,
 } from './insurance';
 import { paidMinutes, type ScheduleForPay } from './paid-minutes';
+import { MIN_HOURLY_WAGE_2026 } from '@/lib/constants';
+import { approvedOvertimeByUser } from '@/lib/overtime/queries';
 
 interface ContractDetail {
   id: string;
@@ -29,6 +31,8 @@ interface ContractDetail {
   work_end_date?: string | null;
   work_schedule?: ScheduleForPay['work_schedule'];
   work_start_time?: string | null;
+  work_end_time?: string | null;
+  break_minutes?: number | null;
   work_days?: string[] | null;
 }
 
@@ -48,6 +52,9 @@ export interface MemberPayrollRow {
   payrollMode: PayrollMode;
   payrollModeLabel: string;   // '4대보험' 등
   deductionLabel: string;     // '4대보험 본인부담' / '원천징수 3.3%' ...
+  belowMinWage: boolean;      // 시급이 최저임금 미만
+  overtimeMinutes: number;    // 승인된 연장근무(분)
+  overtimePay: number;        // 연장근무 가산액
 }
 
 export interface StorePayrollSummary {
@@ -114,7 +121,7 @@ export async function getStorePayroll(
   const [profilesRes, contractsRes, attsRes] = await Promise.all([
     supabase.from('profiles').select('id, name, phone').in('id', userIds),
     supabase.from('labor_contracts')
-      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, work_end_date, work_schedule, work_start_time, work_days, invite_name, invite_phone, created_at')
+      .select('id, employee_id, contract_type, status, wage_type, wage_amount, weekly_holiday_allowance, social_insurance, work_end_date, work_schedule, work_start_time, work_end_time, break_minutes, work_days, invite_name, invite_phone, created_at')
       .eq('store_id', storeId).in('employee_id', userIds).in('status', ['signed', 'sent'])
       .order('created_at', { ascending: false }),
     supabase.from('attendances').select('user_id, check_in_at, check_out_at')
@@ -139,6 +146,9 @@ export async function getStorePayroll(
 
   // 4) 월 출퇴근 기록 (위 Promise.all에서 함께 조회)
   const atts = attsRes.data;
+
+  // 4.5) 승인된 연장근무(분) — 직원별 합산
+  const overtimeByUser = await approvedOvertimeByUser(storeId, month);
 
   const workByUser = new Map<string, { minutes: number; days: Set<string>; weekMinutes: Map<string, number> }>();
   (atts ?? []).forEach((a) => {
@@ -170,6 +180,8 @@ export async function getStorePayroll(
     let insurance: InsuranceBreakdown = ZERO_BREAKDOWN;
     let netPay = 0;
     let deductionLabel = '공제 없음';
+    let overtimeMinutes = 0;
+    let overtimePay = 0;
 
     if (contract) {
       const hours = workMinutes / 60;
@@ -193,6 +205,17 @@ export async function getStorePayroll(
       } else if (contract.wage_type === 'daily') {
         grossPay = workDays * contract.wage_amount;
       }
+      // 승인된 연장근무 가산 (계약시간 상한과 별개로 사장 승인분만 지급)
+      const otMin = overtimeByUser.get(m.user_id) ?? 0;
+      if (otMin > 0) {
+        const rate = contract.wage_type === 'hourly' ? contract.wage_amount
+          : contract.wage_type === 'monthly' ? contract.wage_amount / 209
+          : contract.wage_amount / 8;
+        overtimeMinutes = otMin;
+        overtimePay = Math.round((otMin / 60) * rate);
+        grossPay += overtimePay;
+      }
+
       // 처리방식(payroll_mode)에 따라 공제 계산 — 계약형태와 무관.
       const pr = calculatePayroll(grossPay, mode, {
         dailyWage: contract.wage_type === 'daily' ? contract.wage_amount : undefined,
@@ -222,6 +245,12 @@ export async function getStorePayroll(
       payrollMode: mode,
       payrollModeLabel: PAYROLL_MODE_LABEL[mode],
       deductionLabel,
+      overtimeMinutes,
+      overtimePay,
+      belowMinWage:
+        contract?.wage_type === 'hourly' &&
+        contract.wage_amount > 0 &&
+        contract.wage_amount < MIN_HOURLY_WAGE_2026,
     };
   });
 

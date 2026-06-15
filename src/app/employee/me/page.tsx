@@ -10,6 +10,7 @@ import { getUserStoreContexts } from '@/lib/auth/store-context';
 import { getUnreadNotices, getStoreNotices } from '@/lib/notices/queries';
 import { getEmployeeOverview, formatHM } from '@/lib/employee/queries';
 import { AvatarUploader } from './AvatarUploader';
+import { OvertimeRequest } from './OvertimeRequest';
 import { formatWon, kstTodayStartIso } from '@/lib/utils';
 
 export const metadata = {
@@ -164,6 +165,12 @@ export default async function EmployeeMePage() {
         )}
 
         {/* 매장별 카드 */}
+        {overview.storeSummaries.length > 0 && (
+          <section className="mt-8">
+            <OvertimeRequest stores={overview.storeSummaries.map((s) => ({ storeId: s.storeId, storeName: s.storeName }))} />
+          </section>
+        )}
+
         <section className="mt-8">
           <h2 className="mb-3 text-lg font-bold text-slate-900">소속 매장</h2>
           {overview.storeSummaries.length === 0 ? (

@@ -9,6 +9,8 @@ import { formatWon, currentYearMonth } from '@/lib/utils';
 import { getStorePayroll, formatHM, type MemberPayrollRow } from '@/lib/payroll/store-payroll';
 import { PayrollModeSelect } from './PayrollModeSelect';
 import { ReflectPayrollButton } from './ReflectPayrollButton';
+import { OvertimeApproval } from './OvertimeApproval';
+import { listPendingOvertime } from '@/lib/overtime/queries';
 
 export const metadata = {
   title: '급여 계산 · 리테일메이트',
@@ -42,6 +44,7 @@ export default async function PayrollPage({
   if (!adminStore) return null;
 
   const payroll = await getStorePayroll(supabase, adminStore.storeId, month);
+  const pendingOvertime = await listPendingOvertime(adminStore.storeId);
   const hasAnyContract = payroll.rows.some((r) => r.contract !== null);
 
   return (
@@ -57,6 +60,8 @@ export default async function PayrollPage({
           right={<MonthPicker value={month} />}
           className="mb-5"
         />
+
+        <OvertimeApproval requests={pendingOvertime} />
 
         {/* 요약 KPI 4종 */}
         <div className="rm-stagger grid grid-cols-2 gap-3 lg:grid-cols-3">
@@ -244,7 +249,7 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
           </div>
           {row.contract ? (
             <p className="mt-0.5 text-[12px] text-slate-500">
-              {TYPE_LABEL[row.contract.contract_type]} · {WAGE_LABEL[row.contract.wage_type]} {formatWon(row.contract.wage_amount)}
+              {TYPE_LABEL[row.contract.contract_type]} · {WAGE_LABEL[row.contract.wage_type]} {formatWon(row.contract.wage_amount)} {row.belowMinWage && (<span className="ml-1 rounded bg-red-50 px-1 text-[10px] font-semibold text-red-600">최저임금 미만</span>)}
             </p>
           ) : (
             <p className="mt-0.5 text-[12px] text-amber-700">계약서 미서명 — 급여 계산 불가</p>
@@ -328,7 +333,7 @@ function PcPayrollRow({ row }: { row: MemberPayrollRow }) {
         ) : '-'}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono tabular-nums text-slate-600">
-        {row.contract ? formatWon(row.contract.wage_amount) : '-'}
+        {row.contract ? (<>{formatWon(row.contract.wage_amount)}{row.belowMinWage && <span className="ml-1 rounded bg-red-50 px-1 text-[10px] font-semibold text-red-600">최저임금 미만</span>}</>) : '-'}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-semibold tabular-nums text-indigo-600">
         {row.contract ? formatWon(row.grossPay) : '-'}

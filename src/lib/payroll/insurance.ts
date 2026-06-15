@@ -13,7 +13,6 @@
  * 본 모듈은 매장이 부담하는 회사 분담분은 계산하지 않는다 — 직원 실수령액 표시 용도.
  */
 
-import type { ContractType } from '@/types/database';
 
 export interface SocialInsuranceFlags {
   national_pension: boolean;
@@ -45,49 +44,7 @@ export const ZERO_BREAKDOWN: InsuranceBreakdown = {
   total: 0,
 };
 
-/**
- * 정규직만 본인부담 적용. 시급(parttime) / 일용(daily)은 0.
- * 사용자 정책: "시급제는 4대보험 미적용".
- */
-export function calculateEmployeeInsurance(
-  grossPay: number,
-  contractType: ContractType,
-  flags: SocialInsuranceFlags,
-): InsuranceBreakdown {
-  if (contractType !== 'fulltime') return ZERO_BREAKDOWN;
-  if (grossPay <= 0) return ZERO_BREAKDOWN;
-
-  const np = flags.national_pension ? Math.floor(grossPay * RATES_2026.nationalPension) : 0;
-  const hi = flags.health_insurance ? Math.floor(grossPay * RATES_2026.healthInsurance) : 0;
-  const ltc = hi > 0 ? Math.floor(hi * RATES_2026.longTermCareOfHealth) : 0;
-  const ei = flags.employment_insurance ? Math.floor(grossPay * RATES_2026.employmentInsurance) : 0;
-
-  return {
-    nationalPension: np,
-    healthInsurance: hi,
-    longTermCare: ltc,
-    employmentInsurance: ei,
-    total: np + hi + ltc + ei,
-  };
-}
-
-/**
- * 실수령액 = 세전 - 본인부담 4대보험.
- * (소득세·지방세는 미적용 — Phase 2 간이세액표에서 추가 예정)
- */
-export function calculateNetPay(
-  grossPay: number,
-  contractType: ContractType,
-  flags: SocialInsuranceFlags,
-): { gross: number; insurance: InsuranceBreakdown; net: number } {
-  const insurance = calculateEmployeeInsurance(grossPay, contractType, flags);
-  return {
-    gross: grossPay,
-    insurance,
-    net: grossPay - insurance.total,
-  };
-}
-
+// (구) calculateEmployeeInsurance/calculateNetPay 제거 — 모든 화면이 calculatePayroll로 일원화됨.
 
 /* ════════════════════════════════════════════════════════════════════
  * 급여 처리방식(payroll_mode) 기반 공제 엔진 — 계약형태와 분리해 직원별로 선택.

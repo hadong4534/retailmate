@@ -12,6 +12,7 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin';
+import type { Json } from '@/types/supabase';
 
 export const MODELS = {
   /** 인사이트·챗봇 메인 */
@@ -182,7 +183,7 @@ async function logUsage(input: {
     output_tokens: input.outputTokens,
     total_cost_usd: input.costUsd,
     request_id: input.requestId,
-    metadata: input.metadata,
+    metadata: input.metadata as unknown as Json,
   });
 }
 

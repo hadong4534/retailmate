@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import type { Database } from '@/types/supabase';
 import { NextResponse, type NextRequest } from 'next/server';
 import { cookieDomainFor } from '@/lib/auth/cookie-domain';
 
@@ -19,7 +20,7 @@ export async function updateSession(request: NextRequest) {
     ...(domain ? { domain } : {}),
   };
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {

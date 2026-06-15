@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { logAudit } from '@/lib/audit/log';
+import type { Database } from '@/types/supabase';
 
 type RoleResult = { ok: true } | { error: string };
 
@@ -193,7 +194,7 @@ export async function updateMemberProfile(
 
   const { error } = await admin
     .from('profiles')
-    .upsert(payload, { onConflict: 'id' });
+    .upsert(payload as unknown as Database['public']['Tables']['profiles']['Insert'], { onConflict: 'id' });
   if (error) return { error: error.message };
 
   void logAudit({

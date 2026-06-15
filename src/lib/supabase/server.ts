@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import type { Database } from '@/types/supabase';
 import { cookies, headers } from 'next/headers';
 import { cookieDomainFor } from '@/lib/auth/cookie-domain';
 
@@ -17,7 +18,7 @@ export async function createClient() {
     ...(domain ? { domain } : {}),
   };
 
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {

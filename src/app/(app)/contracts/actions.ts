@@ -7,6 +7,7 @@ import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { randomBytes } from 'node:crypto';
 import { validateWith, contractFormSchema, ndaFormSchema } from '@/lib/validation/schemas';
 import type { WorkSchedule } from '@/types/database';
+import type { Json } from '@/types/supabase';
 
 export type ContractType = 'fulltime' | 'parttime' | 'daily';
 export type WageType = 'hourly' | 'monthly' | 'daily';
@@ -129,11 +130,11 @@ export async function createContract(
       work_start_time: input.work_start_time,
       work_end_time: input.work_end_time,
       break_minutes: input.break_minutes,
-      work_schedule: input.work_schedule ?? null,
+      work_schedule: (input.work_schedule ?? null) as unknown as Json,
       wage_type: input.wage_type,
       wage_amount: input.wage_amount,
       weekly_holiday_allowance: input.weekly_holiday_allowance,
-      social_insurance: input.social_insurance,
+      social_insurance: input.social_insurance as unknown as Json,
       payroll_mode: input.payroll_mode ?? null,
       pay_day: input.pay_day,
       pay_method: input.pay_method || '계좌이체',

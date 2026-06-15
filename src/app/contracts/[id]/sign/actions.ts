@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateContractPDF } from '@/lib/contract/pdf-generator';
 import type { LaborContract, Profile, Store } from '@/types/database';
+import type { Database } from '@/types/supabase';
 
 export interface SubmitSignatureInput {
   token: string;
@@ -136,7 +137,7 @@ export async function submitEmployeeSignature(
 
   const { error: memberErr } = await admin
     .from('store_members')
-    .upsert(memberPayload, { onConflict: 'store_id,user_id' });
+    .upsert(memberPayload as unknown as Database['public']['Tables']['store_members']['Insert'], { onConflict: 'store_id,user_id' });
   if (memberErr) return { error: memberErr.message };
 
   // 1.5) 직원 profile에 이름/전화가 비어있으면 계약서의 invite_name/invite_phone으로 백필.
@@ -157,7 +158,7 @@ export async function submitEmployeeSignature(
   }
   if (Object.keys(profilePatch).length > 0) {
     // upsert로 안전하게 — profiles trigger가 미생성 케이스도 커버.
-    await admin.from('profiles').upsert({ id: user.id, ...profilePatch });
+    await admin.from('profiles').upsert({ id: user.id, ...profilePatch } as unknown as Database['public']['Tables']['profiles']['Insert']);
   }
 
   // 2) 동의 이력 기록

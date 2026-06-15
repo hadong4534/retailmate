@@ -95,7 +95,7 @@ export default async function NewContractPage({
         additional_terms: (src.additional_terms as string | null) ?? '',
       };
       if (src.social_insurance) {
-        initialData.social_insurance = src.social_insurance as SocialInsurance;
+        initialData.social_insurance = src.social_insurance as unknown as SocialInsurance;
       }
       if (src.payroll_mode) {
         initialData.payroll_mode = src.payroll_mode as ContractFormData['payroll_mode'];

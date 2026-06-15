@@ -1,3 +1,6 @@
+/** 2026년 적용 최저임금(시급) — 고용노동부 고시. 매년 갱신. */
+export const MIN_HOURLY_WAGE_2026 = 10320;
+
 export type SaleChannel = 'card' | 'cash' | 'cash_receipt' | 'transfer' | 'delivery' | 'other';
 export type ExpenseCategory =
   | 'material'

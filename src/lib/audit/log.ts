@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin';
+import type { Json } from '@/types/supabase';
 
 export interface AuditEntry {
   storeId: string;
@@ -26,7 +27,7 @@ export async function logAudit(e: AuditEntry): Promise<void> {
       target_type: e.targetType ?? null,
       target_id: e.targetId ?? null,
       summary: e.summary ?? null,
-      metadata: e.metadata ?? null,
+      metadata: (e.metadata ?? null) as unknown as Json,
     });
   } catch (err) {
     console.error('[audit] 기록 실패:', err);

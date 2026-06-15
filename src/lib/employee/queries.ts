@@ -7,6 +7,7 @@ import {
   type PayrollMode,
 } from '@/lib/payroll/insurance';
 import { paidMinutes } from '@/lib/payroll/paid-minutes';
+import { approvedOvertimeForUser } from '@/lib/overtime/queries';
 
 /** 'YYYY-MM-DD' → 그 주 월요일 키 — 주휴수당 주 단위 집계 (store-payroll과 동일 규칙). */
 function weekStartKey(dateStr: string): string {
@@ -27,6 +28,7 @@ interface ContractDetail {
   wage_amount: number;
   work_start_time: string;
   work_end_time: string;
+  break_minutes?: number | null;
   work_days: string[];
   pay_day: number;
   pay_method: string | null;
@@ -45,6 +47,8 @@ export interface EmployeeStoreSummary {
     insurance: InsuranceBreakdown;
     netPay: number;
     deductionLabel: string;
+    overtimeMinutes: number;
+    overtimePay: number;
   };
 }
 
@@ -113,7 +117,7 @@ export async function getEmployeeOverview(
   const { data: contracts } = await supabase
     .from('labor_contracts')
     .select(
-      'id, store_id, contract_type, status, work_start_date, work_end_date, wage_type, wage_amount, work_start_time, work_end_time, work_days, work_schedule, pay_day, pay_method, weekly_holiday_allowance, social_insurance',
+      'id, store_id, contract_type, status, work_start_date, work_end_date, wage_type, wage_amount, work_start_time, work_end_time, break_minutes, work_days, work_schedule, pay_day, pay_method, weekly_holiday_allowance, social_insurance',
     )
     .eq('employee_id', userId)
     .in('status', ['sent', 'signed', 'terminated'])
@@ -131,6 +135,8 @@ export async function getEmployeeOverview(
   // 4) 이번 달 attendances (RLS로 자동 필터)
   const monthStart = startOfThisMonthIso();
   const monthEnd = endOfThisMonthIso();
+  const month = monthStart.slice(0, 7);
+  const overtimeByStore = await approvedOvertimeForUser(userId, month);
   const { data: atts } = await supabase
     .from('attendances')
     .select('store_id, check_in_at, check_out_at')
@@ -170,6 +176,8 @@ export async function getEmployeeOverview(
     let insurance: InsuranceBreakdown = ZERO_BREAKDOWN;
     let netPay = 0;
     let deductionLabel = '공제 없음';
+    let overtimeMinutes = 0;
+    let overtimePay = 0;
 
     if (contract) {
       const hours = workMinutes / 60;
@@ -189,6 +197,17 @@ export async function getEmployeeOverview(
       } else if (contract.wage_type === 'daily') {
         grossPay = workDays * contract.wage_amount;
       }
+      // 승인된 연장근무 가산
+      const otMin = overtimeByStore.get(storeId) ?? 0;
+      if (otMin > 0) {
+        const rate = contract.wage_type === 'hourly' ? contract.wage_amount
+          : contract.wage_type === 'monthly' ? contract.wage_amount / 209
+          : contract.wage_amount / 8;
+        overtimeMinutes = otMin;
+        overtimePay = Math.round((otMin / 60) * rate);
+        grossPay += overtimePay;
+      }
+
       // 공제: 사장님 급여 화면(store-payroll)과 동일하게 payroll_mode 기준으로 계산 → 실수령액 일치
       const pr = calculatePayroll(grossPay, payrollModeByStore.get(storeId) ?? 'none', {
         dailyWage: contract.wage_type === 'daily' ? contract.wage_amount : undefined,
@@ -204,7 +223,7 @@ export async function getEmployeeOverview(
       storeId,
       storeName: storeNameMap.get(storeId) ?? '(매장)',
       contract,
-      monthly: { workMinutes, workDays, grossPay, insurance, netPay, deductionLabel },
+      monthly: { workMinutes, workDays, grossPay, insurance, netPay, deductionLabel, overtimeMinutes, overtimePay },
     };
   });
 

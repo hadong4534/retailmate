@@ -94,7 +94,7 @@ export default async function SignContractPage({
         ) : (
           <SignFlow
             token={token}
-            contract={contract}
+            contract={contract as unknown as Parameters<typeof SignFlow>[0]['contract']}
             store={store}
             ownerName={ownerName}
             currentUserEmail={user?.email ?? null}
