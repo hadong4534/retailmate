@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { PhoneInput, formatKoreanPhone } from '@/components/ui/PhoneInput';
+import { formatKoreanPhone } from '@/components/ui/PhoneInput';
 import { SignaturePad } from '@/components/ui/SignaturePad';
 import { createClient } from '@/lib/supabase/client';
 import { scheduleDaysText, scheduleTimeText } from '@/lib/contract/schedule';

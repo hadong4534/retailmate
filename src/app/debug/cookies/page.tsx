@@ -80,7 +80,7 @@ export default async function CookiesDebugPage() {
           <li>F12 → Application 탭</li>
           <li>좌측 Storage → Cookies → https://retailmate.io 클릭</li>
           <li>sb-...-auth-token 행 클릭</li>
-          <li>"Expires / Max-Age" 컬럼 확인 — &quot;Session&quot;이면 만료, 날짜가 나오면 유지</li>
+          <li>“Expires / Max-Age” 컬럼 확인 — “Session”이면 만료, 날짜가 나오면 유지</li>
         </ol>
       </section>
     </div>

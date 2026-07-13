@@ -113,7 +113,7 @@ export function AIToastWatcher() {
       cancelled = true;
       if (timer) clearTimeout(timer);
     };
-  }, [queue]);
+  }, [queue, router]);
 
   function dismiss(id: string) {
     setToasts((prev) => prev.filter((x) => x.imageId !== id));

@@ -245,7 +245,6 @@ export function ContractWizard({
       {step === 4 && (
         <Step4
           data={data}
-          signature={signature}
           onSignatureChange={setSignature}
         />
       )}
@@ -788,11 +787,9 @@ function Step3({
 
 function Step4({
   data,
-  signature,
   onSignatureChange,
 }: {
   data: ContractFormData;
-  signature: string | null;
   onSignatureChange: (s: string | null) => void;
 }) {
   const wageLabel = data.wage_type === 'hourly' ? '시급' : data.wage_type === 'monthly' ? '월급' : '일급';
@@ -907,9 +904,7 @@ function IssuedCard({
     }
   }
 
-  // 만료일은 null일 때 무기한.
   const expires = expiresAt ? new Date(expiresAt) : null;
-  const expiresStr = expires ? `${expires.getMonth() + 1}월 ${expires.getDate()}일까지` : '무기한';
 
   return (
     <div className="space-y-5">

@@ -3,7 +3,8 @@
 import { PushToggle } from '@/components/settings/PushToggle';
 import { appConfirm } from '@/components/ui/appDialog';
 
-import { useState, useTransition, useRef, useEffect } from 'react';
+import { useState, useTransition, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { PhoneInput } from '@/components/ui/PhoneInput';
@@ -795,10 +796,7 @@ function SecurityForm({ onSaved }: { onSaved: (d: Date) => void }) {
 
 // 카카오 로그인 연결 — 이메일로 가입한 계정에 카카오를 추가 로그인 수단으로 붙인다.
 function KakaoLinkCard() {
-  const [linked, setLinked] = useState(false);
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get('linked') === '1') setLinked(true);
-  }, []);
+  const linked = useSearchParams().get('linked') === '1';
   return (
     <div className="rounded-xl border border-[#EAECF5] bg-white p-6">
       <h2 className="text-base font-bold text-slate-900">카카오 로그인 연결</h2>

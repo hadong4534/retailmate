@@ -5,7 +5,7 @@ import { getCurrentAdminStore } from '@/lib/auth/store-context';
 import { MonthPicker } from '@/components/ui/MonthPicker';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
 import { PageHeader } from '@/components/app';
-import { formatWon, currentYearMonth } from '@/lib/utils';
+import { formatWon, currentYearMonth, todayInKST } from '@/lib/utils';
 import { getStorePayroll, formatHM, type MemberPayrollRow } from '@/lib/payroll/store-payroll';
 import { PayrollModeSelect } from './PayrollModeSelect';
 import { ReflectPayrollButton } from './ReflectPayrollButton';
@@ -46,6 +46,7 @@ export default async function PayrollPage({
   const payroll = await getStorePayroll(supabase, adminStore.storeId, month);
   const pendingOvertime = await listPendingOvertime(adminStore.storeId);
   const hasAnyContract = payroll.rows.some((r) => r.contract !== null);
+  const todayKst = todayInKST();
 
   return (
     <div className="rm-page px-4 py-6 lg:px-8 lg:py-8">
@@ -94,7 +95,7 @@ export default async function PayrollPage({
           <div>
             <p className="font-semibold">참고용 추정 금액입니다</p>
             <p className="mt-0.5 text-amber-800">
-              공제(4대보험·근로소득세·3.3% 사업소득·일용 소득세)는 직원별 '처리방식'과 2026년 요율 기준 추정이며, 근로소득세는 공제대상가족 1인 기준입니다.
+              공제(4대보험·근로소득세·3.3% 사업소득·일용 소득세)는 직원별 ‘처리방식’과 2026년 요율 기준 추정이며, 근로소득세는 공제대상가족 1인 기준입니다.
               실제 신고·지급액은 노무사·세무사 검토 후 확정하세요.
             </p>
           </div>
@@ -143,7 +144,7 @@ export default async function PayrollPage({
 
             {/* 모바일 카드 */}
             <ul className="divide-y divide-slate-100 lg:hidden">
-              {payroll.rows.map((r) => <MobilePayrollCard key={r.memberId} row={r} />)}
+              {payroll.rows.map((r) => <MobilePayrollCard key={r.memberId} row={r} todayKst={todayKst} />)}
             </ul>
 
             {/* PC 테이블 */}
@@ -162,7 +163,7 @@ export default async function PayrollPage({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {payroll.rows.map((r) => <PcPayrollRow key={r.memberId} row={r} />)}
+                  {payroll.rows.map((r) => <PcPayrollRow key={r.memberId} row={r} todayKst={todayKst} />)}
                 </tbody>
                 <tfoot className="border-t-2 border-[#EAECF5] bg-slate-50">
                   <tr>
@@ -223,7 +224,7 @@ function KpiCard({
 }
 
 /* ───────────────────────── 모바일 카드 ───────────────────────── */
-function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
+function MobilePayrollCard({ row, todayKst }: { row: MemberPayrollRow; todayKst: string }) {
   return (
     <li className="px-4 py-3">
       <div className="flex items-start justify-between gap-3">
@@ -241,7 +242,7 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
               </span>
             )}
             {row.contract?.work_end_date &&
-              row.contract.work_end_date < new Date(Date.now() + 32400000).toISOString().slice(0, 10) && (
+              row.contract.work_end_date < todayKst && (
                 <span className="shrink-0 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-semibold text-red-700">
                   계약 만료
                 </span>
@@ -289,7 +290,7 @@ function MobilePayrollCard({ row }: { row: MemberPayrollRow }) {
 }
 
 /* ───────────────────────── PC 테이블 행 ───────────────────────── */
-function PcPayrollRow({ row }: { row: MemberPayrollRow }) {
+function PcPayrollRow({ row, todayKst }: { row: MemberPayrollRow; todayKst: string }) {
   return (
     <tr className="hover:bg-slate-50">
       <td className="whitespace-nowrap px-4 py-3">
@@ -303,7 +304,7 @@ function PcPayrollRow({ row }: { row: MemberPayrollRow }) {
               {row.role === 'manager' ? '매니저' : '직원'}
               {!row.isActive && ' · 퇴사'}
               {row.contract?.work_end_date &&
-                row.contract.work_end_date < new Date(Date.now() + 32400000).toISOString().slice(0, 10) && (
+                row.contract.work_end_date < todayKst && (
                   <span className="font-semibold text-red-600"> · 계약 만료</span>
                 )}
             </p>

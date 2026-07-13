@@ -25,11 +25,13 @@ export function PushToggle() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const ok = 'serviceWorker' in navigator && 'PushManager' in window && !!PUBLIC_KEY;
-    setSupported(ok);
     if (!ok) return;
     navigator.serviceWorker.ready
       .then((reg) => reg.pushManager.getSubscription())
-      .then((sub) => setSubscribed(!!sub))
+      .then((sub) => {
+        setSupported(true);
+        setSubscribed(!!sub);
+      })
       .catch(() => null);
   }, []);
 

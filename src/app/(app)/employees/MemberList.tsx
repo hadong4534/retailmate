@@ -37,12 +37,6 @@ const STATUS_LABEL: Record<string, { text: string; color: string }> = {
   cancelled:  { text: '취소됨',    color: 'bg-slate-100 text-slate-500' },
 };
 
-const TYPE_LABEL: Record<string, string> = {
-  fulltime: '정규직',
-  parttime: '아르바이트',
-  daily: '일용직',
-};
-
 /**
  * 직원 목록 — 재직/퇴사 탭으로 분리.
  * - 이름 미입력 직원은 카드 상단에 강조 + "이름 등록" 빠른 CTA.

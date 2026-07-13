@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 /**
@@ -12,13 +11,6 @@ import { usePathname } from 'next/navigation';
  */
 export function TopProgressBar() {
   const pathname = usePathname();
-  const [active, setActive] = useState(false);
-
-  useEffect(() => {
-    setActive(true);
-    const off = setTimeout(() => setActive(false), 600);
-    return () => clearTimeout(off);
-  }, [pathname]);
 
   return (
     <div
@@ -26,11 +18,8 @@ export function TopProgressBar() {
       className="pointer-events-none fixed left-0 top-0 z-[200] h-[3px] w-full overflow-hidden"
     >
       <div
-        className={
-          'h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 ' +
-          'transition-[width,opacity] duration-500 ease-out ' +
-          (active ? 'w-full opacity-100' : 'w-0 opacity-0')
-        }
+        key={pathname}
+        className="rm-top-progress h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500"
       />
     </div>
   );

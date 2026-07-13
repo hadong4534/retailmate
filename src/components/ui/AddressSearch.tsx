@@ -191,8 +191,12 @@ export function AddressSearch({
       });
       postcodeWidget.embed(embedRef.current);
     } catch (e) {
-      setError((e as Error).message ?? '우편번호 위젯 로드 실패');
-      setOpen(false);
+      const message = (e as Error).message ?? '우편번호 위젯 로드 실패';
+      const timer = window.setTimeout(() => {
+        setError(message);
+        setOpen(false);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
   }, [open]);
 

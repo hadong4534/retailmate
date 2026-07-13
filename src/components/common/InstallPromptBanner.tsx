@@ -79,7 +79,6 @@ export function InstallPromptBanner() {
 
     const p = detectPlatform();
     if (p === 'desktop') return;
-    setPlatform(p);
 
     const handler = (e: Event) => {
       e.preventDefault();
@@ -88,6 +87,7 @@ export function InstallPromptBanner() {
     window.addEventListener('beforeinstallprompt', handler);
 
     const delay = setTimeout(() => {
+      setPlatform(p);
       setShow(true);
       if (p === 'inapp-ios' || p === 'inapp-android') setModalOpen(true);
     }, 1500);
@@ -348,14 +348,14 @@ function InstallGuideModal({
               </Step>
               <Step n={2}>
                 메뉴를 위로 살짝 올린 뒤{' '}
-                <strong>"홈 화면에 추가"</strong>를 선택합니다.
+                <strong>“홈 화면에 추가”</strong>를 선택합니다.
                 <span className="ml-1 inline-flex items-center gap-0.5 text-indigo-600">
                   <Plus className="h-3 w-3" strokeWidth={2.2} /> Add to Home Screen
                 </span>
               </Step>
               <Step n={3}>
-                이름이 <strong>"리테일메이트"</strong>로 자동 채워집니다. 우측 상단의{' '}
-                <strong>"추가"</strong>를 누르면 끝.
+                이름이 <strong>“리테일메이트”</strong>로 자동 채워집니다. 우측 상단의{' '}
+                <strong>“추가”</strong>를 누르면 끝.
               </Step>
               <Step n={4}>
                 홈 화면에 <strong>앱 아이콘</strong>이 생깁니다. 다음부터는 이 아이콘으로 열면
@@ -379,10 +379,10 @@ function InstallGuideModal({
               {deferred ? (
                 <>
                   <Step n={1}>
-                    아래의 <strong>"앱 설치"</strong> 버튼을 누릅니다.
+                    아래의 <strong>“앱 설치”</strong> 버튼을 누릅니다.
                   </Step>
                   <Step n={2}>
-                    "설치하시겠습니까?" 안내가 뜨면 <strong>"설치"</strong>를 누릅니다.
+                    “설치하시겠습니까?” 안내가 뜨면 <strong>“설치”</strong>를 누릅니다.
                   </Step>
                   <Step n={3}>
                     잠시 후 <strong>앱 서랍과 홈 화면</strong>에 리테일메이트 아이콘이 생깁니다.
@@ -404,11 +404,11 @@ function InstallGuideModal({
                     <strong>점 3개 메뉴</strong>를 누릅니다.
                   </Step>
                   <Step n={2}>
-                    <strong>"앱 설치"</strong> 또는 <strong>"홈 화면에 추가"</strong>를 선택합니다.
+                    <strong>“앱 설치”</strong> 또는 <strong>“홈 화면에 추가”</strong>를 선택합니다.
                     (Chrome 버전마다 표기 다름)
                   </Step>
                   <Step n={3}>
-                    안내 팝업의 <strong>"설치"</strong> 버튼 → 홈 화면·앱 서랍에 아이콘 생성.
+                    안내 팝업의 <strong>“설치”</strong> 버튼 → 홈 화면·앱 서랍에 아이콘 생성.
                   </Step>
                 </>
               )}
@@ -423,10 +423,10 @@ function InstallGuideModal({
                 화면 하단의 <strong>메뉴</strong> 버튼(가로줄 3개)을 누릅니다.
               </Step>
               <Step n={2}>
-                <strong>"현재 페이지 추가"</strong> → <strong>"홈 화면"</strong> 을 선택합니다.
+                <strong>“현재 페이지 추가”</strong> → <strong>“홈 화면”</strong> 을 선택합니다.
               </Step>
               <Step n={3}>
-                이름을 확인하고 <strong>"추가"</strong>를 누르면 홈 화면에 아이콘 생성.
+                이름을 확인하고 <strong>“추가”</strong>를 누르면 홈 화면에 아이콘 생성.
               </Step>
               <div className="mt-4 rounded-xl bg-indigo-50 p-3 text-[12px] leading-relaxed text-indigo-900">
                 <p className="font-semibold">팁</p>

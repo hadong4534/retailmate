@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { Megaphone } from 'lucide-react';
 import { markNoticeRead } from '@/app/(app)/notices/actions';
 
@@ -14,12 +14,9 @@ interface NoticePayload {
 }
 
 export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
-  const [queue, setQueue] = useState<NoticePayload[]>(notices);
+  const [dismissedIds, setDismissedIds] = useState<Set<string>>(() => new Set());
   const [pending, startTransition] = useTransition();
-
-  useEffect(() => {
-    setQueue(notices);
-  }, [notices]);
+  const queue = notices.filter((notice) => !dismissedIds.has(notice.id));
 
   if (queue.length === 0) return null;
 
@@ -33,7 +30,7 @@ export function NoticePopup({ notices }: { notices: NoticePayload[] }) {
       if ('error' in result && result.error) {
         // 에러 시에도 큐에서 제거 (UI 안 막힘) — 다음 로그인 시 재노출
       }
-      setQueue((q) => q.slice(1));
+      setDismissedIds((ids) => new Set(ids).add(current.id));
     });
   }
 

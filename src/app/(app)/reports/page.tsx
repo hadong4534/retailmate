@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server';
 import { getPageContext } from '@/lib/auth/page-context';
 import { MonthPicker } from '@/components/ui/MonthPicker';
 import { ExcelDownloadButton } from './ExcelDownloadButton';
-import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
 import { EmptyChart } from '@/components/app/EmptyIllustration';
 import { PageInsight } from '@/components/insights/PageInsight';

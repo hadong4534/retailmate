@@ -66,7 +66,7 @@ export default function StoreOnboardingPage() {
       return;
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('stores')
       .insert({
         owner_id: user.id,

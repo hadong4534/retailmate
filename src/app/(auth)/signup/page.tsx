@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { PhoneInput } from '@/components/ui/PhoneInput';
 
 type Stage = 'idle' | 'sent' | 'verified';
 

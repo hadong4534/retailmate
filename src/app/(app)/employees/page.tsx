@@ -7,8 +7,6 @@ import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/app';
 import { formatWon, todayInKST, memberWageDisplay, kstTodayStartIso } from '@/lib/utils';
 import { StaffHubCards } from '@/components/layout/StaffHubCards';
-import { MemberActions } from './MemberActions';
-import { WageEditor } from './WageEditor';
 import { MemberList } from './MemberList';
 
 interface MemberRow {
@@ -54,13 +52,6 @@ const ROLE_LABEL: Record<string, string> = {
   employee: '직원',
 };
 
-const STATUS_LABEL: Record<ContractRow['status'], { text: string; color: string }> = {
-  draft: { text: '작성 중', color: 'bg-slate-100 text-slate-700' },
-  sent: { text: '서명 대기', color: 'bg-amber-100 text-amber-700' },
-  signed: { text: '서명 완료', color: 'bg-emerald-100 text-emerald-700' },
-  terminated: { text: '종료', color: 'bg-slate-100 text-slate-500' },
-};
-
 export default async function EmployeesPage() {
   const supabase = await createClient();
   const ctx = await getPageContext(supabase);
@@ -75,7 +66,6 @@ export default async function EmployeesPage() {
     .maybeSingle();
   const ownerUserId = storeRow?.owner_id ?? null;
 
-  const today = new Date();
   // KST 기준 — 이번 달 신규 카운트 등의 비교가 자정~09시에 어긋나는 것 방지.
   const todayStr = todayInKST();
   const monthStart = todayStr.slice(0, 7) + '-01';

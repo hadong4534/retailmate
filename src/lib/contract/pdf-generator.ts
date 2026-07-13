@@ -176,7 +176,7 @@ export async function generateContractPDF(data: ContractTemplateData): Promise<U
   const font = await pdfDoc.embedFont(regular);
   const fontBold = await pdfDoc.embedFont(bold);
 
-  let page = pdfDoc.addPage([PAGE_W, PAGE_H]);
+  const page = pdfDoc.addPage([PAGE_W, PAGE_H]);
   let ctx: DrawCtx = { pdfDoc, page, font, fontBold, y: PAGE_H - MARGIN };
 
   // ── 타이틀 ─────────────────────────────────────────────────────────────
@@ -554,7 +554,7 @@ async function generateNDAPDF(data: ContractTemplateData): Promise<Uint8Array> {
   const font = await pdfDoc.embedFont(regular);
   const fontBold = await pdfDoc.embedFont(bold);
 
-  let page = pdfDoc.addPage([PAGE_W, PAGE_H]);
+  const page = pdfDoc.addPage([PAGE_W, PAGE_H]);
   let ctx: DrawCtx = { pdfDoc, page, font, fontBold, y: PAGE_H - MARGIN };
 
   // ── 타이틀 ──
@@ -687,7 +687,7 @@ async function generateNDAPDF(data: ContractTemplateData): Promise<Uint8Array> {
   sigCtx = { ...sigCtx, y: sigCtx.y - 14 };
   sigCtx = drawText(sigCtx, `사업장: ${store.name}`, { x: MARGIN + 10, size: 9, color: [0.35, 0.4, 0.5] });
   sigCtx = { ...sigCtx, y: sigCtx.y - 12 };
-  sigCtx = drawText(sigCtx, `대표자: ${owner.name}`, { x: MARGIN + 10, size: 9, color: [0.35, 0.4, 0.5] });
+  drawText(sigCtx, `대표자: ${owner.name}`, { x: MARGIN + 10, size: 9, color: [0.35, 0.4, 0.5] });
 
   // 근로자 박스
   const empX = MARGIN + sigBoxW + 20;
@@ -705,7 +705,7 @@ async function generateNDAPDF(data: ContractTemplateData): Promise<Uint8Array> {
   empCtx = drawText(empCtx, `성명: ${employee.name}`, { x: empX + 10, size: 9, color: [0.35, 0.4, 0.5] });
   empCtx = { ...empCtx, y: empCtx.y - 12 };
   if (employee.phone) {
-    empCtx = drawText(empCtx, `연락처: ${employee.phone}`, { x: empX + 10, size: 9, color: [0.35, 0.4, 0.5] });
+    drawText(empCtx, `연락처: ${employee.phone}`, { x: empX + 10, size: 9, color: [0.35, 0.4, 0.5] });
   }
 
   // 서명 이미지 (있으면)

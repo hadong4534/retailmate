@@ -12,6 +12,7 @@ export function PullToRefresh() {
   const router = useRouter();
   const [dist, setDist] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [pulling, setPulling] = useState(false);
   const ref = useRef({ startY: 0, pulling: false, dist: 0, busy: false });
   const THRESH = 70;
 
@@ -19,8 +20,8 @@ export function PullToRefresh() {
     const st = ref.current;
     function onStart(e: TouchEvent) {
       if (window.scrollY <= 0 && e.touches.length === 1 && !st.busy) {
-        st.startY = e.touches[0].clientY; st.pulling = true;
-      } else st.pulling = false;
+        st.startY = e.touches[0].clientY; st.pulling = true; setPulling(true);
+      } else { st.pulling = false; setPulling(false); }
     }
     function onMove(e: TouchEvent) {
       if (!st.pulling || st.busy) return;
@@ -31,7 +32,7 @@ export function PullToRefresh() {
     }
     function onEnd() {
       if (!st.pulling) return;
-      st.pulling = false;
+      st.pulling = false; setPulling(false);
       if (st.dist >= THRESH && !st.busy) {
         st.busy = true; setBusy(true); st.dist = 48; setDist(48);
         router.refresh();
@@ -52,7 +53,7 @@ export function PullToRefresh() {
   const ready = dist >= THRESH || busy;
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-[55] flex justify-center lg:hidden"
-      style={{ transform: `translateY(${Math.max(0, dist)}px)`, transition: ref.current.pulling ? 'none' : 'transform .25s', paddingTop: 'env(safe-area-inset-top)' }}>
+      style={{ transform: `translateY(${Math.max(0, dist)}px)`, transition: pulling ? 'none' : 'transform .25s', paddingTop: 'env(safe-area-inset-top)' }}>
       <span className={'mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-md ' + (ready ? 'text-[#6366F1]' : 'text-slate-300')}>
         <RefreshCw className={'h-4 w-4 ' + (busy ? 'animate-spin' : '')} style={{ transform: busy ? undefined : `rotate(${dist * 4}deg)` }} strokeWidth={2.4} />
       </span>
