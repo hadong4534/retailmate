@@ -41,10 +41,11 @@ export function Toaster() {
     const sp = new URLSearchParams(window.location.search);
     const saved = sp.get('saved');
     if (saved) {
-      show(SAVED_LABEL[saved] ?? '저장됐어요');
+      const timer = window.setTimeout(() => show(SAVED_LABEL[saved] ?? '저장됐어요'), 0);
       sp.delete('saved');
       const q = sp.toString();
       window.history.replaceState({}, '', window.location.pathname + (q ? `?${q}` : ''));
+      return () => window.clearTimeout(timer);
     }
   }, [pathname, show]);
 

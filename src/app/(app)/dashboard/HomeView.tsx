@@ -181,9 +181,9 @@ export function HomeView(p: HomeViewProps) {
               </p>
             )}
             <div className="mt-3 space-y-2 text-[13px]">
-              <CompareRow label="매출" cur={p.monthSales} prev={p.prevMonthSales} hasPrev={hasPrevMonthData} prevLabel={p.prevMonthLabel} />
-              <CompareRow label="지출" cur={p.monthExpenses} prev={p.prevMonthExpenses} hasPrev={hasPrevMonthData} prevLabel={p.prevMonthLabel} />
-              <CompareRow label="순이익" cur={monthProfit} prev={prevMonthProfit} hasPrev={hasPrevMonthData} prevLabel={p.prevMonthLabel} rate={monthProfitRate} divider />
+              <CompareRow label="매출" cur={p.monthSales} prev={p.prevMonthSales} hasPrev={hasPrevMonthData} />
+              <CompareRow label="지출" cur={p.monthExpenses} prev={p.prevMonthExpenses} hasPrev={hasPrevMonthData} />
+              <CompareRow label="순이익" cur={monthProfit} prev={prevMonthProfit} hasPrev={hasPrevMonthData} rate={monthProfitRate} divider />
             </div>
             <Link href="/reports" className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-[#DCDBF6] bg-white px-3.5 py-2.5 text-[12.5px] font-semibold text-[#5961E6] transition active:scale-95">
               리포트에서 자세히 <ChevronRight className="h-3.5 w-3.5" />
@@ -359,8 +359,8 @@ function pickAIInsight(s: {
 }
 
 // ── 전월 대비 한 줄 (선택 월 보기) ───────────────────────────────────────────
-function CompareRow({ label, cur, prev, hasPrev, prevLabel, rate, divider }: {
-  label: string; cur: number; prev: number; hasPrev: boolean; prevLabel: string; rate?: number | null; divider?: boolean;
+function CompareRow({ label, cur, prev, hasPrev, rate, divider }: {
+  label: string; cur: number; prev: number; hasPrev: boolean; rate?: number | null; divider?: boolean;
 }) {
   const delta = hasPrev && prev > 0 ? Math.round(((cur - prev) / prev) * 100) : null;
   return (
@@ -391,10 +391,4 @@ function formatKoDateShort(d: Date): string {
   const get = (t: string) => parts.find((x) => x.type === t)?.value ?? '';
   const wk: Record<string, string> = { Sun: '일', Mon: '월', Tue: '화', Wed: '수', Thu: '목', Fri: '금', Sat: '토' };
   return `${parseInt(get('month'), 10)}/${parseInt(get('day'), 10)} (${wk[get('weekday')] ?? ''})`;
-}
-function formatKoDateLong(d: Date): string {
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }).formatToParts(d);
-  const get = (t: string) => parts.find((x) => x.type === t)?.value ?? '';
-  const wk: Record<string, string> = { Sun: '일', Mon: '월', Tue: '화', Wed: '수', Thu: '목', Fri: '금', Sat: '토' };
-  return `${get('year')}. ${get('month')}. ${get('day')} (${wk[get('weekday')] ?? ''})`;
 }

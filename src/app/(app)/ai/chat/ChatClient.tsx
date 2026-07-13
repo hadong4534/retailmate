@@ -84,18 +84,17 @@ export function ChatClient({
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let acc = '';
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
-        acc += chunk;
         setMessages((m) => {
           const copy = [...m];
+          const current = copy[copy.length - 1];
           copy[copy.length - 1] = {
             role: 'assistant',
-            content: acc,
-            ts: copy[copy.length - 1].ts,
+            content: current.content + chunk,
+            ts: current.ts,
           };
           return copy;
         });

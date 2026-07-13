@@ -107,7 +107,7 @@ self.addEventListener('fetch', (event) => {
 // ───────────────────────── 웹푸시 ─────────────────────────
 self.addEventListener('push', (event) => {
   let data = {};
-  try { data = event.data ? event.data.json() : {}; } catch (e) { data = { body: event.data ? event.data.text() : '' }; }
+  try { data = event.data ? event.data.json() : {}; } catch { data = { body: event.data ? event.data.text() : '' }; }
   const title = data.title || '리테일메이트';
   const options = {
     body: data.body || '',
