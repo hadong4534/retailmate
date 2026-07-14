@@ -144,9 +144,9 @@ export function HomeView(p: HomeViewProps) {
 
         {/* Row 2 — 일별 매출 추이 + AI 인사이트 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <section className="rounded-[24px] border border-[#E9EAF4] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(99,102,241,0.3)] lg:col-span-2">
+          <section className="min-w-0 rounded-[24px] border border-[#E9EAF4] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(99,102,241,0.3)] lg:col-span-2">
             <p className="text-[14px] font-semibold text-slate-900">일별 매출 추이</p>
-            <div className="mt-2">
+            <div className="mt-2 min-w-0">
               {series ? (
                 <MonthSalesChart data={series} height={210} />
               ) : (
