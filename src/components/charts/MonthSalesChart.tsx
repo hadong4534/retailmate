@@ -23,8 +23,14 @@ function formatTick(n: number): string {
 
 export function MonthSalesChart({ data, height = 200 }: { data: Datum[]; height?: number }) {
   return (
-    <div style={{ width: '100%', height }}>
-      <ResponsiveContainer>
+    <div className="min-w-0" style={{ width: '100%', height }}>
+      <ResponsiveContainer
+        width="100%"
+        height="100%"
+        minWidth={0}
+        minHeight={height}
+        initialDimension={{ width: 240, height }}
+      >
         <AreaChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="salesArea" x1="0" y1="0" x2="0" y2="1">
